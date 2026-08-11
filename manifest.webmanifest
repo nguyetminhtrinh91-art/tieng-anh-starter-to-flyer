@@ -1,0 +1,40 @@
+{
+  "name": "Đảo Tiếng Anh — Cambridge Starters/Movers/Flyers",
+  "short_name": "Đảo Tiếng Anh",
+  "description": "Học tiếng Anh theo lộ trình Cambridge Starters/Movers/Flyers qua các đảo trò chơi.",
+  "id": "/",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F5F2E9",
+  "theme_color": "#173C3B",
+  "lang": "vi",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192-maskable.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

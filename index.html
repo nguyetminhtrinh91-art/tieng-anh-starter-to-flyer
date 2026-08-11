@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đảo Tiếng Anh — Cambridge Starters/Movers/Flyers</title>
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#173C3B">
+<meta name="description" content="Học tiếng Anh theo lộ trình Cambridge Starters/Movers/Flyers qua các đảo trò chơi.">
+<link rel="icon" type="image/png" href="icons/favicon.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Đảo Tiếng Anh">
+
+<style>
+:root{
+  --bg:#F5F2E9; --card:#FFFDF8; --ink:#173C3B; --ink-soft:#607674;
+  --cam:#F26B4C; --cam-dam:#D64F34; --xanh:#15816F; --xanh-nhat:#DDF3EC;
+  --do:#D75664; --do-nhat:#FCE9EC; --sao:#F3B63F; --tim:#6E63B6;
+  --bien:#D8EBEA; --vang-nhat:#FFF3CF; --r:24px;
+  --shadow:0 8px 24px rgba(23,60,59,.10); --shadow-sm:0 3px 10px rgba(23,60,59,.08);
+}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:
+    radial-gradient(circle at 8% -10%,rgba(242,107,76,.13),transparent 28rem),
+    radial-gradient(circle at 95% 6%,rgba(21,129,111,.12),transparent 26rem),var(--bg); color:var(--ink);
+  font-family:-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
+  font-size:17px; line-height:1.55; min-height:100vh;
+}
+button{font-family:inherit;}
+.skip-link{position:fixed;left:12px;top:-80px;z-index:200;background:var(--ink);color:#fff;padding:10px 16px;border-radius:12px;text-decoration:none;font-weight:800;}
+.skip-link:focus{top:12px;}
+.screen{display:none; max-width:880px; margin:0 auto; padding:20px 18px 104px;}
+.screen.active{display:block; animation:fadeIn .3s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;}
+.brand{display:flex;align-items:center;gap:10px;font-weight:950;letter-spacing:-.02em;}
+.brand-mark{width:38px;height:38px;border-radius:13px;background:var(--ink);color:#fff;display:grid;place-items:center;box-shadow:var(--shadow-sm);}
+.stat-group{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+.chip{display:inline-flex;align-items:center;gap:6px;background:rgba(255,253,248,.92);border:1px solid rgba(23,60,59,.08);border-radius:999px;
+  padding:7px 12px;font-weight:850;box-shadow:var(--shadow-sm);font-size:.9rem;}
+.chip.sao{color:#B07E00;}
+.chip.streak{color:#D9542B;}
+.btn-back{background:var(--card);border:none;border-radius:999px;padding:9px 16px;font-size:1rem;
+  font-weight:700;color:var(--ink);box-shadow:var(--shadow);cursor:pointer;}
+.btn-back:active{transform:scale(.96);}
+
+.map-title{text-align:left;margin:14px 0 2px;font-size:clamp(2rem,7vw,3.55rem);font-weight:950;letter-spacing:-.055em;line-height:1.02;max-width:700px;}
+.map-sub{text-align:left;color:var(--ink-soft);margin:8px 0 18px;font-size:1rem;max-width:680px;}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;color:var(--cam-dam);font-size:.72rem;font-weight:950;margin:28px 0 8px;}
+.today-card{position:relative;overflow:hidden;background:var(--ink);color:#fff;border-radius:30px;padding:22px;box-shadow:0 12px 30px rgba(23,60,59,.18);display:grid;grid-template-columns:1.25fr .75fr;gap:18px;margin:20px 0;}
+.today-card:after{content:'12';position:absolute;right:-8px;bottom:-62px;font-size:11rem;line-height:1;font-weight:950;color:rgba(255,255,255,.055);pointer-events:none;}
+.today-card h2{font-size:1.45rem;line-height:1.15;margin:0 0 8px;letter-spacing:-.03em;}
+.today-card p{margin:0;color:#DCE9E7;font-size:.94rem;max-width:520px;}
+.today-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px;}
+.today-meta span{background:rgba(255,255,255,.11);border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;font-size:.78rem;font-weight:800;}
+.today-action{align-self:center;justify-self:stretch;border:none;border-radius:20px;padding:15px 16px;background:var(--sao);color:#4C3600;font-weight:950;font-size:1rem;cursor:pointer;box-shadow:0 5px 0 #C88E19;position:relative;z-index:1;}
+.today-action:active{transform:translateY(3px);box-shadow:0 2px 0 #C88E19;}
+.method-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0 26px;}
+.method-step{background:rgba(255,253,248,.78);border:1px solid rgba(23,60,59,.08);border-radius:18px;padding:12px;box-shadow:var(--shadow-sm);}
+.method-step b{display:block;font-size:.88rem;margin-bottom:2px;}.method-step span{font-size:.78rem;color:var(--ink-soft);}
+.level-tag{display:inline-block;font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:999px;margin-bottom:6px;}
+.level-tag.starters{background:#E3F7ED;color:#1E8E5A;}
+.level-tag.movers{background:#EAF0FF;color:#3A5DC7;}
+.level-tag.flyers{background:#FBEAF6;color:#B23E8C;}
+.level-tag.extra{background:#FFF3D6;color:#A8792F;}
+.level-filter{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;margin-bottom:10px;scrollbar-width:none;}
+.level-filter::-webkit-scrollbar{display:none;}
+.filter-btn{border:1px solid rgba(23,60,59,.12);background:var(--card);color:var(--ink-soft);padding:9px 13px;border-radius:999px;white-space:nowrap;font-weight:850;cursor:pointer;box-shadow:var(--shadow-sm);}
+.filter-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.island-list{display:grid;grid-template-columns:1fr 1fr;gap:14px;position:relative;}
+.island{position:relative;display:flex;align-items:center;gap:14px;background:var(--card);
+  border-radius:var(--r);padding:16px;box-shadow:var(--shadow);border:1px solid rgba(23,60,59,.07);cursor:pointer;
+  text-align:left;width:100%;transition:transform .15s;}
+.island[hidden]{display:none;}
+.island:active{transform:scale(.98);}
+.island .icon{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:2rem;flex-shrink:0;}
+.island .info{flex:1;min-width:0;}
+.island .ten{display:block;font-weight:800;font-size:1.08rem;line-height:1.25;}
+.island .mota{display:block;color:var(--ink-soft);font-size:.84rem;margin-top:4px;line-height:1.35;}
+.island .tiendo{margin-top:8px;height:10px;border-radius:6px;background:#EDF1F8;overflow:hidden;}
+.island .tiendo i{display:block;height:100%;border-radius:6px;background:var(--xanh);transition:width .4s;}
+.island .stars{font-size:.9rem;font-weight:800;color:#B07E00;white-space:nowrap;}
+.home-actions{display:flex;gap:12px;margin:18px 0 8px;flex-wrap:wrap;}
+.big-action{flex:1;border:none;border-radius:var(--r);padding:16px 12px;font-size:1.02rem;font-weight:800;
+  cursor:pointer;box-shadow:var(--shadow);color:#fff;min-width:190px;}
+.big-action.on{background:var(--tim);}
+.big-action.words{background:var(--xanh);}
+.big-action.ph{background:#5B8DEF;}
+.big-action:active{transform:scale(.97);}
+.mascot-bubble{display:flex;gap:12px;align-items:flex-start;background:var(--vang-nhat);border:1px solid rgba(184,124,0,.12);border-radius:var(--r);
+  padding:14px 16px;box-shadow:var(--shadow-sm);margin-bottom:16px;}
+.mascot-bubble .fox{font-size:2.2rem;line-height:1;}
+.mascot-bubble p{margin:0;font-size:1rem;}
+.linkbanner{background:#E8EEEC;color:var(--ink);border-radius:16px;padding:12px 16px;font-size:.85rem;margin-bottom:16px;border-left:4px solid var(--xanh);}
+.linkbanner b{color:var(--sao);}
+
+.topic-head{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:var(--r);
+  padding:16px;box-shadow:var(--shadow);margin-bottom:16px;}
+.topic-head .icon{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.9rem;}
+.topic-head h2{margin:0;font-size:1.2rem;}
+.lesson-list{display:flex;flex-direction:column;gap:12px;}
+.lesson{display:flex;align-items:center;gap:12px;background:var(--card);border:none;border-radius:18px;
+  padding:14px 16px;box-shadow:var(--shadow);cursor:pointer;text-align:left;width:100%;}
+.lesson:active{transform:scale(.98);}
+.lesson .num{width:40px;height:40px;border-radius:50%;background:var(--bien);display:flex;align-items:center;
+  justify-content:center;font-weight:900;flex-shrink:0;}
+.lesson.done .num{background:var(--xanh-nhat);color:var(--xanh);}
+.lesson .ten{flex:1;font-weight:700;font-size:1rem;}
+.lesson .tick{font-size:1.2rem;}
+
+.tabbar{display:flex;gap:10px;margin-bottom:14px;}
+.tab{flex:1;border:none;border-radius:999px;padding:12px;font-size:1rem;font-weight:800;cursor:pointer;
+  background:var(--card);color:var(--ink-soft);box-shadow:var(--shadow);}
+.tab.active{background:var(--cam);color:#fff;}
+.theory{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);}
+.theory h3{margin:0 0 10px;font-size:1.15rem;}
+.theory p{margin:0 0 12px;}
+.theory ul{margin:0 0 12px;padding-left:22px;}
+.theory li{margin-bottom:6px;}
+.theory .vd{background:#FFF6EC;border-radius:14px;padding:12px 14px;margin:12px 0;font-size:1rem;}
+.theory .meo{background:#EEF4FF;border-radius:14px;padding:12px 14px;margin:12px 0;font-size:.92rem;color:#3A5488;}
+.theory .meo b{color:#2D4370;}
+.wordgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0;}
+.wordgrid .w{background:#FFF6EC;border-radius:10px;padding:8px 10px;font-size:.92rem;}
+.wordgrid .w b{color:var(--cam-dam);}
+.wordgrid .w{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.word-main{min-width:0}.speak-btn{border:none;background:#fff;border-radius:999px;width:34px;height:34px;cursor:pointer;flex:none;box-shadow:var(--shadow-sm);font-size:1rem;}
+.learning-path{display:flex;gap:7px;margin:0 0 14px;}
+.learning-path span{flex:1;padding:8px 5px;text-align:center;border-radius:12px;background:#EDF1EF;color:var(--ink-soft);font-size:.72rem;font-weight:900;}
+.learning-path span.active{background:var(--xanh-nhat);color:var(--xanh);}
+.source-note{font-size:.76rem;color:var(--ink-soft);margin-top:14px;padding-top:12px;border-top:1px dashed rgba(23,60,59,.2);}
+.btn-start{display:block;width:100%;margin-top:16px;border:none;border-radius:var(--r);padding:16px;
+  font-size:1.1rem;font-weight:900;background:var(--cam);color:#fff;cursor:pointer;box-shadow:var(--shadow);}
+.btn-start:active{transform:scale(.97);}
+
+.quiz-progress{display:flex;gap:6px;margin-bottom:14px;}
+.quiz-progress i{flex:1;height:10px;border-radius:6px;background:#E3EAF6;}
+.quiz-progress i.dung{background:var(--xanh);}
+.quiz-progress i.dang{background:var(--sao);}
+.qcard{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);text-align:center;}
+.qtext{font-size:1.18rem;font-weight:800;margin:0 0 6px;}
+.qvisual{margin:14px auto;display:flex;justify-content:center;}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;}
+.ans{border:3px solid #E3EAF6;background:#fff;border-radius:18px;padding:16px 10px;font-size:1.15rem;
+  font-weight:900;color:var(--ink);cursor:pointer;transition:all .12s;min-height:60px;}
+.ans.text{font-size:.92rem;font-weight:700;text-align:left;line-height:1.35;}
+.ans:active{transform:scale(.96);}
+.ans.dung{border-color:var(--xanh);background:var(--xanh-nhat);color:var(--xanh);}
+.ans.sai{border-color:var(--do);background:var(--do-nhat);color:var(--do);animation:lac .3s;}
+.ans:disabled{cursor:default;opacity:.85;}
+@keyframes lac{0%,100%{transform:none;}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.feedback{min-height:56px;margin-top:14px;font-size:1.05rem;font-weight:800;}
+.feedback.ok{color:var(--xanh);}
+.feedback.no{color:#C7565F;}
+.feedback .giai{display:block;font-weight:600;font-size:.95rem;color:var(--ink-soft);margin-top:4px;}
+.hint-row{display:flex;justify-content:center;margin-top:12px;}
+.btn-hint{border:1px solid rgba(23,60,59,.12);background:#F2F6F4;color:var(--ink);border-radius:999px;padding:9px 14px;font-weight:850;cursor:pointer;}
+.mastery-note{font-size:.78rem;color:var(--ink-soft);margin-top:10px;}
+.btn-next{border:none;border-radius:999px;padding:13px 32px;font-size:1.05rem;font-weight:900;
+  background:var(--xanh);color:#fff;cursor:pointer;margin-top:6px;box-shadow:var(--shadow);display:none;}
+.btn-next:active{transform:scale(.96);}
+
+.finish{background:var(--card);border-radius:var(--r);padding:28px 20px;box-shadow:var(--shadow);text-align:center;}
+.finish .fox-big{font-size:4rem;}
+.finish h2{margin:8px 0 4px;}
+.finish .saoket{font-size:2rem;letter-spacing:4px;margin:10px 0;}
+.finish p{color:var(--ink-soft);margin:6px 0 18px;}
+.reflection{margin:18px 0 8px;padding-top:16px;border-top:1px solid #E7ECEA;}
+.reflection b{display:block;margin-bottom:9px;}
+.reflection-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+.reflection-row button{border:1px solid rgba(23,60,59,.12);background:#F3F6F5;border-radius:13px;padding:10px 6px;font-weight:850;color:var(--ink);cursor:pointer;}
+.reflection-row button.selected{background:var(--xanh-nhat);border-color:var(--xanh);color:var(--xanh);}
+.finish .row{display:flex;gap:12px;}
+.finish .row button{flex:1;border:none;border-radius:18px;padding:14px;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:var(--shadow);}
+.finish .again{background:var(--card);color:var(--ink);border:2px solid #E3EAF6;}
+.finish .home{background:var(--cam);color:#fff;}
+
+.ph-card{background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);margin-bottom:14px;font-size:.98rem;}
+.ph-card h3{margin:0 0 8px;font-size:1.08rem;}
+.ph-card p{margin:0 0 10px;}
+.ph-card ul{margin:0 0 10px;padding-left:20px;}
+.ph-card li{margin-bottom:6px;}
+.principle-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.principle{background:#F2F6F4;border-radius:16px;padding:13px;}
+.principle b{display:block;margin-bottom:3px}.principle span{font-size:.84rem;color:var(--ink-soft);}
+.record-box{background:#F2F6F4;border-radius:16px;padding:14px;margin-top:14px;text-align:center;}
+.record-box button{border:none;border-radius:999px;padding:11px 16px;font-weight:900;cursor:pointer;margin:4px;}
+.record-start{background:var(--do);color:#fff}.record-stop{background:var(--ink);color:#fff}.record-stop:disabled{opacity:.45}.record-status{font-size:.82rem;color:var(--ink-soft);margin:5px 0;}
+
+.expression-hero{background:linear-gradient(135deg,#173C3B,#245D59);color:#fff;border-radius:20px;padding:18px;margin-bottom:16px;position:relative;overflow:hidden;}
+.expression-hero:after{content:'ABC';position:absolute;right:-4px;bottom:-22px;font-size:5.5rem;font-weight:950;color:rgba(255,255,255,.05);}
+.expression-hero h3{font-size:1.35rem;margin:4px 0 6px;position:relative;z-index:1;}.expression-hero p{color:#DCE9E7;margin:0;max-width:620px;position:relative;z-index:1;}
+.skill-badge{display:inline-block;background:var(--sao);color:#4C3600;border-radius:999px;padding:4px 10px;font-size:.75rem;font-weight:950;position:relative;z-index:1;}
+.expression-section{border-top:1px solid #E4EAE8;padding-top:16px;margin-top:18px;}.expression-section h4{margin:0 0 9px;font-size:1rem;}
+.sentence-frames{display:grid;grid-template-columns:1fr 1fr;gap:8px;}.sentence-frame{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#F2F6F4;border-radius:14px;padding:10px 12px;font-size:.9rem;}
+.sentence-frame b{display:block;color:var(--xanh);}.sentence-frame small{display:block;color:var(--ink-soft);line-height:1.35;margin-top:2px;}
+.knowledge-list{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}.knowledge-item{background:#FFF6EC;border-left:4px solid var(--cam);border-radius:12px;padding:10px 11px;font-size:.86rem;}
+.practice-card{background:#F7F8F3;border:1px solid rgba(23,60,59,.1);border-radius:18px;padding:14px;margin-top:10px;}.practice-card h5{font-size:.96rem;margin:0 0 7px;}.practice-card ol{margin:0;padding-left:23px;}.practice-card li{margin:5px 0;}
+.model-box{background:#EEF4FF;border-radius:16px;padding:14px;margin:10px 0;}.model-box p{margin:7px 0 0;}.model-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.mini-btn{border:1px solid rgba(23,60,59,.13);background:#fff;color:var(--ink);border-radius:999px;padding:9px 13px;font-weight:850;cursor:pointer;box-shadow:var(--shadow-sm);}.mini-btn:active{transform:scale(.97);}
+.keyword-cue{background:var(--vang-nhat);border-radius:14px;padding:11px 13px;color:#66501E;font-weight:850;font-size:.9rem;margin:10px 0;}
+.writing-box label{display:block;font-weight:900;margin-bottom:7px;}.writing-draft{display:block;width:100%;min-height:155px;resize:vertical;border:2px solid #DDE6E3;border-radius:16px;padding:13px 14px;font:inherit;line-height:1.55;color:var(--ink);background:#fff;}.writing-draft:focus{outline:3px solid rgba(110,99,182,.22);border-color:var(--tim);}
+.draft-meta{display:flex;justify-content:space-between;gap:10px;align-items:center;color:var(--ink-soft);font-size:.8rem;margin-top:7px;}.draft-meta .ready{color:var(--xanh);font-weight:900;}
+.practice-checklist{display:grid;gap:8px;margin:14px 0;}.practice-check{display:flex;align-items:flex-start;gap:10px;background:#F2F6F4;border-radius:13px;padding:10px 12px;cursor:pointer;font-size:.9rem;font-weight:750;}.practice-check input{width:20px;height:20px;accent-color:var(--xanh);flex:none;margin-top:1px;}
+.challenge-box{background:#FBEAF6;border-radius:14px;padding:12px 14px;color:#7D3267;font-size:.9rem;margin-top:12px;}.btn-start:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}
+
+.custom-hero{background:linear-gradient(135deg,#15816F,#245D59);color:#fff;border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:14px;}
+.custom-hero h1{font-size:clamp(1.75rem,6vw,2.7rem);line-height:1.05;letter-spacing:-.04em;margin:4px 0 8px;}
+.custom-hero p{margin:0;color:#E1F2EE;max-width:650px;}
+.custom-stats{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.custom-stats span{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.15);border-radius:999px;padding:6px 10px;font-size:.8rem;font-weight:850;}
+.word-form{background:var(--card);border-radius:var(--r);padding:19px;box-shadow:var(--shadow);margin-bottom:14px;}
+.word-form h2{font-size:1.16rem;margin:0 0 5px;}.word-form>p{font-size:.88rem;color:var(--ink-soft);margin:0 0 14px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.form-field.full{grid-column:1/-1;}
+.form-field label{display:block;font-size:.84rem;font-weight:900;margin-bottom:5px;}
+.form-field input{width:100%;border:2px solid #DDE6E3;border-radius:14px;padding:11px 12px;background:#fff;color:var(--ink);font:inherit;}
+.form-field input:focus,.custom-search:focus{outline:3px solid rgba(110,99,182,.2);border-color:var(--tim);}
+.field-note{display:block;color:var(--ink-soft);font-size:.74rem;margin-top:4px;}
+.form-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px;}.form-actions button{border:none;border-radius:999px;padding:11px 16px;font-weight:900;cursor:pointer;}
+.save-word{background:var(--cam);color:#fff;box-shadow:var(--shadow-sm);}.cancel-edit{background:#EDF1EF;color:var(--ink);display:none;}
+.word-library{background:var(--card);border-radius:var(--r);padding:19px;box-shadow:var(--shadow);}
+.word-library-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-bottom:12px;}.word-library-head h2{font-size:1.16rem;margin:0;}.word-library-head p{font-size:.78rem;color:var(--ink-soft);margin:2px 0 0;}
+.custom-search{width:min(280px,100%);border:2px solid #DDE6E3;border-radius:999px;padding:9px 13px;background:#fff;color:var(--ink);font:inherit;font-size:.88rem;}
+.custom-list{display:grid;gap:10px;}.custom-empty{text-align:center;background:#F2F6F4;border-radius:18px;padding:24px 15px;color:var(--ink-soft);}
+.custom-word{border:1px solid rgba(23,60,59,.1);background:#F9FBF8;border-radius:18px;padding:13px 14px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;}
+.custom-word-main{min-width:0;}.custom-word-title{display:flex;align-items:baseline;gap:7px;flex-wrap:wrap;}.custom-word-title b{font-size:1.08rem;color:var(--cam-dam);}.custom-word-title span{color:var(--ink);}
+.custom-word-meta{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px;}.custom-word-meta span{background:#E6F3EF;color:#28685D;border-radius:999px;padding:3px 8px;font-size:.7rem;font-weight:850;}
+.custom-example{font-size:.83rem;color:var(--ink-soft);margin:6px 0 0;}.custom-word-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}
+.icon-action{border:1px solid rgba(23,60,59,.1);background:#fff;color:var(--ink);border-radius:12px;padding:8px 10px;cursor:pointer;font-weight:850;box-shadow:var(--shadow-sm);}.icon-action.danger{color:#B34652;}.icon-action.review{background:var(--xanh);color:#fff;}
+
+.rest-banner{position:fixed;left:12px;right:12px;bottom:14px;background:#334469;color:#fff;border-radius:18px;
+  padding:14px 16px;display:none;align-items:center;gap:12px;box-shadow:0 10px 26px rgba(0,0,0,.25);z-index:60;max-width:560px;margin:0 auto;}
+.rest-banner.show{display:flex;}
+.rest-banner p{margin:0;flex:1;font-size:.95rem;}
+.rest-banner button{border:none;border-radius:12px;padding:9px 14px;font-weight:800;cursor:pointer;background:var(--sao);color:#5B4300;}
+.confetti-piece{position:fixed;top:-24px;font-size:1.5rem;z-index:80;pointer-events:none;animation:roi linear forwards;}
+@keyframes roi{to{transform:translateY(110vh) rotate(360deg);opacity:.6;}}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;
+  border-radius:999px;padding:10px 20px;font-weight:800;z-index:90;display:none;font-size:.95rem;}
+.toast.show{display:block;animation:fadeIn .25s;}
+
+@media(max-width:420px){
+  body{font-size:17px;}
+  .answers{grid-template-columns:1fr 1fr;}
+  .wordgrid{grid-template-columns:1fr;}
+  .sentence-frames{grid-template-columns:1fr;}
+  .form-grid{grid-template-columns:1fr}.form-field.full{grid-column:auto}.word-library-head{align-items:stretch;flex-direction:column}.custom-search{width:100%}.custom-word{grid-template-columns:1fr}.custom-word-actions{justify-content:flex-start}
+}
+@media(max-width:720px){.island-list{grid-template-columns:1fr}.today-card{grid-template-columns:1fr}.today-action{justify-self:start}.principle-grid{grid-template-columns:1fr}.method-strip{grid-template-columns:1fr}.method-step{display:flex;gap:10px;align-items:baseline}.method-step b{min-width:105px}.map-title{font-size:2.55rem}.stat-group .chip:nth-child(3){display:none}.knowledge-list{grid-template-columns:1fr}.sentence-frames{grid-template-columns:1fr}}
+button:focus-visible,.island:focus-visible,.lesson:focus-visible{outline:3px solid var(--tim);outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<a class="skip-link" href="#mainContent">Bỏ qua đến nội dung chính</a>
+
+<div class="toast" id="toast"></div>
+
+<section class="screen active" id="screen-home" aria-labelledby="homeTitle">
+  <div class="topbar">
+    <div class="brand"><span class="brand-mark" aria-hidden="true">Ð</span><span>Đảo Tiếng Anh</span></div>
+    <div class="stat-group">
+      <span class="chip sao" title="Sao ghi nhận nỗ lực luyện tập">⭐ <span id="tongSao">0</span></span>
+      <span class="chip streak" title="Chuỗi ngày có hoàn thành hoạt động">🔥 <span id="chuoiNgay">0</span> ngày</span>
+      <span class="chip" title="Mức độ thành thạo trung bình">🌱 <span id="masteryChip">0%</span></span>
+    </div>
+  </div>
+  <main id="mainContent">
+  <p class="eyebrow">Cambridge Young Learners · học ít, nhớ lâu</p>
+  <h1 class="map-title" id="homeTitle">Mỗi ngày một chuyến đi nhỏ.</h1>
+  <p class="map-sub">Lộ trình Starters → Movers → Flyers với hơn 200 từ/cụm từ và một nhiệm vụ nói–viết riêng cho từng chủ đề.</p>
+  <div class="today-card" aria-labelledby="todayTitle">
+    <div>
+      <h2 id="todayTitle">Hành trình 12 phút hôm nay</h2>
+      <p id="todayCopy">Khởi động bằng điều con sắp quên, học một mẩu mới, rồi kết thúc bằng câu viết và bài nói của riêng con.</p>
+      <div class="today-meta"><span id="dueBadge">0 mục cần ôn</span><span id="focusBadge">Trọng tâm: làm quen</span><span>Không trừ điểm khi sai</span></div>
+    </div>
+    <button class="today-action" id="btnHanhTrinh">Bắt đầu hành trình →</button>
+  </div>
+  <div class="method-strip" aria-label="Ba chặng học">
+    <div class="method-step"><b>1 · Nhớ lại</b><span>Gọi kiến thức từ trí nhớ</span></div>
+    <div class="method-step"><b>2 · Khám phá</b><span>Học theo cụm nghĩa và ngữ cảnh</span></div>
+    <div class="method-step"><b>3 · Tự diễn đạt</b><span>Viết ngắn, che khung, tự nói</span></div>
+  </div>
+  <div class="mascot-bubble">
+    <span class="fox">🦜</span>
+    <p id="loiChao">Hello! Mình là Vẹt Poly. Hôm nay mình cùng khám phá đảo tiếng Anh nào nhỉ?</p>
+  </div>
+  <p class="eyebrow">Bản đồ năng lực</p>
+  <div class="level-filter" id="levelFilter" aria-label="Lọc cấp độ">
+    <button class="filter-btn active" data-level="all">Tất cả</button>
+    <button class="filter-btn" data-level="starters">Starters</button>
+    <button class="filter-btn" data-level="movers">Movers</button>
+    <button class="filter-btn" data-level="flyers">Flyers</button>
+    <button class="filter-btn" data-level="extra">Nói & ôn tập</button>
+  </div>
+  <div class="island-list" id="islandList"></div>
+  <div class="home-actions">
+    <button class="big-action on" id="btnOnNhanh">🔁 Ôn đúng lúc</button>
+    <button class="big-action words" id="btnSoTu">➕ Sổ từ của bé <span id="customCountHome">· 0 từ</span></button>
+    <button class="big-action ph" id="btnPhuHuynh">👨‍👩‍👧 Dành cho bố mẹ</button>
+  </div>
+  <div class="linkbanner">Lộ trình dùng <b>truy hồi chủ động</b>, <b>lặp lại ngắt quãng</b> và <b>gợi ý giảm dần</b>. Sao chỉ ghi nhận việc hoàn thành; sai không làm mất sao.</div>
+  </main>
+</section>
+
+<section class="screen" id="screen-topic">
+  <div class="topbar">
+    <button class="btn-back" data-goto="home">← Bản đồ</button>
+    <span class="chip sao">⭐ <span class="tongSaoMini">0</span></span>
+  </div>
+  <div class="topic-head" id="topicHead"></div>
+  <div class="lesson-list" id="lessonList"></div>
+</section>
+
+<section class="screen" id="screen-lesson">
+  <div class="topbar">
+    <button class="btn-back" id="btnBackTopic">← Quay lại</button>
+    <span class="chip sao">⭐ <span class="tongSaoMini">0</span></span>
+  </div>
+  <div class="tabbar">
+    <button class="tab active" id="tabLyThuyet">📖 Từ vựng</button>
+    <button class="tab" id="tabLuyenTap">✏️ Luyện tập</button>
+  </div>
+  <div id="theoryView"></div>
+  <div id="quizView" style="display:none;"></div>
+</section>
+
+<section class="screen" id="screen-parent">
+  <div class="topbar">
+    <button class="btn-back" data-goto="home">← Bản đồ</button>
+  </div>
+  <div id="parentContent"></div>
+</section>
+
+<section class="screen" id="screen-custom" aria-labelledby="customTitle">
+  <div class="topbar">
+    <button class="btn-back" data-goto="home">← Bản đồ</button>
+    <span class="chip">📚 <span id="customCountTop">0</span> từ</span>
+  </div>
+  <div class="custom-hero">
+    <p class="eyebrow" style="color:#F7C862;margin:0 0 5px;">Kho từ mở rộng</p>
+    <h1 id="customTitle">Sổ từ của bé</h1>
+    <p>Gặp một từ mới ngoài bài học? Thêm vào đây để nghe, dùng trong câu và tự động gặp lại trong lịch ôn.</p>
+    <div class="custom-stats"><span id="customDueStat">0 từ cần ôn</span><span>Ôn theo nhịp 1–2–4–8–16 ngày</span><span>Lưu trên thiết bị này</span></div>
+  </div>
+  <form class="word-form" id="customWordForm" novalidate>
+    <h2 id="wordFormTitle">Thêm một từ mới</h2>
+    <p>Điền từ và nghĩa. Chủ đề, câu ví dụ giúp con nhớ theo ngữ cảnh.</p>
+    <div class="form-grid">
+      <div class="form-field"><label for="customEn">Từ/cụm từ tiếng Anh *</label><input id="customEn" name="en" autocomplete="off" maxlength="80" required placeholder="Ví dụ: playground"><span class="field-note">Có thể thêm cả cụm từ như “look after”.</span></div>
+      <div class="form-field"><label for="customVi">Nghĩa tiếng Việt *</label><input id="customVi" name="vi" autocomplete="off" maxlength="120" required placeholder="Ví dụ: sân chơi"></div>
+      <div class="form-field"><label for="customTopic">Chủ đề</label><input id="customTopic" name="topic" list="topicSuggestions" autocomplete="off" maxlength="60" placeholder="Ví dụ: Trường học"><datalist id="topicSuggestions"><option value="Bản thân & gia đình"><option value="Trường học"><option value="Con vật"><option value="Đồ ăn"><option value="Thời gian"><option value="Thời tiết"><option value="Thị trấn"><option value="Sở thích"><option value="Sức khỏe"><option value="Tương lai"></datalist></div>
+      <div class="form-field"><label for="customExample">Câu ví dụ tiếng Anh</label><input id="customExample" name="example" autocomplete="off" maxlength="180" placeholder="Ví dụ: I play in the playground."><span class="field-note">Dùng một câu ngắn, gần với trải nghiệm của con.</span></div>
+    </div>
+    <div class="form-actions"><button class="save-word" id="btnSaveWord" type="submit">＋ Thêm vào sổ từ & lịch ôn</button><button class="cancel-edit" id="btnCancelEdit" type="button">Hủy sửa</button></div>
+  </form>
+  <div class="word-library">
+    <div class="word-library-head"><div><h2>Những từ đã thêm</h2><p>Có thể nghe, sửa, xóa hoặc ôn riêng từng từ.</p></div><input class="custom-search" id="customSearch" type="search" placeholder="🔎 Tìm từ hoặc chủ đề" aria-label="Tìm trong sổ từ"></div>
+    <div class="custom-list" id="customWordList"></div>
+  </div>
+</section>
+
+<div class="rest-banner" id="restBanner">
+  <span style="font-size:1.6rem;">🧘</span>
+  <p>Con đã học chăm chỉ 15 phút rồi! Đứng dậy vươn vai, uống nước, rồi quay lại nhé.</p>
+  <button id="btnRestOk">Đã nghỉ xong!</button>
+</div>
+
+<script>
+"use strict";
+/* ================== TỪ VỰNG THEO CHỦ ĐỀ ================== */
+const VOCAB_BANTHAN=[{en:'name',vi:'tên'},{en:'age',vi:'tuổi'},{en:'family',vi:'gia đình'},{en:'friend',vi:'bạn bè'},
+  {en:'mother',vi:'mẹ'},{en:'father',vi:'bố'},{en:'brother',vi:'anh/em trai'},{en:'sister',vi:'chị/em gái'},
+  {en:'grandparents',vi:'ông bà'},{en:'cousin',vi:'anh/chị/em họ'},{en:'class',vi:'lớp học'},{en:'hometown',vi:'quê hương'},
+  {en:'live with',vi:'sống cùng'},{en:'be good at',vi:'giỏi về'}];
+const VOCAB_MAUSAC=[{en:'red',vi:'màu đỏ'},{en:'blue',vi:'màu xanh dương'},{en:'green',vi:'màu xanh lá'},
+  {en:'yellow',vi:'màu vàng'},{en:'black',vi:'màu đen'},{en:'white',vi:'màu trắng'},{en:'orange',vi:'màu cam'},{en:'purple',vi:'màu tím'},
+  {en:'pink',vi:'màu hồng'},{en:'brown',vi:'màu nâu'},{en:'grey',vi:'màu xám'},{en:'light',vi:'màu nhạt'},{en:'dark',vi:'màu đậm'}];
+const VOCAB_SO=[{en:'one',vi:'một'},{en:'five',vi:'năm'},{en:'ten',vi:'mười'},{en:'fifteen',vi:'mười lăm'},
+  {en:'twenty',vi:'hai mươi'},{en:'seven',vi:'bảy'},{en:'twelve',vi:'mười hai'},{en:'thirty',vi:'ba mươi'},
+  {en:'first',vi:'thứ nhất'},{en:'second',vi:'thứ hai'},{en:'third',vi:'thứ ba'},{en:'more',vi:'nhiều hơn'},{en:'fewer',vi:'ít hơn'}];
+const VOCAB_CONVAT=[{en:'cat',vi:'con mèo'},{en:'dog',vi:'con chó'},{en:'cow',vi:'con bò'},{en:'horse',vi:'con ngựa'},
+  {en:'duck',vi:'con vịt'},{en:'rabbit',vi:'con thỏ'},{en:'bird',vi:'con chim'},{en:'fish',vi:'con cá'},
+  {en:'turtle',vi:'con rùa'},{en:'parrot',vi:'con vẹt'},{en:'monkey',vi:'con khỉ'},{en:'elephant',vi:'con voi'},
+  {en:'wing',vi:'cánh'},{en:'tail',vi:'đuôi'},{en:'fur',vi:'bộ lông'},{en:'wild',vi:'hoang dã'}];
+const VOCAB_DODUNG=[{en:'pencil',vi:'bút chì'},{en:'book',vi:'quyển sách'},{en:'bag',vi:'cái cặp'},{en:'ruler',vi:'cái thước'},
+  {en:'toy',vi:'đồ chơi'},{en:'ball',vi:'quả bóng'},{en:'chair',vi:'cái ghế'},{en:'table',vi:'cái bàn'},
+  {en:'eraser',vi:'cục tẩy'},{en:'notebook',vi:'vở ghi'},{en:'crayons',vi:'bút sáp màu'},{en:'scissors',vi:'cái kéo'},
+  {en:'glue',vi:'hồ dán'},{en:'computer',vi:'máy tính'},{en:'board',vi:'bảng'},{en:'pencil case',vi:'hộp bút'}];
+const VOCAB_DOAN=[{en:'apple',vi:'quả táo'},{en:'milk',vi:'sữa'},{en:'rice',vi:'cơm'},{en:'bread',vi:'bánh mì'},
+  {en:'water',vi:'nước'},{en:'egg',vi:'quả trứng'},{en:'banana',vi:'quả chuối'},{en:'noodles',vi:'mì'},
+  {en:'sandwich',vi:'bánh mì kẹp'},{en:'vegetables',vi:'rau củ'},{en:'juice',vi:'nước ép'},{en:'breakfast',vi:'bữa sáng'},
+  {en:'hungry',vi:'đói'},{en:'thirsty',vi:'khát'},{en:'delicious',vi:'ngon'}];
+const VOCAB_THOIGIAN=[{en:"o'clock",vi:'giờ đúng'},{en:'morning',vi:'buổi sáng'},{en:'afternoon',vi:'buổi chiều'},
+  {en:'evening',vi:'buổi tối'},{en:'today',vi:'hôm nay'},{en:'tomorrow',vi:'ngày mai'},{en:'yesterday',vi:'hôm qua'},
+  {en:'half past',vi:'giờ rưỡi'},{en:'quarter past',vi:'giờ hơn mười lăm phút'},{en:'weekday',vi:'ngày trong tuần'},
+  {en:'weekend',vi:'cuối tuần'},{en:'early',vi:'sớm'},{en:'late',vi:'muộn'},{en:'before',vi:'trước khi'},{en:'after',vi:'sau khi'}];
+const VOCAB_THOITIET=[{en:'sunny',vi:'nắng'},{en:'rainy',vi:'mưa'},{en:'cloudy',vi:'nhiều mây'},{en:'windy',vi:'có gió'},
+  {en:'cold',vi:'lạnh'},{en:'hot',vi:'nóng'},{en:'spring',vi:'mùa xuân'},{en:'summer',vi:'mùa hè'},
+  {en:'stormy',vi:'có bão'},{en:'snowy',vi:'có tuyết'},{en:'warm',vi:'ấm'},{en:'cool',vi:'mát'},
+  {en:'autumn',vi:'mùa thu'},{en:'winter',vi:'mùa đông'},{en:'temperature',vi:'nhiệt độ'},{en:'umbrella',vi:'ô/dù'}];
+const VOCAB_THITRAN=[{en:'shop',vi:'cửa hàng'},{en:'park',vi:'công viên'},{en:'station',vi:'nhà ga'},
+  {en:'hospital',vi:'bệnh viện'},{en:'school',vi:'trường học'},{en:'library',vi:'thư viện'},
+  {en:'market',vi:'chợ'},{en:'cinema',vi:'rạp chiếu phim'},{en:'museum',vi:'bảo tàng'},{en:'supermarket',vi:'siêu thị'},
+  {en:'post office',vi:'bưu điện'},{en:'opposite',vi:'đối diện'},{en:'between',vi:'ở giữa'},{en:'near',vi:'ở gần'}];
+const VOCAB_PHUONGTIEN=[{en:'bus',vi:'xe buýt'},{en:'bike',vi:'xe đạp'},{en:'car',vi:'ô tô'},{en:'train',vi:'tàu hỏa'},{en:'plane',vi:'máy bay'},
+  {en:'motorbike',vi:'xe máy'},{en:'boat',vi:'thuyền'},{en:'underground',vi:'tàu điện ngầm'},{en:'taxi',vi:'xe taxi'},
+  {en:'on foot',vi:'đi bộ'},{en:'helmet',vi:'mũ bảo hiểm'},{en:'ticket',vi:'vé'},{en:'journey',vi:'chuyến đi'}];
+const VOCAB_NGHENGHIEP=[{en:'doctor',vi:'bác sĩ'},{en:'teacher',vi:'giáo viên'},{en:'farmer',vi:'nông dân'},{en:'nurse',vi:'y tá'},{en:'driver',vi:'tài xế'},
+  {en:'police officer',vi:'cảnh sát'},{en:'firefighter',vi:'lính cứu hỏa'},{en:'dentist',vi:'nha sĩ'},{en:'chef',vi:'đầu bếp'},
+  {en:'vet',vi:'bác sĩ thú y'},{en:'artist',vi:'họa sĩ'},{en:'engineer',vi:'kỹ sư'}];
+const VOCAB_SOTHICH=[{en:'swimming',vi:'bơi lội'},{en:'reading',vi:'đọc sách'},{en:'painting',vi:'vẽ tranh'},{en:'dancing',vi:'nhảy múa'},{en:'singing',vi:'ca hát'},
+  {en:'cycling',vi:'đạp xe'},{en:'cooking',vi:'nấu ăn'},{en:'collecting',vi:'sưu tầm'},{en:'taking photos',vi:'chụp ảnh'},
+  {en:'playing football',vi:'chơi bóng đá'},{en:'listening to music',vi:'nghe nhạc'},{en:'practise',vi:'luyện tập'}];
+const VOCAB_TINHCACH=[{en:'friendly',vi:'thân thiện'},{en:'kind',vi:'tốt bụng'},{en:'funny',vi:'hài hước'},{en:'clever',vi:'thông minh'},{en:'shy',vi:'nhút nhát'},
+  {en:'brave',vi:'dũng cảm'},{en:'helpful',vi:'hay giúp đỡ'},{en:'patient',vi:'kiên nhẫn'},{en:'hard-working',vi:'chăm chỉ'},
+  {en:'curious',vi:'ham tìm hiểu'},{en:'quiet',vi:'trầm tính'},{en:'active',vi:'năng động'},{en:'honest',vi:'thật thà'}];
+const VOCAB_CAMXUC=[{en:'happy',vi:'vui vẻ'},{en:'sad',vi:'buồn'},{en:'excited',vi:'hào hứng'},{en:'worried',vi:'lo lắng'},{en:'tired',vi:'mệt mỏi'},
+  {en:'proud',vi:'tự hào'},{en:'bored',vi:'buồn chán'},{en:'nervous',vi:'hồi hộp'},{en:'surprised',vi:'ngạc nhiên'},
+  {en:'calm',vi:'bình tĩnh'},{en:'angry',vi:'tức giận'},{en:'relaxed',vi:'thư giãn'}];
+const VOCAB_SUCKHOE=[{en:'headache',vi:'đau đầu'},{en:'stomachache',vi:'đau bụng'},{en:'hospital',vi:'bệnh viện'},{en:'medicine',vi:'thuốc'},{en:'healthy',vi:'khỏe mạnh'},
+  {en:'toothache',vi:'đau răng'},{en:'a cold',vi:'cảm lạnh'},{en:'cough',vi:'ho'},{en:'fever',vi:'sốt'},
+  {en:'sore throat',vi:'đau họng'},{en:'rest',vi:'nghỉ ngơi'},{en:'exercise',vi:'tập thể dục'},{en:'sleep well',vi:'ngủ đủ giấc'}];
+const VOCAB_MUASAM=[{en:'price',vi:'giá tiền'},{en:'expensive',vi:'đắt'},{en:'cheap',vi:'rẻ'},{en:'pay',vi:'trả tiền'},{en:'shop assistant',vi:'nhân viên bán hàng'},
+  {en:'cost',vi:'có giá'},{en:'change',vi:'tiền thừa'},{en:'size',vi:'kích cỡ'},{en:'cash',vi:'tiền mặt'},
+  {en:'receipt',vi:'hóa đơn'},{en:'try on',vi:'mặc thử'},{en:'buy',vi:'mua'},{en:'discount',vi:'giảm giá'}];
+const VOCAB_TUONGLAI=[{en:'weekend',vi:'cuối tuần'},{en:'holiday',vi:'kỳ nghỉ'},{en:'plan',vi:'kế hoạch'},{en:'subject',vi:'môn học'},{en:'favourite',vi:'yêu thích'},
+  {en:'goal',vi:'mục tiêu'},{en:'dream',vi:'ước mơ'},{en:'project',vi:'dự án'},{en:'improve',vi:'cải thiện'},
+  {en:'visit',vi:'thăm'},{en:'travel',vi:'du lịch'},{en:'be going to',vi:'sẽ/định làm'},{en:'next year',vi:'năm sau'}];
+
+/* ================== HỘI THOẠI THEO CHỦ ĐỀ ================== */
+const DIALOGUE_BANTHAN=[
+  {cau:"What's your name?", dung:"My name is Lan.", sai:["I am seven.","It's a cat.","Yes, I do."]},
+  {cau:"How old are you?", dung:"I'm 7 years old.", sai:["My name is Nam.","It's blue.","I like dogs."]},
+  {cau:"How are you?", dung:"I'm fine, thank you.", sai:["It's a book.","I have two sisters.","She is my mother."]},
+  {cau:"Do you have any brothers or sisters?", dung:"Yes, I have one sister.", sai:["I'm seven years old.","It's sunny today.","My favourite colour is red."]}
+];
+const DIALOGUE_CONVAT=[
+  {cau:"What's this?", dung:"It's a cat.", sai:["I'm seven.","Yes, please.","It's Monday."]},
+  {cau:"Is it a dog?", dung:"Yes, it is.", sai:["It's red.","I have a pen.","She is my sister."]},
+  {cau:"Have you got a pet?", dung:"Yes, I have a rabbit.", sai:["It's raining.","I'm fine.","Two, please."]}
+];
+const DIALOGUE_SOTHICH=[
+  {cau:"Do you like apples?", dung:"Yes, I do.", sai:["It's a ball.","I'm eight.","She is tall."]},
+  {cau:"What's your favourite food?", dung:"My favourite food is rice.", sai:["It's Tuesday.","I have a dog.","Yes, please."]},
+  {cau:"Would you like some milk?", dung:"Yes, please.", sai:["No, it isn't.","I'm fine.","It's green."]}
+];
+const DIALOGUE_THOIGIAN=[
+  {cau:"What time is it?", dung:"It's three o'clock.", sai:["It's sunny.","I'm nine.","Yes, I do."]},
+  {cau:"What's the weather like today?", dung:"It's sunny today.", sai:["It's five o'clock.","I have a cat.","It's my book."]}
+];
+const DIALOGUE_CHIDUONG=[
+  {cau:"Where is the park?", dung:"It's next to the school.", sai:["It's three o'clock.","I like dogs.","Yes, please."]},
+  {cau:"How do you go to school?", dung:"I go to school by bus.", sai:["It's sunny.","I'm seven.","She is kind."]}
+];
+const DIALOGUE_QUAKHU=[
+  {cau:"What did you do yesterday?", dung:"I played football.", sai:["I'm playing now.","It's sunny.","I have a dog."]},
+  {cau:"Did you go to school yesterday?", dung:"Yes, I did.", sai:["It's Monday.","I like swimming.","She is my teacher."]}
+];
+const DIALOGUE_SUCKHOE=[
+  {cau:"What's the matter?", dung:"I have a headache.", sai:["It's a ball.","I'm happy.","Yes, please."]},
+  {cau:"Are you okay?", dung:"No, I feel tired.", sai:["It's sunny.","I have a dog.","She is my friend."]}
+];
+const DIALOGUE_MUASAM=[
+  {cau:"How much is it?", dung:"It's five dollars.", sai:["It's Monday.","I have a cat.","Yes, I am."]},
+  {cau:"What are you going to do this weekend?", dung:"I'm going to visit my grandma.", sai:["I have a headache.","It's blue.","She is kind."]}
+];
+
+/* ============== GÓI NÓI – VIẾT THEO TỪNG CHỦ ĐỀ ============== */
+const COMMUNICATION_PACKS={
+  cd1:{
+    title:"Hồ sơ nhỏ của em", level:"Starters · 4–6 câu", minWords:16,
+    mission:"Giới thiệu tên, tuổi, nơi sống, gia đình và một điều con thích.",
+    chunks:[
+      {en:"Hello! My name is ...",vi:"Xin chào! Tên mình là..."},
+      {en:"I'm ... years old.",vi:"Mình ... tuổi."},
+      {en:"I live in ... with ...",vi:"Mình sống ở... cùng..."},
+      {en:"There are ... people in my family.",vi:"Gia đình mình có... người."},
+      {en:"I like ... because ...",vi:"Mình thích... bởi vì..."},
+      {en:"Nice to meet you!",vi:"Rất vui được gặp bạn!"}
+    ],
+    knowledge:["Dùng <b>I am / I'm</b> để nói tuổi và cảm xúc; không dùng <i>I have 8 years</i>.","Tên người, thành phố và từ đầu câu viết hoa; cuối câu có dấu chấm.","Dùng <b>and</b> để nối hai ý, <b>because</b> để nói lý do."],
+    prompts:["What is your name and how old are you?","Where do you live and who do you live with?","How many people are in your family?","What do you like or do well?"],
+    model:"Hello! My name is Mai. I'm eight years old. I live in Hanoi with my family. There are four people in my family. I like drawing and I am good at singing. Nice to meet you!",
+    keywords:"name · age · live · family · like · good at", challenge:"Che bài mẫu và tự giới thiệu bằng 5 ý. Sau đó đổi một ý để bài nói thật sự là của con."
+  },
+  cd2:{
+    title:"Nhà thám hiểm động vật", level:"Starters · 4–6 câu", minWords:15,
+    mission:"Giới thiệu rồi mô tả một con vật bằng màu sắc, số đếm và bộ phận cơ thể.",
+    chunks:[
+      {en:"Today I want to talk about ...",vi:"Hôm nay mình muốn nói về..."},
+      {en:"My favourite animal is ...",vi:"Con vật yêu thích của mình là..."},
+      {en:"It is ... and ...",vi:"Nó... và..."},
+      {en:"It has got ...",vi:"Nó có..."},
+      {en:"It can ...",vi:"Nó có thể..."},
+      {en:"I like it because ...",vi:"Mình thích nó bởi vì..."}
+    ],
+    knowledge:["Dùng <b>It is</b> + màu sắc/kích thước; dùng <b>It has got</b> + bộ phận cơ thể.","Số nhiều thường thêm <b>-s</b>: two wings, four legs.","Dùng <b>can</b> + động từ nguyên mẫu: can run, can fly."],
+    prompts:["What animal do you want to describe?","What colour and size is it?","How many legs, wings or tails has it got?","What can it do and why do you like it?"],
+    model:"Hello! Today I want to talk about my favourite animal. It is a small brown rabbit. It has got four legs and a short tail. It can jump very fast. I like it because it is cute.",
+    keywords:"animal · colour · number · has got · can · because", challenge:"Chọn một con vật khác và tự nói lại, không đổi cấu trúc câu nhưng đổi toàn bộ thông tin."
+  },
+  cd3:{
+    title:"Chiếc cặp và bữa ăn của em", level:"Starters · 4–6 câu", minWords:16,
+    mission:"Nói và viết về đồ dùng của con, món con thích và món con không thích.",
+    chunks:[
+      {en:"This is my school bag.",vi:"Đây là cặp đi học của mình."},
+      {en:"In my bag, there is ...",vi:"Trong cặp mình có..."},
+      {en:"There are ...",vi:"Có nhiều..."},
+      {en:"My favourite food is ...",vi:"Món ăn yêu thích của mình là..."},
+      {en:"I like ... but I don't like ...",vi:"Mình thích... nhưng không thích..."},
+      {en:"I have ... for breakfast.",vi:"Mình ăn/uống... vào bữa sáng."}
+    ],
+    knowledge:["Dùng <b>there is</b> cho một vật và <b>there are</b> cho nhiều vật.","Dùng <b>a/an</b> với một danh từ đếm được; dùng <b>some</b> với số nhiều hoặc thức ăn.","<b>but</b> nối hai ý trái nhau: I like milk, but I don't like juice."],
+    prompts:["What is in your school bag?","How many books or pencils have you got?","What is your favourite food?","What do you eat or drink for breakfast?"],
+    model:"Hello! This is my school bag. There are two books, three pencils and an eraser in it. My favourite food is noodles. I like milk, but I don't like orange juice. I have bread and milk for breakfast.",
+    keywords:"school bag · there is/are · favourite food · like · but · breakfast", challenge:"Nhìn cặp hoặc bữa ăn thật, thêm một câu mới không có trong bài mẫu."
+  },
+  cd4:{
+    title:"Bản tin một ngày của em", level:"Movers · 5–7 câu", minWords:24,
+    mission:"Kể lịch sinh hoạt theo giờ và nối với thời tiết hôm nay.",
+    chunks:[
+      {en:"On school days, I get up at ...",vi:"Ngày đi học, mình thức dậy lúc..."},
+      {en:"First, ... Then, ...",vi:"Đầu tiên... Sau đó..."},
+      {en:"Today it is ...",vi:"Hôm nay trời..."},
+      {en:"When it is ..., I ...",vi:"Khi trời..., mình..."},
+      {en:"My favourite season is ... because ...",vi:"Mùa yêu thích của mình là... vì..."},
+      {en:"In the evening, I ...",vi:"Buổi tối mình..."}
+    ],
+    knowledge:["Dùng hiện tại đơn cho thói quen: <b>I get up, I go, I play</b>.","Dùng <b>at</b> trước giờ: at seven o'clock; dùng <b>in</b> với buổi: in the morning.","Từ nối <b>first, then, after that, finally</b> giúp bài kể mạch lạc."],
+    prompts:["What time do you get up and go to school?","What do you do first, then and in the evening?","What is the weather like today?","What is your favourite season and why?"],
+    model:"Hello! Let me tell you about my day. On school days, I get up at half past six. First, I have breakfast. Then, I go to school. Today it is sunny and warm, so I wear a hat. In the evening, I read a book. My favourite season is summer because I can go swimming.",
+    keywords:"time · first · then · weather · so · season · because", challenge:"Nói lại như một phát thanh viên nhí: thêm giờ cụ thể và một việc con làm khi thời tiết thay đổi."
+  },
+  cd5:{
+    title:"Hướng dẫn viên khu phố", level:"Movers · 5–7 câu", minWords:24,
+    mission:"Giới thiệu nơi con sống, các địa điểm gần nhà và cách con đi lại.",
+    chunks:[
+      {en:"I live in ...",vi:"Mình sống ở..."},
+      {en:"There is a ... near my home.",vi:"Có một... gần nhà mình."},
+      {en:"The ... is next to/opposite ...",vi:"... ở cạnh/đối diện..."},
+      {en:"I go to school by ...",vi:"Mình đến trường bằng..."},
+      {en:"It takes about ... minutes.",vi:"Mất khoảng... phút."},
+      {en:"My favourite place is ... because ...",vi:"Nơi mình thích nhất là... vì..."}
+    ],
+    knowledge:["Dùng <b>there is/are</b> để giới thiệu địa điểm trong khu phố.","Vị trí: <b>next to, opposite, between, near</b>.","Phương tiện dùng <b>by bus/by bike</b>, riêng đi bộ là <b>on foot</b>."],
+    prompts:["Where do you live?","What places are near your home?","Where is your favourite place?","How do you go to school and how long does it take?"],
+    model:"Hello! I live in a busy town. There is a library near my home. It is opposite the park. My favourite place is the park because I can ride my bike there. I go to school by bus, and it takes about fifteen minutes.",
+    keywords:"live · there is · near · opposite · favourite place · by · minutes", challenge:"Dùng đồ vật làm bản đồ nhỏ rồi chỉ đường cho bố mẹ từ nhà đến một địa điểm."
+  },
+  cd6:{
+    title:"Tài năng và ước mơ", level:"Movers · 5–7 câu", minWords:25,
+    mission:"Giới thiệu sở thích, việc đã làm và nghề con mong muốn.",
+    chunks:[
+      {en:"In my free time, I like ...",vi:"Lúc rảnh, mình thích..."},
+      {en:"I practise ... times a week.",vi:"Mình luyện... lần mỗi tuần."},
+      {en:"Yesterday, I ...",vi:"Hôm qua mình đã..."},
+      {en:"I am good at ...",vi:"Mình giỏi về..."},
+      {en:"In the future, I want to be ...",vi:"Trong tương lai, mình muốn trở thành..."},
+      {en:"I want to ... because ...",vi:"Mình muốn... bởi vì..."}
+    ],
+    knowledge:["Sau <b>like</b> có thể dùng động từ <b>-ing</b>: like reading, like swimming.","Việc đã xảy ra dùng quá khứ: play → played; go → went; do → did.","Dùng <b>want to be</b> + nghề nghiệp và <b>because</b> + lý do."],
+    prompts:["What do you like doing in your free time?","How often do you practise it?","What did you do yesterday?","What job do you want in the future and why?"],
+    model:"Hello! In my free time, I like painting and taking photos. I practise painting three times a week. Yesterday, I painted a picture of my family. I am good at choosing colours. In the future, I want to be an artist because I want to make people happy.",
+    keywords:"free time · like -ing · practise · yesterday · good at · want to be · because", challenge:"Thêm một câu về bước nhỏ con có thể làm tuần này để tiến gần hơn tới ước mơ."
+  },
+  cd7:{
+    title:"Em là ai và em chăm sóc mình", level:"Flyers · 6–8 câu", minWords:32,
+    mission:"Miêu tả tính cách, cảm xúc và cách chăm sóc sức khỏe bằng lý do rõ ràng.",
+    chunks:[
+      {en:"I would describe myself as ...",vi:"Mình sẽ miêu tả bản thân là..."},
+      {en:"My friends say I am ...",vi:"Bạn bè nói mình..."},
+      {en:"I feel ... when ...",vi:"Mình cảm thấy... khi..."},
+      {en:"When I feel worried, I ...",vi:"Khi lo lắng, mình..."},
+      {en:"To stay healthy, I ...",vi:"Để khỏe mạnh, mình..."},
+      {en:"We should / shouldn't ...",vi:"Chúng ta nên/không nên..."}
+    ],
+    knowledge:["Sau <b>be</b> và <b>feel</b> dùng tính từ: I am friendly; I feel nervous.","Dùng <b>when</b> để nêu tình huống và <b>because</b> để giải thích.","Dùng <b>should/shouldn't</b> + động từ nguyên mẫu để đưa lời khuyên."],
+    prompts:["Which three adjectives describe you?","When do you feel proud, worried or excited?","What do you do when you have a difficult feeling?","What should children do to stay healthy?"],
+    model:"Hello! I would describe myself as friendly, curious and sometimes shy. My friends say I am helpful because I listen to them. I feel proud when I finish a difficult task. When I feel worried, I breathe slowly and talk to an adult. To stay healthy, I exercise, eat vegetables and sleep well. We shouldn't spend too much time sitting still.",
+    keywords:"describe myself · friends say · feel · when · because · healthy · should", challenge:"Đưa một ví dụ thật để chứng minh một nét tính cách, thay vì chỉ đọc tên tính từ."
+  },
+  cd8:{
+    title:"Kế hoạch cuối tuần thông minh", level:"Flyers · 6–8 câu", minWords:32,
+    mission:"Lập kế hoạch, nói về món cần mua, giá tiền và mục tiêu sắp tới.",
+    chunks:[
+      {en:"This weekend, I'm going to ...",vi:"Cuối tuần này, mình định..."},
+      {en:"First, I'll ... Then, I'll ...",vi:"Đầu tiên mình sẽ... Sau đó mình sẽ..."},
+      {en:"I need to buy ...",vi:"Mình cần mua..."},
+      {en:"It costs ..., so ...",vi:"Nó có giá..., vì vậy..."},
+      {en:"My goal is to ...",vi:"Mục tiêu của mình là..."},
+      {en:"I will practise by ...",vi:"Mình sẽ luyện tập bằng cách..."}
+    ],
+    knowledge:["Kế hoạch đã có ý định dùng <b>be going to</b>; quyết định/lời hứa có thể dùng <b>will</b>.","Dùng <b>first, then, finally</b> để xếp thứ tự kế hoạch.","Dùng <b>so</b> để nói kết quả và <b>because</b> để nói nguyên nhân."],
+    prompts:["What are you going to do this weekend?","What do you need to buy and how much can you spend?","What will you do first, then and finally?","What is one learning goal and how will you practise?"],
+    model:"Hello! This weekend, I'm going to visit my cousin and work on a school project. First, I'll buy some coloured paper. It costs about three dollars, so I can save the rest of my money. Then, I'll finish the project with my cousin. My goal is to speak English more confidently. I will practise by recording one short talk every week.",
+    keywords:"going to · first · buy · cost · so · then · goal · will practise", challenge:"Đổi kế hoạch thành kế hoạch thật của con và thêm một cách kiểm tra xem mục tiêu đã hoàn thành chưa."
+  }
+};
+
+/* ================== DỮ LIỆU 10 CHỦ ĐỀ ================== */
+const CHU_DE=[
+{ id:"cd1", emoji:"🎈", mau:"#DFF3FF", ten:"Đảo Starters — Bản Thân & Gia Đình", capDo:"starters",
+  mota:"Từ vựng, hội thoại và hồ sơ nói–viết về chính em",
+  baiHoc:[
+    { id:"cd1b1", ten:"Từ vựng: Bản thân, gia đình", gen:"tuVungBanThan", soCau:6, vocab:VOCAB_BANTHAN,
+      chuDe:"bản thân, gia đình" },
+    { id:"cd1b2", ten:"Hội thoại: Giới thiệu bản thân", gen:"hoiThoaiBanThan", soCau:4,
+      hoiThoaiMau:DIALOGUE_BANTHAN },
+    { id:"cd1b3", ten:"Nói & viết: Hồ sơ nhỏ của em", loai:"dienDat", pack:"cd1" }
+  ]},
+{ id:"cd2", emoji:"🐶", mau:"#FFE9DC", ten:"Đảo Starters — Màu Sắc, Số Đếm & Con Vật", capDo:"starters",
+  mota:"Hỏi đáp và nói–viết miêu tả con vật yêu thích",
+  baiHoc:[
+    { id:"cd2b1", ten:"Từ vựng: Màu sắc", gen:"tuVungMauSac", soCau:6, vocab:VOCAB_MAUSAC, chuDe:"màu sắc" },
+    { id:"cd2b2", ten:"Từ vựng: Số đếm", gen:"tuVungSo", soCau:6, vocab:VOCAB_SO, chuDe:"số đếm" },
+    { id:"cd2b3", ten:"Từ vựng: Con vật", gen:"tuVungConVat", soCau:6, vocab:VOCAB_CONVAT, chuDe:"con vật" },
+    { id:"cd2b4", ten:"Hội thoại: Hỏi về đồ vật/con vật", gen:"hoiThoaiConVat", soCau:4, hoiThoaiMau:DIALOGUE_CONVAT },
+    { id:"cd2b5", ten:"Nói & viết: Nhà thám hiểm động vật", loai:"dienDat", pack:"cd2" }
+  ]},
+{ id:"cd3", emoji:"🍎", mau:"#E6F9F0", ten:"Đảo Starters — Đồ Vật & Đồ Ăn", capDo:"starters",
+  mota:"Nói–viết về cặp sách, món thích và bữa ăn của em",
+  baiHoc:[
+    { id:"cd3b1", ten:"Từ vựng: Đồ dùng học tập, đồ chơi", gen:"tuVungDoDung", soCau:6, vocab:VOCAB_DODUNG, chuDe:"đồ dùng học tập" },
+    { id:"cd3b2", ten:"Từ vựng: Đồ ăn, thức uống", gen:"tuVungDoAn", soCau:6, vocab:VOCAB_DOAN, chuDe:"đồ ăn, thức uống" },
+    { id:"cd3b3", ten:"Hội thoại: Hỏi về sở thích ăn uống", gen:"hoiThoaiSoThich", soCau:4, hoiThoaiMau:DIALOGUE_SOTHICH },
+    { id:"cd3b4", ten:"Nói & viết: Chiếc cặp và bữa ăn", loai:"dienDat", pack:"cd3" }
+  ]},
+{ id:"cd4", emoji:"⏰", mau:"#F3EDFF", ten:"Đảo Movers — Thời Gian & Thời Tiết", capDo:"movers",
+  mota:"Kể một ngày theo trình tự và làm bản tin thời tiết",
+  baiHoc:[
+    { id:"cd4b1", ten:"Từ vựng: Thời gian", gen:"tuVungThoiGian", soCau:6, vocab:VOCAB_THOIGIAN, chuDe:"thời gian" },
+    { id:"cd4b2", ten:"Từ vựng: Thời tiết, mùa", gen:"tuVungThoiTiet", soCau:6, vocab:VOCAB_THOITIET, chuDe:"thời tiết" },
+    { id:"cd4b3", ten:"Hội thoại: Hỏi giờ, hỏi thời tiết", gen:"hoiThoaiThoiGian", soCau:4, hoiThoaiMau:DIALOGUE_THOIGIAN },
+    { id:"cd4b4", ten:"Nói & viết: Bản tin một ngày", loai:"dienDat", pack:"cd4" }
+  ]},
+{ id:"cd5", emoji:"🏙️", mau:"#FFF3D6", ten:"Đảo Movers — Thị Trấn & Phương Tiện", capDo:"movers",
+  mota:"Giới thiệu khu phố, chỉ vị trí và cách đi lại",
+  baiHoc:[
+    { id:"cd5b1", ten:"Từ vựng: Nơi chốn trong thị trấn", gen:"tuVungThiTran", soCau:6, vocab:VOCAB_THITRAN, chuDe:"thị trấn" },
+    { id:"cd5b2", ten:"Từ vựng: Phương tiện giao thông", gen:"tuVungPhuongTien", soCau:5, vocab:VOCAB_PHUONGTIEN, chuDe:"phương tiện" },
+    { id:"cd5b3", ten:"Hội thoại: Hỏi đường, cách đi lại", gen:"hoiThoaiChiDuong", soCau:4, hoiThoaiMau:DIALOGUE_CHIDUONG },
+    { id:"cd5b4", ten:"Nói & viết: Hướng dẫn viên khu phố", loai:"dienDat", pack:"cd5" }
+  ]},
+{ id:"cd6", emoji:"🏃", mau:"#E8F1FF", ten:"Đảo Movers — Nghề Nghiệp & Sở Thích", capDo:"movers",
+  mota:"Kể sở thích, việc đã làm và ước mơ nghề nghiệp",
+  baiHoc:[
+    { id:"cd6b1", ten:"Từ vựng: Nghề nghiệp", gen:"tuVungNgheNghiep", soCau:5, vocab:VOCAB_NGHENGHIEP, chuDe:"nghề nghiệp" },
+    { id:"cd6b2", ten:"Từ vựng: Sở thích, hoạt động", gen:"tuVungSoThich", soCau:5, vocab:VOCAB_SOTHICH, chuDe:"sở thích" },
+    { id:"cd6b3", ten:"Hội thoại: Kể việc đã làm (quá khứ)", gen:"hoiThoaiQuaKhu", soCau:4, hoiThoaiMau:DIALOGUE_QUAKHU },
+    { id:"cd6b4", ten:"Nói & viết: Tài năng và ước mơ", loai:"dienDat", pack:"cd6" }
+  ]},
+{ id:"cd7", emoji:"😊", mau:"#FDE8F0", ten:"Đảo Flyers — Tính Cách & Sức Khỏe", capDo:"flyers",
+  mota:"Miêu tả bản thân, cảm xúc và cách chăm sóc sức khỏe",
+  baiHoc:[
+    { id:"cd7b1", ten:"Từ vựng: Tính cách", gen:"tuVungTinhCach", soCau:5, vocab:VOCAB_TINHCACH, chuDe:"tính cách" },
+    { id:"cd7b2", ten:"Từ vựng: Cảm xúc", gen:"tuVungCamXuc", soCau:5, vocab:VOCAB_CAMXUC, chuDe:"cảm xúc" },
+    { id:"cd7b3", ten:"Từ vựng: Sức khỏe", gen:"tuVungSucKhoe", soCau:5, vocab:VOCAB_SUCKHOE, chuDe:"sức khỏe" },
+    { id:"cd7b4", ten:"Hội thoại: Hỏi thăm sức khỏe", gen:"hoiThoaiSucKhoe", soCau:4, hoiThoaiMau:DIALOGUE_SUCKHOE },
+    { id:"cd7b5", ten:"Nói & viết: Em là ai & chăm sóc mình", loai:"dienDat", pack:"cd7" }
+  ]},
+{ id:"cd8", emoji:"🛍️", mau:"#E3F7ED", ten:"Đảo Flyers — Mua Sắm & Tương Lai", capDo:"flyers",
+  mota:"Lập kế hoạch cuối tuần, chi tiêu và mục tiêu học tập",
+  baiHoc:[
+    { id:"cd8b1", ten:"Từ vựng: Mua sắm, tiền bạc", gen:"tuVungMuaSam", soCau:5, vocab:VOCAB_MUASAM, chuDe:"mua sắm" },
+    { id:"cd8b2", ten:"Từ vựng: Kế hoạch, trường học", gen:"tuVungTuongLai", soCau:5, vocab:VOCAB_TUONGLAI, chuDe:"kế hoạch tương lai" },
+    { id:"cd8b3", ten:"Hội thoại: Mua đồ, nói kế hoạch", gen:"hoiThoaiMuaSam", soCau:4, hoiThoaiMau:DIALOGUE_MUASAM },
+    { id:"cd8b4", ten:"Nói & viết: Kế hoạch cuối tuần", loai:"dienDat", pack:"cd8" }
+  ]},
+{ id:"cd9", emoji:"🎤", mau:"#FFF0E0", ten:"Đảo Trình Bày", capDo:"extra",
+  mota:"Tập nói, giới thiệu một chủ đề (bố mẹ cùng nghe)",
+  baiHoc:[
+    { id:"cd9b1", ten:"Giới thiệu về bản thân em", loai:"noi",
+      de:"Introduce yourself. (Giới thiệu về bản thân em bằng tiếng Anh.)",
+      cauHoiGoiY:["What's your name? (Tên em là gì?)","How old are you? (Em bao nhiêu tuổi?)","Where do you live? (Em sống ở đâu?)","What do you like? (Em thích gì?)"],
+      tuGoiY:"name, age, live, like" },
+    { id:"cd9b2", ten:"Kể về gia đình em", loai:"noi",
+      de:"Talk about your family. (Kể về gia đình em.)",
+      cauHoiGoiY:["How many people are in your family? (Gia đình em có mấy người?)","Who is in your family? (Gồm những ai?)","What does your mother/father do? (Bố/mẹ em làm nghề gì?)"],
+      tuGoiY:"family, mother, father, brother, sister" },
+    { id:"cd9b3", ten:"Con vật em yêu thích", loai:"noi",
+      de:"Talk about your favourite animal. (Nói về con vật em yêu thích.)",
+      cauHoiGoiY:["What's your favourite animal? (Con vật yêu thích của em là gì?)","What colour is it? (Nó màu gì?)","Why do you like it? (Vì sao em thích nó?)"],
+      tuGoiY:"animal, colour, like, because" },
+    { id:"cd9b4", ten:"Một ngày của em", loai:"noi",
+      de:"Talk about your day. (Kể về một ngày của em.)",
+      cauHoiGoiY:["What time do you get up? (Em thức dậy lúc mấy giờ?)","What do you do at school? (Ở trường em làm gì?)","What do you do in the evening? (Buổi tối em làm gì?)"],
+      tuGoiY:"morning, school, evening, then" },
+    { id:"cd9b5", ten:"Sở thích của em", loai:"noi",
+      de:"Talk about your hobby. (Nói về sở thích của em.)",
+      cauHoiGoiY:["What's your hobby? (Sở thích của em là gì?)","When do you do it? (Em làm việc đó khi nào?)","Why do you like it? (Vì sao em thích?)"],
+      tuGoiY:"hobby, like, because, fun" },
+    { id:"cd9b6", ten:"Ước mơ tương lai của em", loai:"noi",
+      de:"Talk about what you want to be in the future. (Nói về ước mơ tương lai của em.)",
+      cauHoiGoiY:["What do you want to be? (Em muốn làm nghề gì?)","Why? (Vì sao?)","What will you do in that job? (Em sẽ làm gì trong công việc đó?)"],
+      tuGoiY:"want to be, doctor, teacher, because" }
+  ]},
+{ id:"cd10", emoji:"🏆", mau:"#FFE3EC", ten:"Đảo Kho Báu", capDo:"extra",
+  mota:"Ôn tập tổng hợp cả 3 cấp độ Starters – Movers – Flyers",
+  baiHoc:[
+    { id:"cd10b1", ten:"Ôn tập từ vựng tổng hợp", gen:"onTapTA1", soCau:8,
+      lyThuyetRieng:'<h3>🗝️ Chìa khóa từ vựng</h3><p>Ôn lại tất cả từ vựng đã học ở 3 cấp độ Starters, Movers, Flyers.</p>'+
+      '<div class="meo"><b>💡 Mẹo cho bố mẹ:</b> Dùng nút Ôn nhanh thường xuyên — app sẽ tự trộn từ các chủ đề con hay sai.</div>' },
+    { id:"cd10b2", ten:"Ôn tập hội thoại tổng hợp", gen:"onTapTA2", soCau:8,
+      lyThuyetRieng:'<h3>🗝️ Chìa khóa hội thoại</h3><p>Ôn lại các mẫu hội thoại đã học — hỏi đáp về bản thân, sở thích, thời gian, sức khỏe, mua sắm…</p>'+
+      '<div class="meo"><b>💡 Mẹo cho bố mẹ:</b> Hoàn thành hết các đảo, hãy để con thử ghi âm 1 đoạn giới thiệu bản thân bằng tiếng Anh — nghe lại cùng con là một cách ăn mừng rất ý nghĩa!</div>' }
+  ]}
+];
+
+/* ================== NỘI DUNG PHỤ HUYNH ================== */
+const PARENT_HTML=
+'<div class="ph-card"><h3>👨‍👩‍👧 Một buổi học 12 phút</h3>'+
+'<ol><li><b>3 phút nhớ lại:</b> để con tự trả lời trước khi cho gợi ý. Khoảng dừng để nghĩ chính là lúc trí nhớ được luyện.</li>'+
+'<li><b>5 phút khám phá:</b> nghe nút 🔊, chỉ vào đồ vật/tranh, làm động tác hoặc đóng vai theo mẫu câu.</li>'+
+'<li><b>4 phút tự làm:</b> giảm trợ giúp; cuối buổi con nói một câu của riêng mình và chọn mức “Dễ / Vừa sức / Cần ôn”.</li></ol>'+
+'<p>Đi theo Starters → Movers → Flyers, nhưng ưu tiên thẻ “cần ôn hôm nay”. Một buổi ngắn, đều đặn thường hiệu quả hơn một buổi dài gây quá tải.</p></div>'+
+'<div class="ph-card"><h3>🧠 Nền tảng tâm lý học & giáo dục học</h3>'+
+'<div class="principle-grid">'+
+'<div class="principle"><b>Truy hồi chủ động</b><span>Tự nhớ trước khi xem đáp án giúp củng cố đường dẫn trí nhớ.</span></div>'+
+'<div class="principle"><b>Lặp lại ngắt quãng</b><span>Nội dung quay lại sau 1–2–4–8–16 ngày, sớm hơn khi con thấy khó.</span></div>'+
+'<div class="principle"><b>Gợi ý giảm dần</b><span>Từ làm mẫu → có gợi ý → tự làm; tránh phụ thuộc vào đáp án.</span></div>'+
+'<div class="principle"><b>Học thành thạo</b><span>Tiến độ dựa trên chất lượng nhớ lại, không chỉ dấu “đã xem”.</span></div>'+
+'<div class="principle"><b>Củng cố tích cực</b><span>Phản hồi ngay, cụ thể về chiến lược; sai không bị trừ điểm hay mất chuỗi.</span></div>'+
+'<div class="principle"><b>Thuyết tự quyết</b><span>Cho con chọn đảo, thấy năng lực tăng và được đồng hành thay vì bị kiểm soát.</span></div>'+
+'<div class="principle"><b>Tải nhận thức</b><span>Một màn hình, một nhiệm vụ, cụm từ ngắn; bài khó được chia nhỏ.</span></div>'+
+'<div class="principle"><b>Mã hóa kép & TPR</b><span>Kết hợp chữ, biểu tượng, âm thanh và vận động để tạo nhiều dấu vết ghi nhớ.</span></div>'+
+'</div></div>'+
+'<div class="ph-card"><h3>💬 Phản hồi giúp con tiến bộ</h3>'+
+'<ul><li>Thay “Con thông minh quá” bằng <b>“Con đã dừng lại, nhớ chủ đề rồi tự sửa được”</b>.</li>'+
+'<li>Khi sai, hỏi: <b>“Con muốn nghe lại, xem gợi ý, hay thử thêm một lần?”</b> — cho con quyền lựa chọn.</li>'+
+'<li>Với bài nói, không ngắt lời. Sau khi con nói xong, chọn <b>một</b> điểm làm tốt và <b>một</b> mục tiêu nhỏ cho lần sau.</li>'+
+'<li>Không dùng streak để dọa mất thành tích; streak chỉ ghi nhận ngày có hoàn thành hoạt động.</li></ul></div>'+
+'<div class="ph-card"><h3>✍️🎤 Cách dùng nhiệm vụ nói–viết mới</h3>'+
+'<ol><li><b>Nói trước khi viết:</b> nghe và nhại mẫu, sau đó thay một chi tiết bằng thông tin thật. Việc diễn tập bằng lời giúp giảm tải khi viết.</li>'+
+'<li><b>Viết theo bậc thang:</b> trả lời từng câu hỏi, dùng khung câu, rồi nối bằng and, but, because, first, then. Chỉ sửa một loại lỗi mỗi lượt.</li>'+
+'<li><b>Che mẫu để tự nói:</b> chỉ nhìn từ khóa, ghi âm nếu muốn, nghe lại và chọn một điểm tốt cùng một mục tiêu nhỏ.</li></ol>'+
+'<p>Quy trình này kết hợp <b>gợi ý giảm dần</b>, <b>diễn tập truy hồi</b> và <b>chuyển giao từ ngôn ngữ tiếp nhận sang ngôn ngữ sản sinh</b>. Mỗi cấp độ tăng dần độ dài nhưng vẫn cho phép con dùng thông tin thật để duy trì cảm giác tự chủ.</p></div>'+
+'<div class="ph-card"><h3>🌤️ Khi con gặp khó</h3>'+
+'<ul><li><b>Quên cách đọc:</b> bấm 🔊, nghe rồi nhại theo; chưa cần tự giải mã chữ ngay.</li>'+
+'<li><b>Ngại nói:</b> cho phép nói tiếng Việt trước, ghép từng câu tiếng Anh, rồi mới nói liền mạch.</li>'+
+'<li><b>Lẫn hai ngoại ngữ:</b> dùng dấu hiệu bối cảnh rõ (một giờ, một nhân vật, một góc học) và không phê bình việc chuyển mã.</li>'+
+'<li><b>Căng thẳng:</b> dừng bài, uống nước hoặc vận động. Điều hòa cảm xúc đi trước việc học.</li></ul></div>'+
+'<div class="ph-card"><h3>📚 Phạm vi nội dung</h3>'+
+'<p>Chủ điểm được đối chiếu với mục lục và dạng hoạt động trong <i>Fun for Starters 4th Edition</i>, <i>Fun for Movers 4th Edition</i>, <i>Fun for Flyers 4th Edition</i>; cách tổ chức nghe–chỉ–nhắc lại–vận động–dự án được tham khảo thêm từ <i>Les Loustics 1</i>. Ứng dụng là công cụ luyện bổ trợ, không thay thế audio, giáo viên hay bài thi chính thức.</p></div>'+
+'<div class="ph-card"><h3>🔎 Khi nào cần hỗ trợ chuyên môn</h3>'+
+'<p>Nếu khó khăn kéo dài nhiều tháng, xuất hiện cả trong tiếng Việt hoặc ảnh hưởng rõ đến tâm trạng, sinh hoạt và việc học, hãy trao đổi với giáo viên và chuyên gia phù hợp. Ứng dụng không phải công cụ chẩn đoán.</p></div>';
+
+/* ================== TIỆN ÍCH ================== */
+function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
+function shuffle(arr){const a=arr.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function esc(value){return String(value==null?'':value).replace(/[&<>'"]/g,function(ch){return {'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch];});}
+function homNayKey(){
+  const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function keySauNgay(soNgay){
+  const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()+soNgay);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function laHomQua(key){
+  const d=new Date(); d.setHours(12,0,0,0); d.setDate(d.getDate()-1);
+  return key===d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+
+function tuVungGen(bank, tenNhom){
+  const item=pick(bank);
+  const xuoi=rnd(1,2)===1;
+  const others=shuffle(bank.filter(function(x){return x!==item;})).slice(0,3);
+  if(xuoi){
+    return {hoi:'"'+item.en+'" có nghĩa là gì?', visual:'',
+      dapAn:shuffle([item.vi].concat(others.map(function(x){return x.vi;}))), dung:item.vi,
+      goiY:'Nhớ lại chủ đề '+tenNhom+' đã học nhé!', giaiThich:'"'+item.en+'" nghĩa là "'+item.vi+'".'};
+  }
+  return {hoi:'"'+item.vi+'" trong tiếng Anh là gì?', visual:'',
+    dapAn:shuffle([item.en].concat(others.map(function(x){return x.en;}))), dung:item.en,
+    goiY:'Nhớ lại chủ đề '+tenNhom+' đã học nhé!', giaiThich:'"'+item.vi+'" là "'+item.en+'".'};
+}
+function tuVungTuThemGen(item){
+  const nguonPhu=[].concat(VOCAB_BANTHAN,VOCAB_CONVAT,VOCAB_DODUNG,VOCAB_DOAN,VOCAB_THOITIET,VOCAB_SOTHICH);
+  const bank=(state.tuVungTuThem||[]).concat(nguonPhu).filter(function(w){return String(w.en).toLowerCase()!==String(item.en).toLowerCase();});
+  const xuoi=rnd(1,2)===1;
+  const others=[];
+  shuffle(bank).forEach(function(w){
+    if(others.length>=3)return;
+    const value=xuoi?w.vi:w.en;
+    if(value && !others.some(function(x){return String(xuoi?x.vi:x.en).toLowerCase()===String(value).toLowerCase();}))others.push(w);
+  });
+  const en=esc(item.en),vi=esc(item.vi),topic=esc(item.topic||''),viDu=item.example?' Ví dụ: '+esc(item.example):'';
+  if(xuoi){
+    return {hoi:'"'+en+'" có nghĩa là gì?',visual:'',dapAn:shuffle([vi].concat(others.map(function(x){return esc(x.vi);}))),dung:vi,
+      goiY:'Từ này nằm trong Sổ từ của bé'+(topic?' · chủ đề '+topic:'')+'.',giaiThich:'"'+en+'" nghĩa là "'+vi+'".'+viDu};
+  }
+  return {hoi:'"'+vi+'" trong tiếng Anh là gì?',visual:'',dapAn:shuffle([en].concat(others.map(function(x){return esc(x.en);}))),dung:en,
+    goiY:'Thử nhớ âm đầu hoặc nghe lại từ trong Sổ từ của bé.',giaiThich:'"'+vi+'" là "'+en+'".'+viDu};
+}
+function hoiThoaiGen(bank){
+  const item=pick(bank);
+  return {hoi:'Trả lời nào phù hợp cho câu hỏi: "'+item.cau+'"?', visual:'',
+    dapAn:shuffle([item.dung].concat(item.sai)), dung:item.dung,
+    goiY:'Đọc to câu hỏi lên, nghĩ xem câu trả lời nào có nghĩa khớp.',
+    giaiThich:'"'+item.cau+'" → "'+item.dung+'"'};
+}
+
+/* ================== BỘ SINH CÂU HỎI ================== */
+const GEN={
+  tuVungBanThan(){return tuVungGen(VOCAB_BANTHAN,'bản thân & gia đình');},
+  tuVungMauSac(){return tuVungGen(VOCAB_MAUSAC,'màu sắc');},
+  tuVungSo(){return tuVungGen(VOCAB_SO,'số đếm');},
+  tuVungConVat(){return tuVungGen(VOCAB_CONVAT,'con vật');},
+  tuVungDoDung(){return tuVungGen(VOCAB_DODUNG,'đồ dùng học tập');},
+  tuVungDoAn(){return tuVungGen(VOCAB_DOAN,'đồ ăn thức uống');},
+  tuVungThoiGian(){return tuVungGen(VOCAB_THOIGIAN,'thời gian');},
+  tuVungThoiTiet(){return tuVungGen(VOCAB_THOITIET,'thời tiết');},
+  tuVungThiTran(){return tuVungGen(VOCAB_THITRAN,'thị trấn');},
+  tuVungPhuongTien(){return tuVungGen(VOCAB_PHUONGTIEN,'phương tiện');},
+  tuVungNgheNghiep(){return tuVungGen(VOCAB_NGHENGHIEP,'nghề nghiệp');},
+  tuVungSoThich(){return tuVungGen(VOCAB_SOTHICH,'sở thích');},
+  tuVungTinhCach(){return tuVungGen(VOCAB_TINHCACH,'tính cách');},
+  tuVungCamXuc(){return tuVungGen(VOCAB_CAMXUC,'cảm xúc');},
+  tuVungSucKhoe(){return tuVungGen(VOCAB_SUCKHOE,'sức khỏe');},
+  tuVungMuaSam(){return tuVungGen(VOCAB_MUASAM,'mua sắm');},
+  tuVungTuongLai(){return tuVungGen(VOCAB_TUONGLAI,'kế hoạch tương lai');},
+  hoiThoaiBanThan(){return hoiThoaiGen(DIALOGUE_BANTHAN);},
+  hoiThoaiConVat(){return hoiThoaiGen(DIALOGUE_CONVAT);},
+  hoiThoaiSoThich(){return hoiThoaiGen(DIALOGUE_SOTHICH);},
+  hoiThoaiThoiGian(){return hoiThoaiGen(DIALOGUE_THOIGIAN);},
+  hoiThoaiChiDuong(){return hoiThoaiGen(DIALOGUE_CHIDUONG);},
+  hoiThoaiQuaKhu(){return hoiThoaiGen(DIALOGUE_QUAKHU);},
+  hoiThoaiSucKhoe(){return hoiThoaiGen(DIALOGUE_SUCKHOE);},
+  hoiThoaiMuaSam(){return hoiThoaiGen(DIALOGUE_MUASAM);},
+  onTapTA1(){return GEN[pick(['tuVungBanThan','tuVungMauSac','tuVungSo','tuVungConVat','tuVungDoDung','tuVungDoAn',
+    'tuVungThoiGian','tuVungThoiTiet','tuVungThiTran','tuVungPhuongTien','tuVungNgheNghiep','tuVungSoThich',
+    'tuVungTinhCach','tuVungCamXuc','tuVungSucKhoe','tuVungMuaSam','tuVungTuongLai'])]();},
+  onTapTA2(){return GEN[pick(['hoiThoaiBanThan','hoiThoaiConVat','hoiThoaiSoThich','hoiThoaiThoiGian',
+    'hoiThoaiChiDuong','hoiThoaiQuaKhu','hoiThoaiSucKhoe','hoiThoaiMuaSam'])]();}
+};
+
+/* ================== LƯU TRỮ AN TOÀN ================== */
+const KHO=(function(){
+  let mem={};
+  function ok(){try{localStorage.setItem('__t','1');localStorage.removeItem('__t');return true;}catch(e){return false;}}
+  const dungLS=ok();
+  return {
+    get(k,mac){ try{ if(dungLS){const v=localStorage.getItem(k); return v===null?mac:JSON.parse(v);} }catch(e){} return (k in mem)?mem[k]:mac; },
+    set(k,v){ try{ if(dungLS){localStorage.setItem(k,JSON.stringify(v)); return;} }catch(e){} mem[k]=v; }
+  };
+})();
+const STATE_MAC_DINH={sao:0,streak:0,ngayCuoi:'',tienDo:{},saiBank:[],mastery:{},tuVungTuThem:[],soBuoi:0,lastReflection:''};
+let state=KHO.get('daoTiengAnh',STATE_MAC_DINH);
+state=Object.assign({},STATE_MAC_DINH,state);
+state.tienDo=state.tienDo||{}; state.saiBank=state.saiBank||[]; state.mastery=state.mastery||{}; state.tuVungTuThem=Array.isArray(state.tuVungTuThem)?state.tuVungTuThem:[];
+function luu(){ KHO.set('daoTiengAnh', state); }
+const KHOANG_ON=[0,1,2,4,8,16,30];
+function ghiNhanHoanThanhNgay(){
+  const homNay=homNayKey();
+  if(state.ngayCuoi===homNay)return;
+  state.streak=laHomQua(state.ngayCuoi)?state.streak+1:1;
+  state.ngayCuoi=homNay; state.soBuoi=(state.soBuoi||0)+1; luu();
+}
+function capNhatNangLuc(gen,thanhCong){
+  if(!gen)return;
+  const m=state.mastery[gen]||{box:0,seen:0,correct:0,due:homNayKey()};
+  const homNay=homNayKey(); m.seen++;
+  if(thanhCong){
+    m.correct++;
+    if(m.promotedOn!==homNay){m.box=Math.min(5,(m.box||0)+1);m.promotedOn=homNay;}
+  }else if(m.penalizedOn!==homNay){
+    m.box=Math.max(0,(m.box||0)-1);m.penalizedOn=homNay;
+  }
+  m.last=homNay; m.due=keySauNgay(thanhCong?KHOANG_ON[m.box]:1);
+  state.mastery[gen]=m; luu(); capNhatChip();
+}
+function cacKyNangDenHan(){
+  const homNay=homNayKey();
+  return Object.keys(state.mastery).filter(function(k){return (state.mastery[k].due||homNay)<=homNay;});
+}
+function keyTuThem(id){return 'tuThem:'+id;}
+function laKeyTuThem(key){return typeof key==='string'&&key.indexOf('tuThem:')===0;}
+function timTuThemTheoKey(key){const id=String(key||'').slice(7);return state.tuVungTuThem.find(function(w){return String(w.id)===id;});}
+function keyCoBoSinh(key){return Boolean(GEN[key]||(laKeyTuThem(key)&&timTuThemTheoKey(key)));}
+function taoCauHoiTheoKey(key){
+  if(GEN[key])return GEN[key]();
+  const item=timTuThemTheoKey(key); return item?tuVungTuThemGen(item):null;
+}
+function phanTramThanhThao(){
+  const ds=Object.values(state.mastery); if(!ds.length)return 0;
+  return Math.round(ds.reduce(function(s,m){return s+Math.min(5,m.box||0);},0)/(ds.length*5)*100);
+}
+
+const KHEN=['Đúng ngay lần đầu — con đã tự gọi kiến thức từ trí nhớ! 🌱','Con đã dừng lại suy nghĩ rồi chọn chính xác. Well done! 🦜',
+  'Con nối đúng câu hỏi với câu trả lời. Great retrieval! 💪','Con nhớ lại được mà không cần gợi ý — thêm một bước vững chắc! ⭐',
+  'Chính xác! Việc luyện đều đang giúp trí nhớ mạnh hơn. 🌿'];
+const DONG_VIEN=['Chưa đúng, nhưng không sao! Sai là bạn của học mà! 🦜',
+  'Gần đúng rồi đấy! Nghĩ thêm chút xíu nào 🤔','Try again — Vẹt Poly tin con làm được! 💛',
+  'Chưa phải đáp án này. Hít thở sâu, thử lần nữa nào! 🌈'];
+const CHAO=['Hello! Mình là Vẹt Poly. Hôm nay mình cùng khám phá đảo tiếng Anh nào nhỉ?',
+  'Con quay lại rồi! Vẹt Poly chờ con mãi. Học đều mỗi ngày một chút là giỏi nhất đó! 🦜',
+  'Chỉ cần 12 phút mỗi ngày thôi — mình cùng bắt đầu nhé!',
+  'Hôm nay con muốn thăm đảo nào? Nói sai cũng không sao hết nha, cứ mạnh dạn nói tiếng Anh!'];
+
+/* ================== ĐIỀU HƯỚNG ================== */
+const $=function(s){return document.querySelector(s);};
+function toi(man){
+  document.querySelectorAll('.screen').forEach(function(sc){sc.classList.remove('active');});
+  $('#screen-'+man).classList.add('active');
+  window.scrollTo(0,0);
+  capNhatChip();
+}
+function capNhatChip(){
+  $('#tongSao').textContent=state.sao;
+  $('#chuoiNgay').textContent=state.streak;
+  if($('#masteryChip'))$('#masteryChip').textContent=phanTramThanhThao()+'%';
+  document.querySelectorAll('.tongSaoMini').forEach(function(el){el.textContent=state.sao;});
+  const customCount=state.tuVungTuThem.length;
+  if($('#customCountHome'))$('#customCountHome').textContent='· '+customCount+' từ';
+  if($('#customCountTop'))$('#customCountTop').textContent=customCount;
+  if($('#customDueStat')){
+    const due=state.tuVungTuThem.filter(function(w){const m=state.mastery[keyTuThem(w.id)]||{};return (m.due||homNayKey())<=homNayKey();}).length;
+    $('#customDueStat').textContent=due+' từ cần ôn';
+  }
+}
+function toast(msg){
+  const t=$('#toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2200);
+}
+let customEditingId=null;
+function resetCustomForm(){
+  customEditingId=null;
+  $('#customWordForm').reset();
+  $('#wordFormTitle').textContent='Thêm một từ mới';
+  $('#btnSaveWord').textContent='＋ Thêm vào sổ từ & lịch ôn';
+  $('#btnCancelEdit').style.display='none';
+}
+function renderCustomWords(){
+  const host=$('#customWordList'); if(!host)return;
+  const query=String($('#customSearch')?.value||'').trim().toLowerCase();
+  const words=state.tuVungTuThem.slice().reverse().filter(function(w){return !query||[w.en,w.vi,w.topic,w.example].some(function(v){return String(v||'').toLowerCase().indexOf(query)>=0;});});
+  if(!words.length){
+    host.innerHTML='<div class="custom-empty">'+(query?'Không tìm thấy từ phù hợp.':'Chưa có từ nào. Khi gặp một từ mới, mình thêm vào đây nhé! 🌱')+'</div>';
+    capNhatChip(); return;
+  }
+  host.innerHTML=words.map(function(w){
+    const m=state.mastery[keyTuThem(w.id)]||{box:0,due:homNayKey()};
+    const due=(m.due||homNayKey())<=homNayKey();
+    return '<article class="custom-word" data-id="'+esc(w.id)+'"><div class="custom-word-main">'+
+      '<div class="custom-word-title"><b>'+esc(w.en)+'</b><span>— '+esc(w.vi)+'</span></div>'+
+      '<div class="custom-word-meta">'+(w.topic?'<span>'+esc(w.topic)+'</span>':'<span>Chưa xếp chủ đề</span>')+'<span>'+(due?'Cần ôn hôm nay':'Hộp nhớ '+Math.max(1,m.box||0)+'/5')+'</span></div>'+
+      (w.example?'<p class="custom-example">“'+esc(w.example)+'”</p>':'')+'</div>'+
+      '<div class="custom-word-actions"><button class="icon-action" data-action="hear" type="button" aria-label="Nghe '+esc(w.en)+'">🔊 Nghe</button>'+
+      '<button class="icon-action review" data-action="review" type="button">🧠 Ôn</button><button class="icon-action" data-action="edit" type="button">✏️ Sửa</button><button class="icon-action danger" data-action="delete" type="button">🗑️ Xóa</button></div></article>';
+  }).join('');
+  capNhatChip();
+}
+function moSoTu(){renderCustomWords();toi('custom');setTimeout(function(){$('#customEn').focus();},80);}
+function luuCustomWord(event){
+  event.preventDefault();
+  const en=$('#customEn').value.trim().replace(/\s+/g,' '),vi=$('#customVi').value.trim().replace(/\s+/g,' ');
+  const topic=$('#customTopic').value.trim().replace(/\s+/g,' '),example=$('#customExample').value.trim().replace(/\s+/g,' ');
+  if(!en||!vi){toast('Con hãy điền cả từ tiếng Anh và nghĩa tiếng Việt nhé.');(!en?$('#customEn'):$('#customVi')).focus();return;}
+  const duplicate=state.tuVungTuThem.find(function(w){return String(w.en).toLowerCase()===en.toLowerCase()&&String(w.id)!==String(customEditingId||'');});
+  if(duplicate){toast('Từ này đã có trong sổ. Con có thể bấm Sửa ở thẻ từ.');return;}
+  if(customEditingId){
+    const word=state.tuVungTuThem.find(function(w){return String(w.id)===String(customEditingId);});
+    if(word){word.en=en;word.vi=vi;word.topic=topic;word.example=example;word.updatedAt=Date.now();}
+    toast('Đã cập nhật từ “'+en+'”.');
+  }else{
+    const id=Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+    state.tuVungTuThem.push({id:id,en:en,vi:vi,topic:topic,example:example,createdAt:Date.now()});
+    state.mastery[keyTuThem(id)]={box:0,seen:0,correct:0,due:homNayKey()};
+    toast('Đã thêm “'+en+'” vào lịch ôn hôm nay!');
+  }
+  luu();resetCustomForm();renderCustomWords();capNhatHanhTrinh();
+}
+function handleCustomWordAction(event){
+  const button=event.target.closest&&event.target.closest('[data-action]'); if(!button)return;
+  const card=button.closest('.custom-word'),id=card&&card.dataset.id;
+  const word=state.tuVungTuThem.find(function(w){return String(w.id)===String(id);}); if(!word)return;
+  const action=button.dataset.action;
+  if(action==='hear'){noiTiengAnh(word.example?word.en+'. '+word.example:word.en);return;}
+  if(action==='review'){moOnNhanh([keyTuThem(word.id),keyTuThem(word.id),keyTuThem(word.id),keyTuThem(word.id)]);return;}
+  if(action==='edit'){
+    customEditingId=word.id;$('#customEn').value=word.en;$('#customVi').value=word.vi;$('#customTopic').value=word.topic||'';$('#customExample').value=word.example||'';
+    $('#wordFormTitle').textContent='Sửa từ “'+word.en+'”';$('#btnSaveWord').textContent='💾 Lưu thay đổi';$('#btnCancelEdit').style.display='inline-block';
+    $('#customEn').focus();window.scrollTo({top:0,behavior:'smooth'});return;
+  }
+  if(action==='delete'&&window.confirm('Xóa “'+word.en+'” khỏi Sổ từ của bé và lịch ôn?')){
+    state.tuVungTuThem=state.tuVungTuThem.filter(function(w){return String(w.id)!==String(id);});
+    delete state.mastery[keyTuThem(id)];state.saiBank=state.saiBank.filter(function(k){return k!==keyTuThem(id);});
+    if(String(customEditingId)===String(id))resetCustomForm();luu();renderCustomWords();capNhatHanhTrinh();toast('Đã xóa từ khỏi sổ.');
+  }
+}
+function demBaiXong(cd){
+  return cd.baiHoc.filter(function(b){return state.tienDo[b.id]&&state.tienDo[b.id].xong;}).length;
+}
+const LEVEL_LABEL={starters:'STARTERS',movers:'MOVERS',flyers:'FLYERS',extra:'BỔ SUNG'};
+function veBanDo(){
+  $('#loiChao').textContent=pick(CHAO);
+  const el=$('#islandList'); el.innerHTML='';
+  CHU_DE.forEach(function(cd){
+    const xong=demBaiXong(cd), tong=cd.baiHoc.length;
+    const saoCd=cd.baiHoc.reduce(function(s,b){return s+((state.tienDo[b.id]||{}).sao||0);},0);
+    const btn=document.createElement('button');
+    btn.className='island';
+    btn.dataset.level=cd.capDo;
+    btn.innerHTML='<span class="icon" style="background:'+cd.mau+'">'+cd.emoji+'</span>'+
+      '<span class="info"><span class="level-tag '+cd.capDo+'">'+LEVEL_LABEL[cd.capDo]+'</span><br>'+
+      '<span class="ten">'+cd.ten+'</span>'+
+      '<span class="mota">'+cd.mota+'</span>'+
+      '<span class="tiendo"><i style="width:'+(tong?Math.round(xong/tong*100):0)+'%"></i></span></span>'+
+      '<span class="stars">⭐ '+saoCd+'<br><small style="color:#8A97B0;font-weight:600">'+xong+'/'+tong+' bài</small></span>';
+    btn.addEventListener('click',function(){moChuDe(cd.id);});
+    el.appendChild(btn);
+  });
+  apDungBoLoc(document.querySelector('.filter-btn.active')?.dataset.level||'all');
+  capNhatHanhTrinh();
+}
+function apDungBoLoc(level){
+  document.querySelectorAll('.island').forEach(function(card){card.hidden=level!=='all'&&card.dataset.level!==level;});
+}
+function timBaiGoiY(){
+  for(const cd of CHU_DE){for(const b of cd.baiHoc){if(!state.tienDo[b.id]?.xong)return {cd:cd,b:b};}}
+  let yeuNhat=null;
+  CHU_DE.forEach(function(cd){cd.baiHoc.forEach(function(b){
+    if(!b.gen)return; const box=(state.mastery[b.gen]||{}).box||0;
+    if(!yeuNhat||box<yeuNhat.box)yeuNhat={cd:cd,b:b,box:box};
+  });});
+  return yeuNhat;
+}
+function capNhatHanhTrinh(){
+  const due=cacKyNangDenHan(); const goiY=timBaiGoiY();
+  if($('#dueBadge'))$('#dueBadge').textContent=due.length+' mục cần ôn';
+  if($('#focusBadge'))$('#focusBadge').textContent='Trọng tâm: '+(due.length?'gợi nhớ đúng lúc':goiY?goiY.cd.ten.replace(/^Đảo\s(?:Starters|Movers|Flyers)\s—\s/,''):'duy trì thành thạo');
+  if($('#todayCopy'))$('#todayCopy').textContent=due.length?
+    'Có '+due.length+' nhóm kiến thức đã đến lịch. Ôn chúng trước khi khám phá nội dung mới.':
+    'Hôm nay chưa có mục quá hạn. Mình sẽ mở bài phù hợp tiếp theo trong lộ trình.';
+}
+let cdHienTai=null, baiHienTai=null;
+function moChuDe(id){
+  cdHienTai=CHU_DE.find(function(c){return c.id===id;});
+  $('#topicHead').innerHTML='<span class="icon" style="background:'+cdHienTai.mau+'">'+cdHienTai.emoji+'</span>'+
+    '<div><h2>'+cdHienTai.ten+'</h2><div style="color:var(--ink-soft);font-size:.9rem">'+cdHienTai.mota+'</div></div>';
+  const el=$('#lessonList'); el.innerHTML='';
+  cdHienTai.baiHoc.forEach(function(b,i){
+    const td=state.tienDo[b.id]||{};
+    const btn=document.createElement('button');
+    btn.className='lesson'+(td.xong?' done':'');
+    btn.innerHTML='<span class="num">'+(td.xong?'✓':(i+1))+'</span>'+
+      '<span class="ten">'+b.ten+'</span>'+
+      '<span class="tick">'+(td.sao?'⭐'+td.sao:'')+'</span>';
+    btn.addEventListener('click',function(){moBai(b);});
+    el.appendChild(btn);
+  });
+  toi('topic');
+}
+function renderVocabTheory(b){
+  const words=b.vocab.map(function(w){return '<div class="w"><span class="word-main"><b>'+w.en+'</b> — '+w.vi+'</span><button class="speak-btn" data-say="'+encodeURIComponent(w.en)+'" aria-label="Nghe từ '+w.en+'">🔊</button></div>';}).join('');
+  return '<div class="learning-path"><span>1 · Nhớ lại</span><span class="active">2 · Khám phá</span><span>3 · Tự làm</span></div>'+
+    '<div class="theory"><h3>📖 Từ vựng: '+b.chuDe+'</h3>'+
+    '<p><b>Nghe → nhìn → làm động tác → nhắc lại.</b> Chia thành cụm nhỏ; con không cần thuộc hết trước khi luyện.</p>'+
+    '<div class="wordgrid">'+words+'</div>'+
+    '<div class="meo"><b>💡 Gợi ý đa giác quan:</b> Chỉ vào vật thật, vẽ nhanh hoặc làm động tác khớp với từ. Hỏi lại sau 20–30 giây thay vì yêu cầu con đọc chép nhiều lần.</div>'+
+    '<div class="source-note">Chủ điểm đối chiếu theo cấp '+LEVEL_LABEL[cdHienTai.capDo]+' trong bộ Fun for Cambridge Young Learners.</div>'+
+    '<button class="btn-start" id="btnBatDau">✏️ Luyện tập ngay ('+b.soCau+' câu)</button></div>';
+}
+function renderHoiThoaiTheory(b){
+  const rows=b.hoiThoaiMau.map(function(d){return '<div class="w"><span class="word-main"><b>Q:</b> '+d.cau+'<br><b>A:</b> '+d.dung+'</span><button class="speak-btn" data-say="'+encodeURIComponent(d.cau+' '+d.dung)+'" aria-label="Nghe hội thoại mẫu">🔊</button></div>';}).join('');
+  return '<div class="learning-path"><span>1 · Nghe mẫu</span><span class="active">2 · Đổi vai</span><span>3 · Tự đáp</span></div>'+
+    '<div class="theory"><h3>💬 Hội thoại mẫu</h3>'+
+    '<p>Bấm nghe, nhại theo từng nhịp, rồi đổi vai. Sau cùng hãy thay một chi tiết bằng thông tin thật của con.</p>'+
+    '<div class="wordgrid" style="grid-template-columns:1fr;">'+rows+'</div>'+
+    '<div class="meo"><b>💡 Gợi ý giảm dần:</b> Lần 1 đọc cùng con; lần 2 chỉ nhắc từ đầu; lần 3 để con tự trả lời. Đây là “làm mẫu → cùng làm → tự làm”.</div>'+
+    '<div class="source-note">Dạng hỏi–đáp, cá nhân hóa và đóng vai bám cách tổ chức hoạt động trong Fun for '+LEVEL_LABEL[cdHienTai.capDo].charAt(0)+LEVEL_LABEL[cdHienTai.capDo].slice(1).toLowerCase()+'.</div>'+
+    '<button class="btn-start" id="btnBatDau">✏️ Luyện tập ngay ('+b.soCau+' câu)</button></div>';
+}
+function renderDienDatCard(b){
+  const p=COMMUNICATION_PACKS[b.pack];
+  const frames=p.chunks.map(function(x){return '<div class="sentence-frame"><span><b>'+x.en+'</b><small>'+x.vi+'</small></span><button class="speak-btn" data-say="'+encodeURIComponent(x.en)+'" aria-label="Nghe mẫu câu '+x.en+'">🔊</button></div>';}).join('');
+  const knowledge=p.knowledge.map(function(x){return '<div class="knowledge-item">'+x+'</div>';}).join('');
+  const prompts=p.prompts.map(function(x){return '<li>'+x+'</li>';}).join('');
+  return '<div class="learning-path"><span>1 · Gom ý</span><span>2 · Viết có khung</span><span class="active">3 · Tự nói</span></div><div class="theory">'+
+    '<div class="expression-hero"><span class="skill-badge">'+p.level+'</span><h3>✍️🎤 '+p.title+'</h3><p>'+p.mission+'</p></div>'+
+    '<div class="expression-section"><h4>Cụm câu để nói liền mạch</h4><div class="sentence-frames">'+frames+'</div></div>'+
+    '<div class="expression-section"><h4>Kiến thức cần nhớ khi nói và viết</h4><div class="knowledge-list">'+knowledge+'</div></div>'+
+    '<div class="expression-section"><h4>Ba bài tập từ có mẫu đến độc lập</h4>'+
+      '<div class="practice-card"><h5>1 · Nghe – nhại – thay một chi tiết</h5><p>Nghe bài mẫu một lần, nhại theo từng câu, rồi thay tên, nơi chốn, con số hoặc sở thích bằng thông tin thật.</p></div>'+
+      '<div class="model-box"><b>Bài mẫu tham khảo</b><p id="modelText">'+p.model+'</p><div class="model-actions">'+
+        '<button class="mini-btn speak-btn" id="btnHearModel" data-say="'+encodeURIComponent(p.model)+'">🔊 Nghe bài mẫu</button>'+
+        '<button class="mini-btn" id="btnToggleModel">🙈 Che bài mẫu</button></div></div>'+
+      '<div class="practice-card"><h5>2 · Viết theo bậc thang</h5><p>Trả lời lần lượt các câu hỏi rồi nối thành một đoạn. Đừng chép nguyên mẫu — hãy dùng thông tin thật của con.</p><ol>'+prompts+'</ol></div>'+
+      '<div class="writing-box"><label for="writingDraft">Đoạn viết của con</label><textarea class="writing-draft" id="writingDraft" placeholder="Bắt đầu bằng: Hello! Today I want to talk about..." spellcheck="true"></textarea>'+
+      '<div class="draft-meta"><span id="draftCount">0 từ</span><span id="draftTarget">Mục tiêu: '+p.minWords+'+ từ</span></div><div class="model-actions"><button class="mini-btn" id="btnSaveDraft">💾 Lưu bài trên thiết bị</button><button class="mini-btn" id="btnSpeakDraft">🔊 Nghe đoạn con viết</button></div></div>'+
+      '<div class="practice-card"><h5>3 · Che khung – tự nói</h5><div class="keyword-cue">Từ khóa: '+p.keywords+'</div><p>Chỉ nhìn từ khóa, nói lại bằng lời của con. Có thể ghi âm rồi nghe lại một lần.</p></div>'+
+      '<div class="record-box"><b>Phòng thu an toàn</b><p class="record-status" id="recordStatus">Bản ghi chỉ ở trên thiết bị này và không được gửi đi.</p><button class="record-start" id="btnRecord">● Ghi âm</button><button class="record-stop" id="btnStopRecord" disabled>■ Dừng</button><div id="recordPlayback"></div></div>'+
+      '<div class="challenge-box"><b>🌟 Thử thách cá nhân hóa:</b> '+p.challenge+'</div>'+
+    '</div>'+
+    '<div class="practice-checklist" aria-label="Danh sách hoàn thành"><label class="practice-check"><input type="checkbox" data-expression-check="listen"> Con đã nghe/đọc mẫu và thay ít nhất một thông tin.</label><label class="practice-check"><input type="checkbox" data-expression-check="write" disabled> Con đã viết đủ mục tiêu từ bằng câu của mình.</label><label class="practice-check"><input type="checkbox" data-expression-check="speak"> Con đã nói không nhìn nguyên bài mẫu.</label></div>'+
+    '<button class="btn-start" id="btnDienDatXong" disabled>✅ Hoàn thành nhiệm vụ nói & viết</button></div>';
+}
+function demTu(text){
+  const cleaned=String(text||'').trim();
+  return cleaned?cleaned.split(/\s+/).filter(Boolean).length:0;
+}
+function khoiTaoDienDat(b){
+  const p=COMMUNICATION_PACKS[b.pack];
+  const draft=$('#writingDraft'),count=$('#draftCount'),target=$('#draftTarget'),done=$('#btnDienDatXong');
+  const draftKey='daoDraft_'+b.id;
+  draft.value=KHO.get(draftKey,'');
+  function capNhatNhiemVu(){
+    const words=demTu(draft.value);
+    count.textContent=words+' từ';
+    const writeCheck=document.querySelector('[data-expression-check="write"]');
+    writeCheck.checked=words>=p.minWords;
+    target.textContent=words>=p.minWords?'✓ Đã đủ độ dài':'Mục tiêu: '+p.minWords+'+ từ';
+    target.classList.toggle('ready',words>=p.minWords);
+    const all=Array.from(document.querySelectorAll('[data-expression-check]')).every(function(x){return x.checked;});
+    done.disabled=!all;
+  }
+  draft.addEventListener('input',function(){KHO.set(draftKey,draft.value);capNhatNhiemVu();});
+  document.querySelectorAll('[data-expression-check]').forEach(function(x){x.addEventListener('change',capNhatNhiemVu);});
+  $('#btnHearModel').addEventListener('click',function(){document.querySelector('[data-expression-check="listen"]').checked=true;capNhatNhiemVu();});
+  $('#btnToggleModel').addEventListener('click',function(){
+    const model=$('#modelText'),hidden=model.hidden; model.hidden=!hidden; this.textContent=hidden?'🙈 Che bài mẫu':'👀 Hiện bài mẫu';
+  });
+  $('#btnSaveDraft').addEventListener('click',function(){KHO.set(draftKey,draft.value);toast('Đã lưu bài viết trên thiết bị này.');});
+  $('#btnSpeakDraft').addEventListener('click',function(){if(demTu(draft.value)<2){toast('Con hãy viết ít nhất một câu trước nhé.');return;}noiTiengAnh(draft.value);});
+  khoiTaoGhiAm(); capNhatNhiemVu();
+  done.addEventListener('click',function(){
+    const td=state.tienDo[b.id]||{sao:0,xong:false};
+    const lanDau=!td.xong; td.xong=true; td.sao=3; state.tienDo[b.id]=td;
+    if(lanDau)state.sao+=3;
+    ghiNhanHoanThanhNgay(); luu(); capNhatChip(); banSao(7);
+    toast('Wonderful! Con đã hoàn thành cả viết và nói! +3 ⭐');
+    moChuDe(cdHienTai.id);
+  });
+}
+function renderNoiCard(b){
+  return '<div class="learning-path"><span>1 · Lập ý</span><span class="active">2 · Nói thử</span><span>3 · Tự nghe lại</span></div><div class="theory"><h3>🎤 '+b.ten+'</h3>'+
+    '<div class="vd"><b>Đề bài:</b> '+b.de+'</div>'+
+    '<p><b>Câu hỏi gợi ý (trả lời từng câu để ghép thành bài nói):</b></p><ul>'+
+    b.cauHoiGoiY.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul>'+
+    '<div class="meo"><b>💡 Từ gợi ý:</b> '+b.tuGoiY+'</div>'+
+    '<div class="record-box"><b>Phòng thu an toàn</b><p class="record-status" id="recordStatus">Con có thể ghi âm để tự nghe lại. Bản ghi chỉ ở trên thiết bị này.</p><button class="record-start" id="btnRecord">● Ghi âm</button><button class="record-stop" id="btnStopRecord" disabled>■ Dừng</button><div id="recordPlayback"></div></div>'+
+    '<div class="meo"><b>✅ Bố mẹ cùng con kiểm tra khi nói:</b><ul style="margin:6px 0 0;">'+
+    '<li>Con có trả lời được ít nhất 3 câu hỏi gợi ý không?</li>'+
+    '<li>Con có nói thành câu hoàn chỉnh (không chỉ 1 từ) không?</li>'+
+    '<li>Con có tự tin nói to, rõ ràng không?</li>'+
+    '<li>Không ngắt lời sửa lỗi khi con đang nói — ghi nhớ lại, góp ý nhẹ nhàng SAU khi con nói xong.</li></ul></div>'+
+    '<button class="btn-start" id="btnNoiXong">✅ Con đã nói xong bài này!</button></div>';
+}
+function moBai(b){
+  baiHienTai=b;
+  const tabbarEl=document.querySelector('.tabbar');
+  if(b.loai==='dienDat'){
+    tabbarEl.style.display='none';
+    $('#quizView').style.display='none';
+    $('#theoryView').style.display='block';
+    $('#theoryView').innerHTML=renderDienDatCard(b);
+    khoiTaoDienDat(b); toi('lesson'); return;
+  }
+  if(b.loai==='noi'){
+    tabbarEl.style.display='none';
+    $('#quizView').style.display='none';
+    $('#theoryView').style.display='block';
+    $('#theoryView').innerHTML=renderNoiCard(b);
+    khoiTaoGhiAm();
+    $('#btnNoiXong').addEventListener('click',function(){
+      const td=state.tienDo[b.id]||{sao:0,xong:false};
+      td.xong=true; td.sao=3;
+      state.tienDo[b.id]=td; ghiNhanHoanThanhNgay(); luu(); capNhatChip();
+      banSao(6);
+      toast('Great job! Con đã hoàn thành bài nói! +3 ⭐');
+      moChuDe(cdHienTai.id);
+    });
+    toi('lesson');
+    return;
+  }
+  tabbarEl.style.display='flex';
+  let html;
+  if(b.vocab){ html=renderVocabTheory(b); }
+  else if(b.hoiThoaiMau){ html=renderHoiThoaiTheory(b); }
+  else { html='<div class="theory">'+(b.lyThuyetRieng||'')+
+    '<button class="btn-start" id="btnBatDau">✏️ Luyện tập ngay ('+b.soCau+' câu)</button></div>'; }
+  $('#theoryView').innerHTML=html;
+  $('#btnBatDau').addEventListener('click',function(){batDauQuiz(false);});
+  chonTab('lyThuyet');
+  toi('lesson');
+}
+function noiTiengAnh(text){
+  if(!('speechSynthesis' in window)){toast('Thiết bị này chưa hỗ trợ đọc thành tiếng.');return;}
+  window.speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text); u.lang='en-GB'; u.rate=.82; u.pitch=1.02;
+  const voices=window.speechSynthesis.getVoices();
+  u.voice=voices.find(function(v){return /^en-GB/i.test(v.lang);})||voices.find(function(v){return /^en/i.test(v.lang);})||null;
+  window.speechSynthesis.speak(u);
+}
+let mediaRecorder=null, amThanhChunks=[], amThanhUrl=null;
+function khoiTaoGhiAm(){
+  const bat=$('#btnRecord'),dung=$('#btnStopRecord'),status=$('#recordStatus'),playback=$('#recordPlayback');
+  if(!bat||!dung)return;
+  if(!navigator.mediaDevices||!window.MediaRecorder){bat.disabled=true;status.textContent='Trình duyệt này chưa hỗ trợ ghi âm; con vẫn có thể nói trực tiếp.';return;}
+  bat.addEventListener('click',async function(){
+    try{
+      const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+      amThanhChunks=[]; mediaRecorder=new MediaRecorder(stream);
+      mediaRecorder.ondataavailable=function(e){if(e.data.size)amThanhChunks.push(e.data);};
+      mediaRecorder.onstop=function(){
+        const blob=new Blob(amThanhChunks,{type:mediaRecorder.mimeType||'audio/webm'});
+        if(amThanhUrl)URL.revokeObjectURL(amThanhUrl); amThanhUrl=URL.createObjectURL(blob);
+        playback.innerHTML=''; const audio=document.createElement('audio');audio.controls=true;audio.src=amThanhUrl;audio.style.width='100%';audio.style.marginTop='8px';playback.appendChild(audio);
+        stream.getTracks().forEach(function(t){t.stop();}); status.textContent='Nghe lại một lần: chọn một điểm con làm tốt và một mục tiêu nhỏ.';
+      };
+      mediaRecorder.start(); bat.disabled=true;dung.disabled=false;status.textContent='Đang ghi… cứ nói chậm và rõ, không cần hoàn hảo.';
+    }catch(e){status.textContent='Chưa được cấp quyền micro. Con có thể nói trực tiếp với bố mẹ.';}
+  });
+  dung.addEventListener('click',function(){if(mediaRecorder&&mediaRecorder.state==='recording')mediaRecorder.stop();bat.disabled=false;dung.disabled=true;});
+}
+function chonTab(t){
+  $('#tabLyThuyet').classList.toggle('active',t==='lyThuyet');
+  $('#tabLuyenTap').classList.toggle('active',t==='luyenTap');
+  $('#theoryView').style.display=(t==='lyThuyet')?'block':'none';
+  $('#quizView').style.display=(t==='luyenTap')?'block':'none';
+}
+
+/* ================== QUIZ ENGINE ================== */
+let quiz={cauHoi:[],viTri:0,dungDau:0,daSaiCauNay:false,laOnNhanh:false,keysChon:null};
+function batDauQuiz(laOn,forcedKeys){
+  batDemGio();
+  quiz.laOnNhanh=laOn;
+  quiz.keysChon=Array.isArray(forcedKeys)?forcedKeys.slice():null;
+  quiz.viTri=0; quiz.dungDau=0;
+  quiz.cauHoi=[];
+  if(laOn){
+    const genXong=[]; CHU_DE.forEach(function(cd){cd.baiHoc.forEach(function(b){if(b.gen&&GEN[b.gen])genXong.push(b.gen);});});
+    const customKeys=state.tuVungTuThem.map(function(w){return keyTuThem(w.id);});
+    const denHan=cacKyNangDenHan().filter(keyCoBoSinh);
+    const yeu=Object.keys(state.mastery).filter(keyCoBoSinh).sort(function(a,b){return (state.mastery[a].box||0)-(state.mastery[b].box||0);});
+    const tuSai=state.saiBank.slice(-4).filter(keyCoBoSinh);
+    const uuTien=[].concat(denHan,tuSai,yeu).filter(function(k,i,a){return a.indexOf(k)===i;});
+    const nguon=quiz.keysChon&&quiz.keysChon.length?quiz.keysChon:(uuTien.length?uuTien:(customKeys.length?customKeys:(genXong.length?genXong:['tuVungBanThan','tuVungMauSac','tuVungConVat'])));
+    const soCau=quiz.keysChon&&quiz.keysChon.length?Math.max(4,quiz.keysChon.length):8;
+    for(let i=0;i<soCau;i++){
+      const key=i<nguon.length?nguon[i]:pick(nguon);
+      const q=taoCauHoiTheoKey(key)||GEN.tuVungBanThan();
+      q._gen=keyCoBoSinh(key)?key:'tuVungBanThan';quiz.cauHoi.push(q);
+    }
+  } else {
+    for(let i=0;i<baiHienTai.soCau;i++){
+      const q=GEN[baiHienTai.gen]();
+      q._gen=baiHienTai.gen;
+      quiz.cauHoi.push(q);
+    }
+    chonTab('luyenTap');
+  }
+  veCauHoi();
+}
+function veCauHoi(){
+  quiz.daSaiCauNay=false;
+  const q=quiz.cauHoi[quiz.viTri];
+  const view=quiz.laOnNhanh?$('#reviewQuizHost'):$('#quizView');
+  let bars='';
+  quiz.cauHoi.forEach(function(_,i){
+    bars+='<i class="'+(i<quiz.viTri?'dung':(i===quiz.viTri?'dang':''))+'"></i>';
+  });
+  const daiNhat=q.dapAn.reduce(function(m,a){return Math.max(m,String(a).length);},0);
+  const lopChu=daiNhat>10?' text':'';
+  let ansHtml='';
+  q.dapAn.forEach(function(a,i){
+    ansHtml+='<button class="ans'+lopChu+'" data-i="'+i+'">'+a+'</button>';
+  });
+  view.innerHTML='<div class="learning-path"><span>1 · Nhớ lại</span><span>2 · Có gợi ý</span><span class="active">3 · Tự làm</span></div><div class="quiz-progress" aria-label="Tiến độ câu hỏi">'+bars+'</div>'+
+    '<div class="qcard"><p class="qtext">'+q.hoi+'</p>'+
+    '<div class="qvisual">'+(q.visual||'')+'</div>'+
+    '<div class="answers">'+ansHtml+'</div>'+
+    '<div class="hint-row"><button class="btn-hint" id="btnHint">💡 Cho con một gợi ý</button></div>'+
+    '<div class="feedback" id="fb" role="status" aria-live="polite"></div>'+
+    '<div class="mastery-note">Trả lời đúng trước khi xem gợi ý sẽ kéo dài khoảng ôn tiếp theo.</div>'+
+    '<button class="btn-next" id="btnNext">Câu tiếp theo →</button></div>';
+  view.querySelectorAll('.ans').forEach(function(btn){
+    btn.addEventListener('click',function(){chamDiem(btn,q);});
+  });
+  $('#btnHint').addEventListener('click',function(){
+    q._hintUsed=true; this.disabled=true; this.textContent='Đã mở gợi ý';
+    const fb=$('#fb');fb.className='feedback';fb.innerHTML='<span class="giai">💡 '+q.goiY+'</span>';
+  });
+  $('#btnNext').addEventListener('click',cauTiep);
+}
+function chamDiem(btn,q){
+  const chon=q.dapAn[Number(btn.dataset.i)];
+  const fb=$('#fb');
+  if(String(chon)===String(q.dung)){
+    btn.classList.add('dung');
+    document.querySelectorAll('.ans').forEach(function(b){b.disabled=true;});
+    if($('#btnHint'))$('#btnHint').disabled=true;
+    if(!quiz.daSaiCauNay&&!q._hintUsed){
+      quiz.dungDau++; capNhatNangLuc(q._gen,true);
+      state.sao++; luu(); capNhatChip();
+      fb.className='feedback ok';
+      fb.innerHTML=pick(KHEN)+' <b>+1 ⭐</b>';
+      banSao(3);
+    } else if(!quiz.daSaiCauNay&&q._hintUsed){
+      capNhatNangLuc(q._gen,false);
+      fb.className='feedback ok';
+      fb.innerHTML='Đúng rồi! Con đã dùng gợi ý đúng cách. Mục này sẽ quay lại sớm để con thử tự nhớ. 🌱'+
+        '<span class="giai">'+q.giaiThich+'</span>';
+    } else {
+      fb.className='feedback ok';
+      fb.innerHTML='Đúng rồi! Con đã tự sửa được — great learning! 🌟'+
+        '<span class="giai">'+q.giaiThich+'</span>';
+    }
+    $('#btnNext').style.display='inline-block';
+  } else {
+    btn.classList.add('sai'); btn.disabled=true;
+    if(!quiz.daSaiCauNay){
+      quiz.daSaiCauNay=true;
+      capNhatNangLuc(q._gen,false);
+      if(state.saiBank[state.saiBank.length-1]!==q._gen){state.saiBank.push(q._gen);}
+      if(state.saiBank.length>12)state.saiBank.shift();
+      luu();
+      fb.className='feedback no';
+      fb.innerHTML=pick(DONG_VIEN)+'<span class="giai">💡 '+q.goiY+'</span>';
+    } else {
+      document.querySelectorAll('.ans').forEach(function(b){
+        b.disabled=true;
+        const val=q.dapAn[Number(b.dataset.i)];
+        if(String(val)===String(q.dung))b.classList.add('dung');
+      });
+      if($('#btnHint'))$('#btnHint').disabled=true;
+      fb.className='feedback no';
+      fb.innerHTML='Đáp án đúng là <b>'+q.dung+'</b>. Không sao, lần sau con sẽ nhớ!'+
+        '<span class="giai">'+q.giaiThich+'</span>';
+      $('#btnNext').style.display='inline-block';
+    }
+  }
+}
+function cauTiep(){
+  quiz.viTri++;
+  if(quiz.viTri<quiz.cauHoi.length){ veCauHoi(); }
+  else{ ketThucBai(); }
+}
+function ketThucBai(){
+  const tong=quiz.cauHoi.length, dung=quiz.dungDau;
+  let sao3=1; if(dung>=tong)sao3=3; else if(dung>=Math.ceil(tong*0.6))sao3=2;
+  let loi;
+  if(dung===tong) loi='Xuất sắc! Excellent! Con làm đúng tất cả ngay lần đầu!';
+  else if(sao3===2) loi='Làm tốt lắm! Con đúng '+dung+'/'+tong+' câu ngay lần đầu. Càng luyện càng giỏi!';
+  else loi='Con đã hoàn thành cả bài — riêng việc không bỏ cuộc đã rất đáng khen rồi! Mai mình luyện lại nhé.';
+  if(!quiz.laOnNhanh){
+    const td=state.tienDo[baiHienTai.id]||{sao:0,xong:false};
+    td.xong=true; td.sao=Math.max(td.sao||0,sao3);
+    state.tienDo[baiHienTai.id]=td; ghiNhanHoanThanhNgay(); luu();
+  }else{
+    ghiNhanHoanThanhNgay();
+  }
+  const view=quiz.laOnNhanh?$('#reviewQuizHost'):$('#quizView');
+  view.innerHTML='<div class="finish"><div class="fox-big">🦜🎉</div>'+
+    '<h2>'+(quiz.laOnNhanh?'Ôn tập hoàn thành!':'Hoàn thành bài học!')+'</h2>'+
+    '<div class="saoket">'+'⭐'.repeat(sao3)+'☆'.repeat(3-sao3)+'</div>'+
+    '<p>'+loi+'</p>'+
+    '<div class="reflection"><b>Bài này cảm thấy thế nào?</b><div class="reflection-row">'+
+    '<button data-feel="easy">🙂 Dễ</button><button data-feel="right">🌱 Vừa sức</button><button data-feel="hard">🧩 Cần ôn</button></div></div>'+
+    '<div class="row"><button class="again" id="btnLamLai">🔁 Làm lại</button>'+
+    '<button class="home" id="btnVeNha">🗺️ Về bản đồ</button></div></div>';
+  $('#btnLamLai').addEventListener('click',function(){batDauQuiz(quiz.laOnNhanh,quiz.keysChon);});
+  $('#btnVeNha').addEventListener('click',function(){veBanDo();toi('home');});
+  view.querySelectorAll('[data-feel]').forEach(function(btn){btn.addEventListener('click',function(){
+    view.querySelectorAll('[data-feel]').forEach(function(x){x.classList.remove('selected');});btn.classList.add('selected');
+    state.lastReflection=btn.dataset.feel;
+    const gen=quiz.laOnNhanh?null:(baiHienTai&&baiHienTai.gen);
+    if(gen&&state.mastery[gen]){
+      if(btn.dataset.feel==='easy'){state.mastery[gen].box=Math.min(5,state.mastery[gen].box+1);state.mastery[gen].due=keySauNgay(KHOANG_ON[state.mastery[gen].box]);}
+      if(btn.dataset.feel==='hard'){state.mastery[gen].box=Math.max(1,state.mastery[gen].box-1);state.mastery[gen].due=keySauNgay(1);}
+    }
+    luu();capNhatChip();toast('Đã điều chỉnh lịch ôn theo cảm nhận của con.');
+  });});
+  if(sao3===3)banSao(8);else banSao(4);
+}
+function moOnNhanh(forcedKeys){
+  const tabbarEl=document.querySelector('.tabbar');
+  $('#theoryView').style.display='none';
+  $('#quizView').style.display='none';
+  toi('lesson');
+  tabbarEl.style.display='none';
+  let host=$('#reviewQuizHost');
+  if(!host){host=document.createElement('div');host.id='reviewQuizHost';$('#screen-lesson').appendChild(host);}
+  host.style.display='block';
+  batDauQuiz(true,Array.isArray(forcedKeys)?forcedKeys:null);
+}
+function dongOnNhanh(){
+  const host=$('#reviewQuizHost'); if(host)host.style.display='none';
+  document.querySelector('.tabbar').style.display='flex';
+  veBanDo(); toi('home');
+}
+function banSao(n){
+  const icons=['⭐','🌟','✨','🎈','🎉'];
+  for(let i=0;i<n;i++){
+    const p=document.createElement('span');
+    p.className='confetti-piece';
+    p.setAttribute('aria-hidden','true');
+    p.textContent=pick(icons);
+    p.style.left=rnd(5,95)+'vw';
+    p.style.animationDuration=(1.4+Math.random()*1.4)+'s';
+    document.body.appendChild(p);
+    setTimeout(function(){p.remove();},3000);
+  }
+}
+let gioBatDau=null, daNhacNghi=false;
+function batDemGio(){
+  if(gioBatDau===null){
+    gioBatDau=Date.now();
+    setInterval(function(){
+      if(!daNhacNghi && Date.now()-gioBatDau > 15*60*1000){
+        daNhacNghi=true;
+        $('#restBanner').classList.add('show');
+      }
+    },30000);
+  }
+}
+document.addEventListener('DOMContentLoaded',function(){
+  veBanDo();
+  capNhatChip();
+  $('#parentContent').innerHTML=PARENT_HTML;
+  document.querySelectorAll('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(){
+      if($('#reviewQuizHost'))$('#reviewQuizHost').style.display='none';
+      document.querySelector('.tabbar').style.display='flex';
+      veBanDo();
+      toi(b.dataset.goto);
+    });
+  });
+  $('#btnBackTopic').addEventListener('click',function(){
+    const host=$('#reviewQuizHost');
+    if(host&&host.style.display==='block'){dongOnNhanh();return;}
+    moChuDe(cdHienTai.id);
+  });
+  $('#tabLyThuyet').addEventListener('click',function(){chonTab('lyThuyet');});
+  $('#tabLuyenTap').addEventListener('click',function(){
+    if($('#quizView').innerHTML.trim()===''){batDauQuiz(false);}else{chonTab('luyenTap');}
+  });
+  $('#btnOnNhanh').addEventListener('click',function(){moOnNhanh();});
+  $('#btnSoTu').addEventListener('click',moSoTu);
+  $('#customWordForm').addEventListener('submit',luuCustomWord);
+  $('#btnCancelEdit').addEventListener('click',resetCustomForm);
+  $('#customSearch').addEventListener('input',renderCustomWords);
+  $('#customWordList').addEventListener('click',handleCustomWordAction);
+  $('#btnHanhTrinh').addEventListener('click',function(){
+    if(cacKyNangDenHan().length){moOnNhanh();return;}
+    const goiY=timBaiGoiY(); if(goiY){cdHienTai=goiY.cd;moBai(goiY.b);}else{moOnNhanh();}
+  });
+  document.querySelectorAll('.filter-btn').forEach(function(btn){btn.addEventListener('click',function(){
+    document.querySelectorAll('.filter-btn').forEach(function(x){x.classList.remove('active');});btn.classList.add('active');apDungBoLoc(btn.dataset.level);
+  });});
+  document.addEventListener('click',function(e){
+    const btn=e.target.closest&&e.target.closest('.speak-btn');if(btn)noiTiengAnh(decodeURIComponent(btn.dataset.say||''));
+  });
+  $('#btnPhuHuynh').addEventListener('click',function(){toi('parent');});
+  $('#btnRestOk').addEventListener('click',function(){
+    $('#restBanner').classList.remove('show');
+    daNhacNghi=false; gioBatDau=Date.now();
+    toast('Nghỉ ngơi xong, học tiếp thôi! 💪');
+  });
+  if(state.streak>=2)toast('🔥 Chuỗi '+state.streak+' ngày học liên tiếp! Giỏi quá!');
+});
+</script>
+
+<!-- Đăng ký Service Worker để dùng offline -->
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('service-worker.js').catch(function(err){
+      console.warn('Không đăng ký được service worker:', err);
+    });
+  });
+}
+</script>
+</body>
+</html>
