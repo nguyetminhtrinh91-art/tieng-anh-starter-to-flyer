@@ -1,6 +1,6 @@
 // Đổi số phiên bản này (v1 -> v2 -> ...) mỗi khi bạn cập nhật nội dung
 // index.html, để trình duyệt tải lại bản mới thay vì dùng bản cache cũ.
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v3-20260920';
 const CACHE_NAME = 'dao-tieng-anh-' + CACHE_VERSION;
 
 // Các file cốt lõi được cache ngay khi cài đặt (đường dẫn tương đối
