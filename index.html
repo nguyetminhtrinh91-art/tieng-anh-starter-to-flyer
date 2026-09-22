@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>V3 · Đảo Tiếng Anh — Cambridge Starters/Movers/Flyers</title>
+<title>V5 · Đảo Tiếng Anh — Cambridge Starters/Movers/Flyers</title>
 
 <!-- PWA -->
 <link rel="manifest" href="manifest.webmanifest">
@@ -261,6 +261,18 @@ button{font-family:inherit;}
 button:focus-visible,.island:focus-visible,.lesson:focus-visible{outline:3px solid var(--tim);outline-offset:2px;}
 
 .example-after{display:block;margin-top:10px;padding:12px 14px;background:#eef9f5;border-radius:14px;line-height:1.45}.choice-chips{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.choice-chip{border:1px solid #cbdad6;background:#fff;border-radius:999px;padding:8px 12px;cursor:pointer}.rp-score{font-weight:800;color:#0b806d}.anchor-model{background:#fff8e8;border:1px solid #f1d99a;border-radius:16px;padding:14px;margin:12px 0}.micro-game{font-size:.92rem;color:var(--ink-soft);margin-top:8px}
+/* V5: nút chỉ đọc TỪ trong thẻ từ; nút câu ví dụ riêng và không bị ép vào 34px. */
+.wordgrid .w{align-items:flex-start;gap:12px;overflow-wrap:anywhere}
+.wordgrid .speak-btn{width:42px;height:42px;min-width:42px;min-height:42px;font-size:1.15rem;align-self:center}
+.mini-btn.speak-btn,.example-listen{width:auto;height:auto;min-width:0;min-height:44px;flex:none;display:inline-flex;align-items:center;justify-content:center;white-space:normal;line-height:1.3;text-align:center;padding:10px 14px;font-size:.86rem}
+.example-after{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;overflow-wrap:anywhere}
+.example-after .example-listen{max-width:100%}
+.qcard .ans{overflow-wrap:anywhere}
+@media(max-width:420px){.theory{padding:16px}.qcard{padding:16px}.wordgrid .w{padding:12px}}
+
+/* ===== V6: Dictionary + Speaking Lab ===== */
+.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:14px 0 22px}.tool-card{border:1px solid rgba(23,60,59,.08);background:var(--card);border-radius:22px;padding:16px;text-align:left;box-shadow:var(--shadow);cursor:pointer;color:var(--ink)}.tool-card b{display:block;font-size:1.05rem;margin-bottom:5px}.tool-card span{color:var(--ink-soft);font-size:.88rem;line-height:1.45}.tool-icon{font-size:1.7rem;display:block;margin-bottom:8px}.lab-hero{background:linear-gradient(135deg,#173C3B,#286B63);color:#fff;border-radius:28px;padding:22px;margin-bottom:14px;box-shadow:var(--shadow)}.lab-hero h1{margin:5px 0 8px}.lab-hero p{margin:0;opacity:.9;line-height:1.5}.dict-search{width:100%;border:2px solid #DDE7E5;border-radius:18px;padding:14px 16px;font-size:1rem;outline:none;background:#fff}.dict-search:focus{border-color:var(--xanh)}.dict-results{display:grid;gap:10px;margin-top:14px}.dict-item{background:var(--card);border-radius:18px;padding:15px;box-shadow:var(--shadow-sm);border:1px solid rgba(23,60,59,.07)}.dict-title{display:flex;align-items:center;gap:9px;flex-wrap:wrap}.dict-title b{font-size:1.12rem;color:#C95540}.dict-meaning{font-weight:750}.dict-example{margin:9px 0 0;color:var(--ink-soft);line-height:1.5}.dict-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:9px}.dict-tags span{font-size:.75rem;background:#EEF5F3;border-radius:999px;padding:5px 8px;color:#45615F}.speak-tabs{display:flex;gap:8px;overflow:auto;margin-bottom:12px}.speak-tabs button{white-space:nowrap;border:1px solid #DDE7E5;background:#fff;border-radius:999px;padding:9px 12px;font-weight:850;color:var(--ink-soft)}.speak-tabs button.active{background:var(--ink);color:#fff}.shadow-card{background:var(--card);border-radius:22px;padding:18px;box-shadow:var(--shadow);margin-bottom:12px}.shadow-line{font-size:1.18rem;font-weight:850;line-height:1.55;margin:12px 0}.speed-row,.lab-actions{display:flex;gap:8px;flex-wrap:wrap}.speed-row button,.lab-actions button{border:0;border-radius:999px;padding:10px 13px;font-weight:850;cursor:pointer}.speed-row button{background:#EDF2F1;color:var(--ink)}.lab-actions .primary{background:var(--xanh);color:#fff}.lab-actions .secondary{background:#FFF1E8;color:#A34A36}.mission-box{background:#EEF4FF;border-radius:16px;padding:14px;margin-top:12px;color:#34527B}.listen-check{display:flex;gap:8px;align-items:flex-start;margin-top:10px;font-size:.9rem;color:var(--ink-soft)}
+@media(max-width:560px){.tool-grid{grid-template-columns:1fr 1fr}.tool-card{padding:13px}.tool-card span{font-size:.82rem}.lab-hero{padding:18px}.shadow-line{font-size:1.08rem}}
 </style>
 </head>
 <body>
@@ -308,6 +320,11 @@ button:focus-visible,.island:focus-visible,.lesson:focus-visible{outline:3px sol
     <button class="filter-btn" data-level="extra">Nói & ôn tập</button>
   </div>
   <div class="island-list" id="islandList"></div>
+  <p class="eyebrow">Công cụ luyện mỗi ngày</p>
+  <div class="tool-grid">
+    <button class="tool-card" id="btnDictionary"><span class="tool-icon">🔎</span><b>Từ điển của bé</b><span>Tra từ trong toàn bộ chương trình, nghe từ và xem câu dùng thật.</span></button>
+    <button class="tool-card" id="btnSpeakingLab"><span class="tool-icon">🗣️</span><b>Phòng luyện nói</b><span>Shadowing, đổi tốc độ, ghi âm và thử thách nói ngắn.</span></button>
+  </div>
   <div class="home-actions">
     <button class="big-action on" id="btnOnNhanh">🔁 Ôn đúng lúc</button>
     <button class="big-action words" id="btnSoTu">➕ Sổ từ của bé <span id="customCountHome">· 0 từ</span></button>
@@ -372,6 +389,21 @@ button:focus-visible,.island:focus-visible,.lesson:focus-visible{outline:3px sol
     <div class="word-library-head"><div><h2>Những từ đã thêm</h2><p>Có thể nghe, sửa, xóa hoặc ôn riêng từng từ.</p></div><input class="custom-search" id="customSearch" type="search" placeholder="🔎 Tìm từ hoặc chủ đề" aria-label="Tìm trong sổ từ"></div>
     <div class="custom-list" id="customWordList"></div>
   </div>
+</section>
+
+<section class="screen" id="screen-dictionary" aria-labelledby="dictionaryTitle">
+  <div class="topbar"><button class="btn-back" data-goto="home">← Bản đồ</button><span class="chip">🔎 Tra từ</span></div>
+  <div class="lab-hero"><p class="eyebrow" style="color:#F7C862;margin:0">Từ điển học tập</p><h1 id="dictionaryTitle">Tìm từ con đang cần</h1><p>Tra trong toàn bộ từ đã học và Sổ từ của bé. Mỗi kết quả có nghĩa, câu ví dụ và nút nghe riêng.</p></div>
+  <input class="dict-search" id="dictSearch" type="search" autocomplete="off" placeholder="Gõ tiếng Anh hoặc tiếng Việt…" aria-label="Tra từ điển">
+  <div class="dict-results" id="dictResults"></div>
+</section>
+
+<section class="screen" id="screen-speakinglab" aria-labelledby="speakingLabTitle">
+  <div class="topbar"><button class="btn-back" data-goto="home">← Bản đồ</button><span class="chip">🎙️ Luyện nói</span></div>
+  <div class="lab-hero"><p class="eyebrow" style="color:#F7C862;margin:0">Listen → Shadow → Change → Speak</p><h1 id="speakingLabTitle">Phòng luyện nói</h1><p>Mỗi lượt chỉ 1 câu ngắn. Nghe mẫu, nói đè theo nhịp, đổi một chi tiết thành câu của con rồi ghi âm nghe lại.</p></div>
+  <div class="speak-tabs" id="speakTabs"><button class="active" data-set="daily">Giao tiếp</button><button data-set="school">Trường học</button><button data-set="math">Toán</button><button data-set="science">Khoa học</button><button data-set="story">Kể chuyện</button></div>
+  <div id="shadowHost"></div>
+  <div class="record-box"><b>🎙️ Nghe lại giọng của con</b><p class="record-status" id="recordStatus">Bản ghi chỉ ở trên thiết bị này. Không gửi lên máy chủ.</p><button class="record-start" id="btnRecord">● Ghi âm</button><button class="record-stop" id="btnStopRecord" disabled>■ Dừng</button><div id="recordPlayback"></div></div>
 </section>
 
 <div class="rest-banner" id="restBanner">
@@ -457,7 +489,7 @@ VOCAB_CAMXUC.push({en:'afraid',vi:'sợ'},{en:'hungry',vi:'đói'},{en:'thirsty'
 VOCAB_TUONGLAI.push({en:'learn',vi:'học'},{en:'remember',vi:'ghi nhớ'},{en:'try',vi:'cố gắng/thử'},{en:'next week',vi:'tuần sau'},{en:'later',vi:'sau đó'});
 
 const WORD_EXAMPLES={
-  name:['My name is Mia.','What is your name?'], age:['I am seven years old.','What is your age?'], family:['This is my family.','I love my family.'], friend:['She is my best friend.','I play with my friends.'],
+  name:['My name is Mia.','What is your name?'], age:['We are the same age.','At what age did you learn to ride a bike?'], family:['This is my family.','I love my family.'], friend:['She is my best friend.','I play with my friends.'],
   red:['My bag is red.','I like the red ball.'], blue:['The sky is blue.','My favourite colour is blue.'], green:['The frog is green.','I have a green pencil.'], yellow:['The sun is yellow.','This is a yellow duck.'],
   cat:['The cat is under the chair.','I have a black cat.'], dog:['My dog can run.','Do you like dogs?'], rabbit:['The rabbit has long ears.','I can see two rabbits.'], elephant:['The elephant is big.','It has a long nose.'],
   pencil:['This is my pencil.','Can I borrow a pencil?'], book:['Open your book, please.','This book is funny.'], bag:['My books are in my bag.','Whose bag is this?'], ruler:['My ruler is on the desk.','I have a long ruler.'],
@@ -473,13 +505,263 @@ const WORD_EXAMPLES={
   price:['What is the price?','The price is five dollars.'], buy:['I want to buy a notebook.','Where can I buy a ticket?'], cost:['How much does it cost?','It costs three dollars.'], size:['What size do you need?','This size is too big.'],
   plan:['I have a plan for Saturday.','What is your plan?'], goal:['My goal is to speak English well.','I have one learning goal.'], project:['We have a school project.','I am working on my project.'], improve:['I want to improve my English.','Practice helps me improve.']
 };
+// Hai từ cùng cách viết nhưng khác ngữ cảnh cần câu ví dụ riêng.
+VOCAB_DOAN.find(function(w){return w.en==='fish';}).ex=['We are having fish and rice for lunch.','Would you like some grilled fish?'];
+VOCAB_DOAN.find(function(w){return w.en==='chicken';}).ex=['We made chicken soup for dinner.','I like chicken with rice.'];
+const WORD_EXAMPLES_V5 = {
+  "mother": "My mother and I make breakfast on Sundays.",
+  "father": "My father reads me a story at night.",
+  "brother": "My brother wants to play outside.",
+  "sister": "My sister and I share our crayons.",
+  "grandparents": "We visit our grandparents at the weekend.",
+  "cousin": "My cousin is coming to my birthday party.",
+  "class": "Our class starts at eight o'clock.",
+  "hometown": "My hometown is near the sea.",
+  "live with": "I live with my family.",
+  "be good at": "I am good at playing the piano.",
+  "nickname": "My nickname is Mimi.",
+  "birthday": "My birthday is in October.",
+  "address": "Please ask an adult before sharing your address.",
+  "favourite": "My favourite game is hide-and-seek.",
+  "same": "We have the same school bag.",
+  "different": "Our shoes are different colours.",
+  "black": "The cat has black fur.",
+  "white": "We have a white rabbit.",
+  "orange": "I packed an orange T-shirt.",
+  "purple": "My sister painted a purple flower.",
+  "pink": "I chose a pink pencil case.",
+  "brown": "The bear has brown fur.",
+  "grey": "The rainy sky is grey.",
+  "light": "I chose a light blue shirt.",
+  "dark": "The sky gets dark at night.",
+  "gold": "My card has a gold star.",
+  "silver": "She is wearing silver shoes.",
+  "colourful": "We made a colourful poster for class.",
+  "one": "I have one little sister.",
+  "five": "There are five pencils in my bag.",
+  "ten": "I can count to ten.",
+  "fifteen": "I need fifteen minutes to finish.",
+  "twenty": "There are twenty students in our class.",
+  "seven": "My brother is seven years old.",
+  "twelve": "There are twelve months in a year.",
+  "thirty": "The bus arrives in thirty minutes.",
+  "first": "I washed my hands first.",
+  "second": "I came second in the race.",
+  "third": "Our classroom is on the third floor.",
+  "more": "Could I have more water, please?",
+  "fewer": "I have fewer stickers than you.",
+  "eleven": "Eleven children are playing football.",
+  "thirteen": "I counted thirteen shells on the beach.",
+  "fourteen": "We have fourteen books to return.",
+  "sixteen": "There are sixteen squares on this page.",
+  "seventeen": "My dad bought seventeen oranges.",
+  "eighteen": "Eighteen people came to the picnic.",
+  "nineteen": "I read nineteen pages yesterday.",
+  "forty": "Our lesson lasts forty minutes.",
+  "fifty": "Fifty centimetres is half a metre.",
+  "hundred": "There are one hundred centimetres in a metre.",
+  "cow": "The cow is eating grass on the farm.",
+  "horse": "I saw a horse running in the field.",
+  "duck": "The duck is swimming in the pond.",
+  "bird": "A bird is singing outside my window.",
+  "fish": "We saw three fish in the pond.",
+  "turtle": "The turtle is moving slowly.",
+  "parrot": "The parrot has bright green feathers.",
+  "monkey": "The monkey climbed the tree.",
+  "wing": "A butterfly has four wings.",
+  "tail": "The dog is wagging its tail.",
+  "fur": "My cat has soft fur.",
+  "wild": "We should not feed wild animals.",
+  "bear": "A bear is looking for food in the forest.",
+  "bee": "A bee landed on the flower.",
+  "chicken": "The chickens are looking for seeds.",
+  "crocodile": "The crocodile is resting by the river.",
+  "frog": "A frog jumped into the pond.",
+  "giraffe": "The giraffe reached a leaf high in the tree.",
+  "goat": "The goat is eating leaves.",
+  "hippo": "The hippo is standing in the water.",
+  "lizard": "A lizard ran across the wall.",
+  "mouse": "A little mouse ran under the table.",
+  "sheep": "The sheep are eating grass.",
+  "snake": "We watched a snake from a safe distance.",
+  "spider": "A spider made a web near the window.",
+  "tiger": "The tiger has orange fur and black stripes.",
+  "zebra": "The zebra has black and white stripes.",
+  "toy": "Please put your toys away after playing.",
+  "ball": "We played with a ball in the park.",
+  "chair": "Please sit on your chair.",
+  "table": "Put the plates on the table.",
+  "eraser": "Can I borrow your eraser?",
+  "notebook": "I wrote the new words in my notebook.",
+  "crayons": "We used crayons to draw a rainbow.",
+  "scissors": "Ask an adult before using sharp scissors.",
+  "glue": "Put a little glue on the paper.",
+  "computer": "I use the computer to practise English.",
+  "board": "Our teacher wrote the date on the board.",
+  "pencil case": "I keep my pens in my pencil case.",
+  "desk": "Please tidy your desk before you leave.",
+  "door": "Close the door gently, please.",
+  "window": "I opened the window to let in fresh air.",
+  "paper": "Can I have a piece of paper?",
+  "picture": "I drew a picture of my family.",
+  "map": "Let's find the zoo on the map.",
+  "keyboard": "I typed my name on the keyboard.",
+  "screen": "Move back a little from the screen.",
+  "water": "Please drink some water after running.",
+  "egg": "I had a boiled egg for breakfast.",
+  "banana": "I put a banana in my lunchbox.",
+  "noodles": "We are having noodles for dinner.",
+  "sandwich": "I made a cheese sandwich.",
+  "vegetables": "I help wash the vegetables before dinner.",
+  "juice": "Would you like some orange juice?",
+  "breakfast": "I eat breakfast before school.",
+  "hungry": "I am hungry after swimming.",
+  "thirsty": "I feel thirsty after playing outside.",
+  "delicious": "This soup smells delicious.",
+  "meat": "We cooked meat and vegetables for lunch.",
+  "potato": "I cut the potato with an adult's help.",
+  "tomato": "I put a tomato in my sandwich.",
+  "carrot": "The rabbit is eating a carrot.",
+  "cheese": "Would you like cheese on your bread?",
+  "soup": "The soup is too hot to eat yet.",
+  "cake": "We shared a cake at the birthday party.",
+  "fruit": "I packed some fruit for my snack.",
+  "o'clock": "School starts at eight o'clock.",
+  "afternoon": "I do my homework in the afternoon.",
+  "evening": "We eat dinner together in the evening.",
+  "yesterday": "Yesterday, I visited my friend.",
+  "half past": "I get home at half past four.",
+  "quarter past": "The lesson starts at quarter past nine.",
+  "weekday": "On a weekday, I go to school.",
+  "early": "I went to bed early last night.",
+  "late": "We were late for the bus.",
+  "before": "Wash your hands before you eat.",
+  "after": "I practise piano after dinner.",
+  "cloudy": "It is cloudy, but it is not raining.",
+  "windy": "Hold your hat; it is windy today.",
+  "spring": "Flowers bloom in spring.",
+  "summer": "I like swimming in summer.",
+  "stormy": "We stayed inside because it was stormy.",
+  "snowy": "The children played outside on a snowy day.",
+  "warm": "This jacket keeps me warm.",
+  "cool": "The water feels cool on my hands.",
+  "autumn": "Leaves fall from some trees in autumn.",
+  "winter": "I wear a coat in winter.",
+  "temperature": "Let's check the temperature before going out.",
+  "umbrella": "I left my umbrella near the door.",
+  "shop": "I went to the shop to buy some bread.",
+  "station": "We waited for the train at the station.",
+  "hospital": "The doctor works at the hospital.",
+  "cinema": "We watched a film at the cinema.",
+  "museum": "We saw dinosaur bones at the museum.",
+  "supermarket": "I helped my mum at the supermarket.",
+  "post office": "We sent a card at the post office.",
+  "opposite": "The bakery is opposite the school.",
+  "between": "The library is between the bank and the park.",
+  "near": "Our school is near the park.",
+  "cafe": "We ordered hot chocolate at the cafe.",
+  "playground": "My friends are waiting in the playground.",
+  "sports centre": "I have swimming lessons at the sports centre.",
+  "bank": "The bank is next to the post office.",
+  "street": "Look both ways before crossing the street.",
+  "traffic lights": "Wait for the green light at the traffic lights.",
+  "car": "We went to the beach by car.",
+  "plane": "Our plane leaves in the morning.",
+  "motorbike": "My dad wears a helmet on his motorbike.",
+  "boat": "We took a boat across the lake.",
+  "underground": "We took the underground to the museum.",
+  "taxi": "We took a taxi to the airport.",
+  "on foot": "I go to the playground on foot.",
+  "helmet": "Wear your helmet when you ride your bike.",
+  "journey": "We played word games on the long journey.",
+  "scooter": "I ride my scooter in the park.",
+  "airport": "We arrived early at the airport.",
+  "bus stop": "We waited together at the bus stop.",
+  "turn left": "Turn left at the next street.",
+  "turn right": "Turn right after the supermarket.",
+  "go straight": "Go straight until you see the library.",
+  "farmer": "The farmer grows vegetables on the farm.",
+  "driver": "The bus driver greeted us.",
+  "police officer": "A police officer helped us cross the road.",
+  "firefighter": "The firefighter helped put out the fire.",
+  "dentist": "I visited the dentist to check my teeth.",
+  "vet": "The vet helped my sick dog.",
+  "artist": "The artist painted a beautiful picture.",
+  "engineer": "An engineer designs bridges and machines.",
+  "painting": "I enjoy painting with watercolours.",
+  "singing": "We are singing our favourite song.",
+  "cycling": "We go cycling in the park on Sundays.",
+  "collecting": "I enjoy collecting postcards.",
+  "taking photos": "I love taking photos of flowers.",
+  "playing football": "My friends are playing football after school.",
+  "listening to music": "I like listening to music while drawing.",
+  "practise": "I practise English for ten minutes every day.",
+  "drawing": "I am drawing a house and a tree.",
+  "playing the piano": "I enjoy playing the piano after school.",
+  "playing games": "We like playing games as a family.",
+  "watching films": "We enjoy watching films together.",
+  "skating": "She goes skating on Saturdays.",
+  "running": "I go running with my dad in the morning.",
+  "friendly": "The new student is friendly to everyone.",
+  "kind": "It was kind of you to help me.",
+  "funny": "My friend told a funny story.",
+  "clever": "The clever fox found a way out.",
+  "shy": "I felt shy on my first day at school.",
+  "brave": "She was brave enough to ask a question.",
+  "helpful": "Thank you for being so helpful.",
+  "patient": "My teacher is patient when I need more time.",
+  "hard-working": "My hard-working friend practises every day.",
+  "curious": "I am curious about how plants grow.",
+  "quiet": "Please be quiet in the library.",
+  "active": "We stay active by playing outside.",
+  "honest": "Please be honest about what happened.",
+  "sad": "She felt sad when her friend moved away.",
+  "proud": "I felt proud when I finished the book.",
+  "bored": "I feel bored when I have nothing to do.",
+  "nervous": "I was nervous before my piano performance.",
+  "surprised": "I was surprised to see my cousin at the door.",
+  "calm": "Take a moment to feel calm before speaking.",
+  "angry": "I felt angry, so I took a short break.",
+  "relaxed": "I feel relaxed after listening to music.",
+  "afraid": "The child was afraid of the loud thunder.",
+  "busy": "I am busy with homework this afternoon.",
+  "comfortable": "These shoes are comfortable for walking.",
+  "stomachache": "I have a stomachache after lunch.",
+  "toothache": "I told my mum about my toothache.",
+  "a cold": "I have a cold, so I will rest today.",
+  "cough": "Please cover your mouth when you cough.",
+  "fever": "I stayed home because I had a fever.",
+  "sore throat": "My throat hurts; I have a sore throat.",
+  "rest": "I need to rest after the long walk.",
+  "sleep well": "I sleep well when I go to bed on time.",
+  "expensive": "This backpack is too expensive for me.",
+  "cheap": "These pencils are cheap but useful.",
+  "pay": "Can I pay by card?",
+  "shop assistant": "The shop assistant helped me find my size.",
+  "change": "Here is your change and receipt.",
+  "cash": "My grandma paid in cash.",
+  "receipt": "Please keep the receipt in your bag.",
+  "try on": "Can I try on these shoes?",
+  "discount": "These books have a small discount today.",
+  "holiday": "We are visiting our cousins during the holiday.",
+  "subject": "Science is my favourite school subject.",
+  "dream": "My dream is to become a vet.",
+  "visit": "We plan to visit the museum on Friday.",
+  "travel": "I want to travel by train one day.",
+  "be going to": "I am going to read a book tonight.",
+  "next year": "Next year, I will learn more about space.",
+  "learn": "I want to learn five new words today.",
+  "remember": "I remember where I left my keys.",
+  "try": "I will try again if I make a mistake.",
+  "next week": "We have a school trip next week.",
+  "later": "I will finish this drawing later."
+};
 function viDuTu(w){
-  if(w.example)return [w.example, "Can you use "+w.en+" in your own sentence?"];
   if(w.ex)return Array.isArray(w.ex)?w.ex:[w.ex];
-  if(WORD_EXAMPLES[w.en])return WORD_EXAMPLES[w.en];
-  if(/^(turn left|turn right|go straight)$/.test(w.en))return [w.en.charAt(0).toUpperCase()+w.en.slice(1)+', please.'];
-  if(/^(playing|taking|listening|watching|drawing|skating|running)/.test(w.en))return ['I like '+w.en+'.'];
-  return ['This is '+(/^[aeiou]/i.test(w.en)?'an ':'a ')+w.en+'.'];
+  if(w.example)return [w.example];
+  const curated=WORD_EXAMPLES[w.en]||[];
+  const fresh=WORD_EXAMPLES_V5[w.en];
+  return fresh?[fresh].concat(curated.filter(function(x){return x!==fresh;}).slice(0,1)):curated;
 }
 
 /* ================== HỘI THOẠI THEO CHỦ ĐỀ ================== */
@@ -823,11 +1105,11 @@ function tuVungGen(bank, tenNhom){
   if(xuoi){
     return {hoi:'"'+item.en+'" có nghĩa là gì?', visual:'',
       dapAn:shuffle([item.vi].concat(others.map(function(x){return x.vi;}))), dung:item.vi,
-      goiY:'Nhớ lại chủ đề '+tenNhom+' đã học nhé!', giaiThich:'"'+item.en+'" nghĩa là "'+item.vi+'".',example:item.example||('I can use '+item.en+' in a sentence.')};
+      goiY:'Nhớ lại chủ đề '+tenNhom+' đã học nhé!', giaiThich:'"'+item.en+'" nghĩa là "'+item.vi+'".',example:item.example||(viDuTu(item)[0])};
   }
   return {hoi:'"'+item.vi+'" trong tiếng Anh là gì?', visual:'',
     dapAn:shuffle([item.en].concat(others.map(function(x){return x.en;}))), dung:item.en,
-    goiY:'Nhớ lại chủ đề '+tenNhom+' đã học nhé!', giaiThich:'"'+item.vi+'" là "'+item.en+'".',example:item.example||('I can use '+item.en+' in a sentence.')};
+    goiY:'Nhớ lại chủ đề '+tenNhom+' đã học nhé!', giaiThich:'"'+item.vi+'" là "'+item.en+'".',example:item.example||(viDuTu(item)[0])};
 }
 function tuVungTuThemGen(item){
   const nguonPhu=[].concat(VOCAB_BANTHAN,VOCAB_CONVAT,VOCAB_DODUNG,VOCAB_DOAN,VOCAB_THOITIET,VOCAB_SOTHICH);
@@ -966,9 +1248,883 @@ ROLEPLAY.v3rp11={"title": "Everyday · Opinions & decisions", "scene": "Dùng t�
 ["starters","movers","flyers"].forEach(function(lv){const t=LEVEL_TESTS[lv];CHU_DE.filter(function(c){return c.id.indexOf("v3-")===0&&c.capDo===lv;}).forEach(function(c){t.keys.push(c.baiHoc[0].gen);});const test=CHU_DE.find(function(c){return c.id===t.id;});test.baiHoc[0].keys=t.keys.slice();test.baiHoc[0].soCau=36;test.baiHoc[0].ten="🎮 Đại thử thách liên môn · 36 câu";test.mota="36 câu trộn tiếng Anh, toán, khoa học, văn học và giao tiếp";});
 
 /* V3: contextual reasoning questions, not only translation */
-const V3_REASON=[[["What is 8 + 7?", "15", ["13", "14", "16"], "Eight plus seven equals fifteen."], ["Which number is even?", "12", ["7", "9", "11"], "Twelve is an even number."], ["Mia has 9 shells and gets 6 more. How many now?", "15", ["14", "16", "3"], "Nine plus six equals fifteen."], ["What is 18 - 9?", "9", ["7", "8", "10"], "Eighteen minus nine equals nine."], ["Which is greater than 24?", "31", ["18", "20", "23"], "Thirty-one is greater than twenty-four."], ["Double 7 is ...", "14", ["7", "12", "21"], "Double seven is fourteen."]], [["How many sides does a hexagon have?", "6", ["4", "5", "8"], "A hexagon has six sides."], ["A rectangle is 4 cm long and 3 cm wide. What is its area?", "12 cm²", ["7 cm²", "14 cm²", "24 cm²"], "Four times three is twelve square centimetres."], ["A square has sides of 5 cm. What is its perimeter?", "20 cm", ["10 cm", "15 cm", "25 cm"], "Add all four sides to get twenty centimetres."], ["Which shape has no straight sides?", "circle", ["triangle", "square", "rectangle"], "A circle has no straight sides."], ["Which unit is best for a pencil?", "centimetres", ["kilograms", "litres", "hours"], "We can measure a pencil in centimetres."], ["Which word means how tall something is?", "height", ["width", "area", "angle"], "Height tells how tall something is."]], [["What is one quarter of 20?", "5", ["4", "10", "15"], "Twenty divided by four is five."], ["What comes next: 2, 4, 8, 16, ...?", "32", ["18", "24", "30"], "Each number is double the previous one."], ["What is 3 × 6?", "18", ["9", "12", "21"], "Three groups of six make eighteen."], ["What is 24 ÷ 6?", "4", ["3", "5", "6"], "Twenty-four divided by six is four."], ["Which fraction is one half?", "1/2", ["1/3", "1/4", "2/3"], "One half is written one over two."], ["Estimate 49 + 31. Which is closest?", "80", ["60", "70", "100"], "Fifty plus thirty is about eighty."]], [["Which part of a plant absorbs water from soil?", "roots", ["leaves", "flowers", "petals"], "Roots absorb water from the soil."], ["Which animal is an insect?", "ant", ["spider", "frog", "snail"], "An ant is an insect with six legs."], ["What does a seed need to begin growing?", "water", ["plastic", "paint", "sand only"], "A seed needs water to start growing."], ["Which is a living thing?", "tree", ["rock", "spoon", "chair"], "A tree grows and is a living thing."], ["Where does a frog often live?", "pond", ["bookshelf", "cupboard", "desk"], "A pond can be a frog habitat."], ["What do leaves help a plant use?", "sunlight", ["metal", "glass", "plastic"], "Leaves help a plant use sunlight to make food."]], [["What causes day and night on Earth?", "Earth rotates", ["The Moon shines", "Clouds move", "The Sun goes around Earth"], "Earth rotates on its axis."], ["Which star is closest to Earth?", "the Sun", ["Sirius", "Polaris", "Vega"], "The Sun is the star closest to Earth."], ["Which object goes around Earth?", "the Moon", ["Mars", "a mountain", "a cloud"], "The Moon orbits Earth."], ["What planet do we live on?", "Earth", ["Venus", "Jupiter", "Mercury"], "We live on planet Earth."], ["Which word means the path around another object?", "orbit", ["shadow", "soil", "season"], "An orbit is a path around another object."], ["Which season is usually the coldest?", "winter", ["spring", "summer", "autumn"], "Winter is usually the coldest season."]], [["Which state of matter keeps its own shape?", "solid", ["liquid", "gas", "water vapour"], "A solid keeps its own shape."], ["What tool can attract an iron paper clip?", "magnet", ["wooden ruler", "rubber band", "glass cup"], "A magnet can attract an iron paper clip."], ["Before an experiment, what should you do?", "read the instructions", ["run around", "taste everything", "hide the tools"], "Read the instructions before an experiment."], ["What you think will happen is a ...", "prediction", ["chapter", "price", "setting"], "A prediction says what you think will happen."], ["Something you notice carefully is an ...", "observation", ["opinion only", "ending", "title"], "An observation is something you notice carefully."], ["Ice changing into water is ...", "melting", ["freezing", "floating", "measuring"], "Ice melts when it becomes liquid water."]], [["Who writes a story?", "author", ["illustrator", "reader", "character"], "An author writes a story."], ["Where and when a story happens is its ...", "setting", ["title", "ending", "author"], "The setting tells where and when a story happens."], ["‘Lina lost her key, so she looked under the bed.’ What is the problem?", "Lina lost her key.", ["She has a bed.", "She found a book.", "She is sleeping."], "The problem is the difficulty a character must solve."], ["Who tells the story?", "narrator", ["cover", "chapter", "setting"], "The narrator is the voice that tells the story."], ["What is a character?", "a person or animal in a story", ["the book price", "a page number", "the font"], "A character takes part in the story."], ["Which part introduces a simple story?", "beginning", ["solution", "last page", "price"], "The beginning introduces the story."]], [["‘Ben took an umbrella. Dark clouds covered the sky.’ What can you infer?", "It may rain.", ["It is very hot.", "Ben is swimming.", "It is midnight."], "The clues suggest that rain may come."], ["‘The library is quiet. Students read at tables.’ What is the main idea?", "Students are reading in a quiet library.", ["The library sells food.", "Everyone is running.", "The tables are broken."], "The main idea tells what the passage is mostly about."], ["Which is an opinion?", "The story is exciting.", ["The book has 50 pages.", "The story has two characters.", "The cover is blue."], "An opinion tells what someone thinks or feels."], ["Which is a fact?", "A triangle has three sides.", ["Triangles are beautiful.", "Maths is fun.", "Blue is the best colour."], "A fact can be checked and proved."], ["What does ‘because’ usually introduce?", "a reason", ["a title", "a greeting", "a number"], "Because introduces a reason."], ["Best summary: ‘A seed gets water, grows roots, then grows leaves.’", "A seed grows into a plant.", ["Leaves are green.", "Water is wet.", "Roots are underground."], "A summary keeps the most important idea."]], [["Which sentence is a simile?", "The moon is like a silver coin.", ["The moon is bright.", "The moon rose.", "I saw the moon."], "A simile compares using like or as."], ["Which is the clearest story opening?", "One rainy morning, Mia found a tiny box.", ["Nice.", "And then.", "Because it was."], "A clear opening gives a person, time or situation."], ["Which connector shows sequence?", "Then, ...", ["Because ...", "Although ...", "Maybe ..."], "Then shows what happens next."], ["Which ending solves a problem?", "At last, Tom found the lost puppy and took it home.", ["Tom likes dogs.", "The park is big.", "It was Tuesday."], "A solution resolves the story problem."], ["Which sentence shows a feeling with a reason?", "Lily was relieved because she found her bag.", ["Lily has a bag.", "The bag is blue.", "Lily walked home."], "A reason makes the feeling clearer."], ["Which detail makes writing vivid?", "The tiny red kite danced in the wind.", ["The kite was there.", "It is a kite.", "Kite."], "Specific details help the reader imagine the scene."]], [["Someone says ‘Thank you!’ What is a polite reply?", "You’re welcome.", ["I am seven.", "It is red.", "No, I don’t."], "You’re welcome is a polite response."], ["How do you ask to use a pen politely?", "May I borrow your pen?", ["Give pen.", "You have pen.", "Where pen?"], "May I ...? asks permission politely."], ["Your parent asks for help. What can you say?", "Of course. What can I do?", ["Never.", "Go away.", "Blue pencil."], "This is a helpful, polite response."], ["Ask someone to pass water politely.", "Could you pass the water, please?", ["Water now!", "You water.", "I water?"], "Could you ... please? makes a polite request."], ["You made a mistake. What can you say?", "I’m sorry.", ["Good night.", "How much?", "Turn left."], "I’m sorry is appropriate after a mistake."], ["Refuse food politely.", "No, thank you.", ["Bad food!", "Go away.", "Never!"], "No, thank you politely refuses an offer."]], [["You did not hear a question. What should you say?", "Could you repeat that, please?", ["I agree.", "I am finished.", "See you tomorrow."], "Ask for repetition politely."], ["You have a different idea. What is polite?", "I see your point, but I think ...", ["You are wrong!", "Stop talking.", "No way!"], "Disagree respectfully and give your idea."], ["You do not understand a word. What can you ask?", "What does this word mean?", ["Give me answer.", "You wrong?", "What time lunch?"], "Ask politely for the meaning."], ["A classmate is speaking. What should you do?", "listen and wait for your turn", ["interrupt loudly", "walk away", "shout"], "Good conversation includes listening and turn-taking."], ["You want to add an idea. Which phrase works?", "I’d like to add that ...", ["Stop now.", "Wrong!", "Nothing."], "This phrase adds an idea politely."], ["You need time to think. What can you say?", "Let me think for a moment.", ["Bye forever.", "No question.", "I cannot English."], "This phrase gives you thinking time naturally."]], [["Which phrase introduces a contrast?", "On the other hand, ...", ["For example, ...", "First, ...", "In conclusion, ..."], "On the other hand introduces a contrast."], ["Which is a reason, not just an opinion?", "Because it saves time.", ["It is nice.", "I like it.", "This is the best."], "Because introduces an explanation."], ["Which phrase introduces an opinion?", "In my opinion, ...", ["Yesterday at five ...", "How much is it?", "Turn right."], "In my opinion introduces a viewpoint."], ["Which phrase gives an example?", "For example, ...", ["However, ...", "Finally, ...", "I disagree ..."], "For example introduces an example."], ["Which phrase helps make a decision together?", "Shall we choose ...?", ["You must choose mine.", "Stop talking.", "Impossible."], "Shall we ...? invites a shared decision."], ["Which ending fits a short opinion?", "For these reasons, I think ...", ["Once upon a time ...", "Dear Sir, ...", "What is your name?"], "This phrase can conclude an opinion."]]];
-V3_REASON.forEach(function(bank,i){const name="v3Gen"+i;const original=GEN[name];GEN[name]=function(){if(Math.random()<0.55){const q=pick(bank);return {hoi:q[0],visual:"",dapAn:shuffle([q[1]].concat(q[2])),dung:q[1],goiY:"Read the question carefully and explain your thinking.",giaiThich:q[3],example:q[3]};}return original();};});
+const V3_REASON=[[["What is 8 + 7?", "15", ["13", "14", "16"], "Eight plus seven equals fifteen."], ["Which number is even?", "12", ["7", "9", "11"], "Twelve is an even number."], ["Mia has 9 shells and gets 6 more. How many now?", "15", ["14", "16", "3"], "Nine plus six equals fifteen."], ["What is 18 - 9?", "9", ["7", "8", "10"], "Eighteen minus nine equals nine."], ["Which is greater than 24?", "31", ["18", "20", "23"], "Thirty-one is greater than twenty-four."], ["Double 7 is ...", "14", ["7", "12", "21"], "Double seven is fourteen."]], [["How many sides does a hexagon have?", "6", ["4", "5", "8"], "A hexagon has six sides."], ["A rectangle is 4 cm long and 3 cm wide. What is its area?", "12 cm²", ["7 cm²", "14 cm²", "24 cm²"], "Four times three is twelve square centimetres."], ["A square has sides of 5 cm. What is its perimeter?", "20 cm", ["10 cm", "15 cm", "25 cm"], "Add all four sides to get twenty centimetres."], ["Which shape has no straight sides?", "circle", ["triangle", "square", "rectangle"], "A circle has no straight sides."], ["Which unit is best for a pencil?", "centimetres", ["kilograms", "litres", "hours"], "We can measure a pencil in centimetres."], ["Which word means how tall something is?", "height", ["width", "area", "angle"], "Height tells how tall something is."]], [["What is one quarter of 20?", "5", ["4", "10", "15"], "Twenty divided by four is five."], ["What comes next: 2, 4, 8, 16, ...?", "32", ["18", "24", "30"], "Each number is double the previous one."], ["What is 3 × 6?", "18", ["9", "12", "21"], "Three groups of six make eighteen."], ["What is 24 ÷ 6?", "4", ["3", "5", "6"], "Twenty-four divided by six is four."], ["Which fraction is one half?", "1/2", ["1/3", "1/4", "2/3"], "One half is written one over two."], ["Estimate 49 + 31. Which is closest?", "80", ["60", "70", "100"], "Fifty plus thirty is about eighty."]], [["Which part of a plant absorbs water from soil?", "roots", ["leaves", "flowers", "petals"], "Roots absorb water from the soil."], ["Which animal is an insect?", "ant", ["spider", "frog", "snail"], "An ant is an insect with six legs."], ["What does a seed need to begin growing?", "water", ["plastic", "paint", "sand only"], "A seed needs water to start growing."], ["Which is a living thing?", "tree", ["rock", "spoon", "chair"], "A tree grows and is a living thing."], ["Where does a frog often live?", "pond", ["bookshelf", "cupboard", "desk"], "A pond can be a frog habitat."], ["What do leaves help a plant use?", "sunlight", ["metal", "glass", "plastic"], "Leaves help a plant use sunlight to make food."]], [["What causes day and night on Earth?", "Earth rotates", ["The Moon shines", "Clouds move", "The Sun goes around Earth"], "Earth rotates on its axis."], ["Which star is closest to Earth?", "the Sun", ["Sirius", "Polaris", "Vega"], "The Sun is the star closest to Earth."], ["Which object goes around Earth?", "the Moon", ["Mars", "a mountain", "a cloud"], "The Moon orbits Earth."], ["What planet do we live on?", "Earth", ["Venus", "Jupiter", "Mercury"], "We live on planet Earth."], ["Which word means the path around another object?", "orbit", ["shadow", "soil", "season"], "An orbit is a path around another object."], ["Which object gives Earth light during the day?", "the Sun", ["the Moon", "Mars", "a cloud"], "Sunlight reaches Earth from the Sun."]], [["Which state of matter keeps its own shape?", "solid", ["liquid", "gas", "water vapour"], "A solid keeps its own shape."], ["What tool can attract an iron paper clip?", "magnet", ["wooden ruler", "rubber band", "glass cup"], "A magnet can attract an iron paper clip."], ["Before an experiment, what should you do?", "read the instructions", ["run around", "taste everything", "hide the tools"], "Read the instructions before an experiment."], ["What you think will happen is a ...", "prediction", ["chapter", "price", "setting"], "A prediction says what you think will happen."], ["Something you notice carefully is an ...", "observation", ["opinion only", "ending", "title"], "An observation is something you notice carefully."], ["Ice changing into water is ...", "melting", ["freezing", "floating", "measuring"], "Ice melts when it becomes liquid water."]], [["Who writes a story?", "author", ["illustrator", "reader", "character"], "An author writes a story."], ["Where and when a story happens is its ...", "setting", ["title", "ending", "author"], "The setting tells where and when a story happens."], ["‘Lina lost her key, so she looked under the bed.’ What is the problem?", "Lina lost her key.", ["She has a bed.", "She found a book.", "She is sleeping."], "The problem is the difficulty a character must solve."], ["Who tells the story?", "narrator", ["cover", "chapter", "setting"], "The narrator is the voice that tells the story."], ["What is a character?", "a person or animal in a story", ["the book price", "a page number", "the font"], "A character takes part in the story."], ["Which part introduces a simple story?", "beginning", ["solution", "last page", "price"], "The beginning introduces the story."]], [["‘Ben took an umbrella. Dark clouds covered the sky.’ What can you infer?", "It may rain.", ["It is very hot.", "Ben is swimming.", "It is midnight."], "The clues suggest that rain may come."], ["‘The library is quiet. Students read at tables.’ What is the main idea?", "Students are reading in a quiet library.", ["The library sells food.", "Everyone is running.", "The tables are broken."], "The main idea tells what the passage is mostly about."], ["Which is an opinion?", "The story is exciting.", ["The book has 50 pages.", "The story has two characters.", "The cover is blue."], "An opinion tells what someone thinks or feels."], ["Which is a fact?", "The story has six pages.", ["The story is amazing.", "The ending is perfect.", "This character is the best."], "A fact can be checked and proved."], ["What does ‘because’ usually introduce?", "a reason", ["a title", "a greeting", "a number"], "Because introduces a reason."], ["Best summary: ‘A seed gets water, grows roots, then grows leaves.’", "A seed grows into a plant.", ["Leaves are green.", "Water is wet.", "Roots are underground."], "A summary keeps the most important idea."]], [["Which sentence is a simile?", "The moon is like a silver coin.", ["The moon is bright.", "The moon rose.", "I saw the moon."], "A simile compares using like or as."], ["Which is the clearest story opening?", "One rainy morning, Mia found a tiny box.", ["Nice.", "And then.", "Because it was."], "A clear opening gives a person, time or situation."], ["Which connector shows sequence?", "Then, ...", ["Because ...", "Although ...", "Maybe ..."], "Then shows what happens next."], ["Which ending solves a problem?", "At last, Tom found the lost puppy and took it home.", ["Tom likes dogs.", "The park is big.", "It was Tuesday."], "A solution resolves the story problem."], ["Which sentence shows a feeling with a reason?", "Lily was relieved because she found her bag.", ["Lily has a bag.", "The bag is blue.", "Lily walked home."], "A reason makes the feeling clearer."], ["Which detail makes writing vivid?", "The tiny red kite danced in the wind.", ["The kite was there.", "It is a kite.", "Kite."], "Specific details help the reader imagine the scene."]], [["Someone says ‘Thank you!’ What is a polite reply?", "You’re welcome.", ["I am seven.", "It is red.", "No, I don’t."], "You’re welcome is a polite response."], ["How do you ask to use a pen politely?", "May I borrow your pen?", ["Give pen.", "You have pen.", "Where pen?"], "May I ...? asks permission politely."], ["Your parent asks for help. What can you say?", "Of course. What can I do?", ["Never.", "Go away.", "Blue pencil."], "This is a helpful, polite response."], ["Ask someone to pass water politely.", "Could you pass the water, please?", ["Water now!", "You water.", "I water?"], "Could you ... please? makes a polite request."], ["You made a mistake. What can you say?", "I’m sorry.", ["Good night.", "How much?", "Turn left."], "I’m sorry is appropriate after a mistake."], ["Refuse food politely.", "No, thank you.", ["Bad food!", "Go away.", "Never!"], "No, thank you politely refuses an offer."]], [["You did not hear a question. What should you say?", "Could you repeat that, please?", ["I agree.", "I am finished.", "See you tomorrow."], "Ask for repetition politely."], ["You have a different idea. What is polite?", "I see your point, but I think ...", ["You are wrong!", "Stop talking.", "No way!"], "Disagree respectfully and give your idea."], ["You do not understand a word. What can you ask?", "What does this word mean?", ["Give me answer.", "You wrong?", "What time lunch?"], "Ask politely for the meaning."], ["A classmate is speaking. What should you do?", "listen and wait for your turn", ["interrupt loudly", "walk away", "shout"], "Good conversation includes listening and turn-taking."], ["You want to add an idea. Which phrase works?", "I’d like to add that ...", ["Stop now.", "Wrong!", "Nothing."], "This phrase adds an idea politely."], ["You need time to think. What can you say?", "Let me think for a moment.", ["Bye forever.", "No question.", "I cannot English."], "This phrase gives you thinking time naturally."]], [["Which phrase introduces a contrast?", "On the other hand, ...", ["For example, ...", "First, ...", "In conclusion, ..."], "On the other hand introduces a contrast."], ["Which is a reason, not just an opinion?", "Because it saves time.", ["It is nice.", "I like it.", "This is the best."], "Because introduces an explanation."], ["Which phrase introduces an opinion?", "In my opinion, ...", ["Yesterday at five ...", "How much is it?", "Turn right."], "In my opinion introduces a viewpoint."], ["Which phrase gives an example?", "For example, ...", ["However, ...", "Finally, ...", "I disagree ..."], "For example introduces an example."], ["Which phrase helps make a decision together?", "Shall we choose ...?", ["You must choose mine.", "Stop talking.", "Impossible."], "Shall we ...? invites a shared decision."], ["Which ending fits a short opinion?", "For these reasons, I think ...", ["Once upon a time ...", "Dear Sir, ...", "What is your name?"], "This phrase can conclude an opinion."]]];
+const V5_REASON_EXTRA = [
+ [
+  [
+   "Mia has 7 red and 5 blue marbles. How many marbles does she have?",
+   "12",
+   [
+    "10",
+    "11",
+    "13"
+   ],
+   "Seven plus five equals twelve."
+  ],
+  [
+   "20 stickers are shared equally between two children. How many each?",
+   "10",
+   [
+    "8",
+    "12",
+    "20"
+   ],
+   "Twenty divided by two is ten."
+  ],
+  [
+   "Tom has 18 sweets and gives away 6. How many are left?",
+   "12",
+   [
+    "10",
+    "11",
+    "13"
+   ],
+   "Eighteen minus six equals twelve."
+  ],
+  [
+   "How many groups of 3 are in 12?",
+   "4",
+   [
+    "3",
+    "5",
+    "6"
+   ],
+   "Four groups of three make twelve."
+  ],
+  [
+   "Which number is odd?",
+   "17",
+   [
+    "12",
+    "14",
+    "16"
+   ],
+   "Seventeen is odd."
+  ],
+  [
+   "What is half of 14?",
+   "7",
+   [
+    "6",
+    "8",
+    "14"
+   ],
+   "Half of fourteen is seven."
+  ]
+ ],
+ [
+  [
+   "A triangle has three sides. How many corners does it have?",
+   "3",
+   [
+    "1",
+    "2",
+    "4"
+   ],
+   "A triangle has three corners."
+  ],
+  [
+   "A square has sides of 6 cm. What is its perimeter?",
+   "24 cm",
+   [
+    "12 cm",
+    "18 cm",
+    "36 cm"
+   ],
+   "Four times six is twenty-four centimetres."
+  ],
+  [
+   "A rectangle is 5 cm long and 2 cm wide. What is its area?",
+   "10 cm²",
+   [
+    "7 cm²",
+    "12 cm²",
+    "20 cm²"
+   ],
+   "Five times two is ten square centimetres."
+  ],
+  [
+   "What tool can measure the length of a pencil?",
+   "ruler",
+   [
+    "thermometer",
+    "clock",
+    "scale"
+   ],
+   "A ruler measures length."
+  ],
+  [
+   "Which shape has exactly four equal sides and four right angles?",
+   "square",
+   [
+    "triangle",
+    "circle",
+    "oval"
+   ],
+   "A square has four equal sides and four right angles."
+  ],
+  [
+   "A bottle holds 1 litre. Which unit describes its capacity?",
+   "litres",
+   [
+    "centimetres",
+    "kilograms",
+    "hours"
+   ],
+   "Litres measure capacity."
+  ]
+ ],
+ [
+  [
+   "One half of 18 is ...",
+   "9",
+   [
+    "6",
+    "8",
+    "12"
+   ],
+   "Eighteen divided by two is nine."
+  ],
+  [
+   "Three quarters of 20 is ...",
+   "15",
+   [
+    "5",
+    "10",
+    "18"
+   ],
+   "Divide twenty into four groups; take three groups."
+  ],
+  [
+   "What comes next: 3, 6, 9, 12, ...?",
+   "15",
+   [
+    "13",
+    "16",
+    "18"
+   ],
+   "The pattern increases by three."
+  ],
+  [
+   "A box has 4 rows of 5 pencils. How many pencils?",
+   "20",
+   [
+    "9",
+    "16",
+    "25"
+   ],
+   "Four times five is twenty."
+  ],
+  [
+   "31 sweets are shared into groups of 5. What is the remainder?",
+   "1",
+   [
+    "0",
+    "2",
+    "3"
+   ],
+   "Six groups of five use thirty sweets; one is left."
+  ],
+  [
+   "Estimate 198 + 102 to the nearest hundred.",
+   "300",
+   [
+    "200",
+    "250",
+    "400"
+   ],
+   "Two hundred plus one hundred is about three hundred."
+  ]
+ ],
+ [
+  [
+   "Which part of a plant carries water up from its roots?",
+   "stem",
+   [
+    "flower",
+    "seed",
+    "petal"
+   ],
+   "The stem carries water to leaves."
+  ],
+  [
+   "A caterpillar changes into a ...",
+   "butterfly",
+   [
+    "frog",
+    "snail",
+    "bird"
+   ],
+   "A butterfly develops from a caterpillar."
+  ],
+  [
+   "Which animal has six legs?",
+   "bee",
+   [
+    "spider",
+    "worm",
+    "snail"
+   ],
+   "An insect has six legs."
+  ],
+  [
+   "Which part can grow into a new plant?",
+   "seed",
+   [
+    "stone",
+    "plastic",
+    "coin"
+   ],
+   "A seed can germinate and grow into a new plant."
+  ],
+  [
+   "What does a plant use from the soil?",
+   "water",
+   [
+    "sunshine",
+    "wind",
+    "plastic"
+   ],
+   "Roots absorb water from the soil."
+  ],
+  [
+   "Which habitat is home to many fish?",
+   "river",
+   [
+    "desert",
+    "roof",
+    "cupboard"
+   ],
+   "Many fish live in a river."
+  ]
+ ],
+ [
+  [
+   "What causes a shadow to move during the day?",
+   "Earth rotates",
+   [
+    "The Moon turns green",
+    "Clouds are square",
+    "Stars disappear"
+   ],
+   "As Earth rotates, the Sun appears in a different position."
+  ],
+  [
+   "Which object is a natural satellite of Earth?",
+   "the Moon",
+   [
+    "the Sun",
+    "Mars",
+    "Jupiter"
+   ],
+   "The Moon is Earth's natural satellite."
+  ],
+  [
+   "What do we call the layer of air around Earth?",
+   "atmosphere",
+   [
+    "crust",
+    "ocean",
+    "soil"
+   ],
+   "Earth's atmosphere is a layer of gases."
+  ],
+  [
+   "What provides energy for evaporation in the water cycle?",
+   "the Sun",
+   [
+    "the Moon",
+    "rocks",
+    "magnets"
+   ],
+   "Energy from the Sun helps water evaporate."
+  ],
+  [
+   "Why do we have different seasons?",
+   "Earth's tilted axis and its orbit",
+   [
+    "The Moon's colour",
+    "Wind from Mars",
+    "Rain alone"
+   ],
+   "Earth's tilt and orbit cause seasons."
+  ],
+  [
+   "Which planet is known for its rings?",
+   "Saturn",
+   [
+    "Earth",
+    "Mercury",
+    "Mars"
+   ],
+   "Saturn is famous for its rings."
+  ]
+ ],
+ [
+  [
+   "Water turning into ice is called ...",
+   "freezing",
+   [
+    "melting",
+    "evaporation",
+    "boiling"
+   ],
+   "Water freezes when it becomes ice."
+  ],
+  [
+   "Water vapour is a ...",
+   "gas",
+   [
+    "solid",
+    "magnet",
+    "plant"
+   ],
+   "Water vapour is water in its gaseous state."
+  ],
+  [
+   "A scientist records what happened. This is an ...",
+   "observation",
+   [
+    "prediction",
+    "price",
+    "ending"
+   ],
+   "An observation records what was noticed."
+  ],
+  [
+   "Which tool measures temperature?",
+   "thermometer",
+   [
+    "ruler",
+    "magnet",
+    "clock"
+   ],
+   "A thermometer measures temperature."
+  ],
+  [
+   "What should you change in a fair experiment?",
+   "one variable",
+   [
+    "everything at once",
+    "all results",
+    "the answer"
+   ],
+   "Change one variable to make a fair comparison."
+  ],
+  [
+   "Which object is most likely attracted to a magnet?",
+   "iron nail",
+   [
+    "wooden spoon",
+    "plastic cup",
+    "paper bag"
+   ],
+   "Iron can be attracted by a magnet."
+  ]
+ ],
+ [
+  [
+   "“Mia found a lost dog and took it to the vet.” Who is the character helping?",
+   "a dog",
+   [
+    "a tree",
+    "a car",
+    "a bird"
+   ],
+   "Mia helps a lost dog in the story."
+  ],
+  [
+   "“Tom fell off his bike. He cried.” How is Tom probably feeling?",
+   "hurt",
+   [
+    "excited",
+    "hungry",
+    "sleepy"
+   ],
+   "The clues suggest Tom is hurt."
+  ],
+  [
+   "“The children built a sandcastle on the beach.” Where is the setting?",
+   "the beach",
+   [
+    "a library",
+    "a farm",
+    "a classroom"
+   ],
+   "The story takes place on the beach."
+  ],
+  [
+   "“The key was gone. Mia searched her bag.” What is the problem?",
+   "a missing key",
+   [
+    "a loud dog",
+    "a new toy",
+    "a windy day"
+   ],
+   "Mia cannot find her key."
+  ],
+  [
+   "“At last, Dad fixed the broken bike.” What is the solution?",
+   "Dad repaired the bike",
+   [
+    "It is windy",
+    "A dog arrived",
+    "Dad bought bread"
+   ],
+   "Repairing the bike solves the problem."
+  ],
+  [
+   "“First Ben packed. Then he got on the bus.” What did Ben do first?",
+   "packed his bag",
+   [
+    "got on the bus",
+    "ate dinner",
+    "went to bed"
+   ],
+   "First signals the earlier action."
+  ]
+ ],
+ [
+  [
+   "“Eva put on her raincoat and picked up an umbrella.” What can you infer?",
+   "It might rain.",
+   [
+    "She is baking.",
+    "She is swimming.",
+    "It is midnight."
+   ],
+   "The raincoat and umbrella are clues about rain."
+  ],
+  [
+   "“Dogs need food, water and daily care.” What is the main idea?",
+   "How to care for a dog",
+   [
+    "How to draw a dog",
+    "How to fly a kite",
+    "How to choose shoes"
+   ],
+   "The sentence is mainly about caring for a dog."
+  ],
+  [
+   "“Sam missed the bus because he woke up late.” Why did Sam miss the bus?",
+   "He woke up late.",
+   [
+    "He lost his book.",
+    "He went swimming.",
+    "He was hungry."
+   ],
+   "Because introduces the reason."
+  ],
+  [
+   "Which sentence is a checkable fact about this story: “Mia read five pages.”?",
+   "Mia read five pages.",
+   [
+    "The story is the best.",
+    "Reading is boring.",
+    "Mia is wonderful."
+   ],
+   "A fact can be checked against the text."
+  ],
+  [
+   "“The baby bird fell from its nest. Ali called an adult.” What is the problem?",
+   "A bird fell from its nest.",
+   [
+    "An adult was called.",
+    "Ali likes birds.",
+    "The nest is brown."
+   ],
+   "The bird falling is the problem."
+  ],
+  [
+   "“Lena practised daily and finally learned the song.” What is the best summary?",
+   "Practice helped Lena learn a song.",
+   [
+    "Lena bought a piano.",
+    "Lena went to a cafe.",
+    "Lena lost her book."
+   ],
+   "A summary includes the main idea."
+  ]
+ ],
+ [
+  [
+   "“The clouds were like fluffy cotton.” Which words show the comparison?",
+   "like fluffy cotton",
+   [
+    "were very dark",
+    "the clouds",
+    "in the sky"
+   ],
+   "Like compares clouds with cotton."
+  ],
+  [
+   "Which opening sets a clear time and place?",
+   "On Saturday, Ava went to the park.",
+   [
+    "Nice.",
+    "Because.",
+    "Then."
+   ],
+   "A clear opening sets the scene."
+  ],
+  [
+   "Choose a vivid detail for a garden story.",
+   "Bright butterflies landed on the red flowers.",
+   [
+    "There was stuff.",
+    "Something happened.",
+    "It was a place."
+   ],
+   "Specific details make writing vivid."
+  ],
+  [
+   "Which sentence correctly uses a sequence word?",
+   "First, we planted a seed.",
+   [
+    "Because first we.",
+    "First I because.",
+    "Then yesterday because."
+   ],
+   "First shows the start of a sequence."
+  ],
+  [
+   "Which sentence clearly shows a problem and solution?",
+   "My bike broke, so Dad helped me fix it.",
+   [
+    "The bike is red.",
+    "Dad is tall.",
+    "I like wheels."
+   ],
+   "So connects the problem to its solution."
+  ],
+  [
+   "Choose an ending for “The puppy was lost all day ...”",
+   "Finally, Mia found it and carried it home.",
+   [
+    "The puppy is small.",
+    "Mia likes cakes.",
+    "It was green."
+   ],
+   "The ending resolves the lost-puppy problem."
+  ]
+ ],
+ [
+  [
+   "A friend says “Good morning!” What do you say?",
+   "Good morning!",
+   [
+    "Good night!",
+    "I am eight.",
+    "Blue, please."
+   ],
+   "Greet your friend politely."
+  ],
+  [
+   "You need help opening a jar. What can you ask?",
+   "Could you help me, please?",
+   [
+    "Give me that now.",
+    "I am a jar.",
+    "Tomorrow is Monday."
+   ],
+   "Use could you and please to ask nicely."
+  ],
+  [
+   "You accidentally spill water. What do you say?",
+   "I'm sorry. I'll clean it up.",
+   [
+    "Good night.",
+    "How old are you?",
+    "It is green."
+   ],
+   "Apologise and offer to help."
+  ],
+  [
+   "An adult offers you more food, but you are full. You say ...",
+   "No, thank you.",
+   [
+    "Go away.",
+    "I am seven.",
+    "Turn right."
+   ],
+   "No, thank you is polite."
+  ],
+  [
+   "Your sibling lends you a toy. You say ...",
+   "Thank you!",
+   [
+    "Never.",
+    "Tomorrow.",
+    "What's the time?"
+   ],
+   "Thank your sibling for sharing."
+  ],
+  [
+   "You need to pass someone in a narrow hallway. You say ...",
+   "Excuse me.",
+   [
+    "Good night.",
+    "I have a cat.",
+    "It is seven."
+   ],
+   "Excuse me is polite when passing."
+  ]
+ ],
+ [
+  [
+   "You don't know how to spell a word. Ask your teacher ...",
+   "How do you spell it?",
+   [
+    "How much is it?",
+    "Where is the park?",
+    "What is for lunch?"
+   ],
+   "Ask for the spelling of the word."
+  ],
+  [
+   "You did not hear the last instruction. Ask ...",
+   "Could you say that again, please?",
+   [
+    "I like cats.",
+    "It is sunny.",
+    "Turn left."
+   ],
+   "Ask politely for repetition."
+  ],
+  [
+   "Your classmate has an idea you like. Say ...",
+   "I agree with your idea.",
+   [
+    "You are wrong.",
+    "Go away.",
+    "It is red."
+   ],
+   "Agree politely."
+  ],
+  [
+   "You want to explain your answer. Say ...",
+   "Let me explain my thinking.",
+   [
+    "I am hungry.",
+    "Good night.",
+    "Where is the bus?"
+   ],
+   "Explain introduces your reasoning."
+  ],
+  [
+   "Your teacher asks you to work in pairs. Say ...",
+   "Let's work together.",
+   [
+    "I can't English.",
+    "Never!",
+    "Buy it now."
+   ],
+   "Work together means cooperate."
+  ],
+  [
+   "You have finished your homework. Tell your teacher ...",
+   "I'd like to hand in my homework.",
+   [
+    "Where is the zoo?",
+    "It is raining.",
+    "Can I eat this?"
+   ],
+   "Hand in means submit work."
+  ]
+ ],
+ [
+  [
+   "You prefer books to films. Which sentence says that?",
+   "I prefer books to films.",
+   [
+    "I never read books.",
+    "Books are red.",
+    "Films start at ten."
+   ],
+   "Prefer expresses a choice."
+  ],
+  [
+   "Your friend suggests the park, but you have another idea. Say ...",
+   "What about the library instead?",
+   [
+    "You are wrong!",
+    "Stop talking.",
+    "No idea."
+   ],
+   "Suggest an alternative politely."
+  ],
+  [
+   "Which sentence supports an opinion with a reason?",
+   "I like cycling because it is fun.",
+   [
+    "Cycling is good.",
+    "I like it.",
+    "It is red."
+   ],
+   "Because gives a reason."
+  ],
+  [
+   "Which phrase introduces an example?",
+   "For example, ...",
+   [
+    "However, ...",
+    "On the other hand, ...",
+    "Finally, ..."
+   ],
+   "For example introduces an example."
+  ],
+  [
+   "Two friends disagree. Which response is respectful?",
+   "I understand, but I think differently.",
+   [
+    "Your idea is silly.",
+    "Be quiet!",
+    "Never ask me."
+   ],
+   "Disagree without insulting the other person."
+  ],
+  [
+   "You want to recommend a book. Say ...",
+   "I recommend this book because it is funny.",
+   [
+    "My book is on the desk.",
+    "That is not a book.",
+    "I have a blue bag."
+   ],
+   "A recommendation can include a reason."
+  ]
+ ]
+];
+V3_REASON.forEach(function(bank,i){V5_REASON_EXTRA[i].forEach(function(q){bank.push(q);});});
+const V5_READING_EXTRA = {"6": [["“Lily dropped her lunchbox. Sam helped her pick it up.” Who helped Lily?", "Sam", ["Mum", "Tom", "The teacher"], "Sam helped Lily pick up her lunchbox."], ["“At sunset, the children walked home from the beach.” When does the story happen?", "at sunset", ["at breakfast", "at midnight", "at sunrise"], "At sunset tells when the story happens."], ["“Max forgot his homework, so he called his mum.” Why did Max call his mum?", "He forgot his homework.", ["He was hungry.", "It was raining.", "He wanted a bicycle."], "The word so introduces what Max did after forgetting his homework."], ["“Ben looked under the bed and found his missing book.” What was Ben looking for?", "his missing book", ["his new shoes", "his lunch", "his pet"], "Ben looked for a missing book."], ["“Sara was cold, so she put on her coat.” What is the solution?", "She put on her coat.", ["She felt cold.", "It was Monday.", "Sara has a bag."], "Putting on the coat helps Sara feel warmer."], ["“Ava was nervous before her concert. Then she played her song.” Which event came first?", "Ava felt nervous.", ["Ava finished the concert.", "Ava went home.", "Ava packed lunch."], "Before tells us how Ava felt earlier."]], "7": [["“Mia held an ice cream in the sun. It began to drip.” What can you infer?", "The ice cream is melting.", ["Mia is sleeping.", "It is winter.", "The ice cream is frozen solid."], "The dripping ice cream is likely melting."], ["“The family planted trees, picked up rubbish and watered flowers.” What is the main idea?", "The family cared for the environment.", ["The family went shopping.", "The family played music.", "The family was travelling."], "The actions all help care for their surroundings."], ["“Kim reads every night, and her vocabulary is growing.” Which detail supports the main idea?", "Kim reads every night.", ["Kim has a red bag.", "Kim can swim.", "Kim likes cake."], "Reading each night supports vocabulary development."], ["“The book has eight chapters.” Is this a fact or an opinion?", "a fact", ["an opinion", "a prediction", "a request"], "The number of chapters can be checked."], ["“Tom was excited because tomorrow was his birthday.” Why was Tom excited?", "His birthday was tomorrow.", ["He lost a toy.", "He missed a train.", "He felt tired."], "The because clause gives the reason."], ["“Mum baked bread. Dad made soup. Everyone ate together.” Which summary fits?", "The family prepared and shared a meal.", ["Mum drove a train.", "Dad painted the house.", "Everyone went swimming."], "The main idea is preparing and sharing food."]], "8": [["Which sentence uses “because” to explain a feeling?", "I am proud because I finished the puzzle.", ["I am proud.", "My puzzle is blue.", "I have a puzzle."], "Because connects the feeling with a reason."], ["Choose the clearest opening for a story set at school.", "On Monday, I found a strange note in my desk.", ["It was something.", "Good.", "The end."], "The opening provides time, setting and a story hook."], ["Choose a detailed sentence about a rainy day.", "Cold raindrops tapped on the classroom window.", ["There was weather.", "Something fell.", "It was a day."], "Details help the reader imagine the rain."], ["Which transition fits: “First, we washed the apples. ___, we cut them.”", "Next", ["However", "Because", "Although"], "Next signals the following step."], ["“The kite was stuck in a tree.” Which ending resolves the problem?", "Dad used a long stick to free the kite.", ["The kite was blue.", "The tree was tall.", "It was windy."], "The ending tells how the kite is freed."], ["Which sentence uses “like” to compare two things?", "Her voice was like a gentle song.", ["She sang yesterday.", "The song is long.", "Her voice was loud."], "A simile compares with like or as."]]};
+Object.keys(V5_READING_EXTRA).forEach(function(i){V5_READING_EXTRA[i].forEach(function(row){V3_REASON[Number(i)].push(row);});});
+
+
 ["starters","movers","flyers"].forEach(function(lv){const idx=CHU_DE.findIndex(function(c){return c.id==="test-"+lv;});if(idx>=0)CHU_DE.push(CHU_DE.splice(idx,1)[0]);});
+
+/* ===== V5: CÂU HỎI THEO PHẠM VI BÀI/ĐẢO, KHÔNG LẪN CHỦ ĐỀ ===== */
+const V5_MATH_DYNAMIC = [[],[],[]];
+function v5MathRow(index,question,answer,other,example){
+  const vals=Array.from(new Set(other.map(String).filter(function(x){return x!==String(answer);}))).slice(0,3);
+  if(vals.length===3)V5_MATH_DYNAMIC[index].push([question,String(answer),vals,example]);
+}
+for(let a=6;a<=19;a++)for(let b=2;b<=11;b++){
+  const sum=a+b, difference=a-b;
+  v5MathRow(0,'What is '+a+' + '+b+'?',sum,[sum+1,sum-1,sum+2],a+' plus '+b+' equals '+sum+'.');
+  if(difference>=0)v5MathRow(0,'What is '+a+' - '+b+'?',difference,[difference+1,difference+2,difference+3],a+' minus '+b+' equals '+difference+'.');
+  v5MathRow(0,'Mia has '+a+' stickers and gets '+b+' more. How many now?',sum,[sum-1,sum+1,a],a+' plus '+b+' equals '+sum+' stickers.');
+}
+for(let width=2;width<=9;width++)for(let height=2;height<=9;height++){
+  if(width===height)continue;
+  const area=width*height, perimeter=2*(width+height);
+  v5MathRow(1,'A rectangle is '+width+' cm long and '+height+' cm wide. Find its area.',area+' cm²',[(area+width)+' cm²',(area+height)+' cm²',perimeter+' cm'],width+' times '+height+' equals '+area+' square centimetres.');
+  v5MathRow(1,'A rectangle is '+width+' cm long and '+height+' cm wide. Find its perimeter.',perimeter+' cm',[(perimeter+height)+' cm',(perimeter+width)+' cm',area+' cm²'],'Add all four sides: '+perimeter+' centimetres.');
+}
+for(let a=3;a<=12;a++)for(let b=2;b<=9;b++){
+  const product=a*b;
+  v5MathRow(2,'What is '+a+' × '+b+'?',product,[product+a,product+b,product-1],a+' times '+b+' equals '+product+'.');
+  v5MathRow(2,'What is '+product+' ÷ '+b+'?',a,[a+1,a+2,a+3],product+' divided by '+b+' equals '+a+'.');
+  if(a%2===0){const half=a/2;v5MathRow(2,'What is half of '+a+'?',half,[half+1,half+2,a],a+' divided by two is '+half+'.');}
+}
+function v5FromReason(row,scope,key){
+  return {hoi:row[0],visual:'',dapAn:shuffle([row[1]].concat(row[2])),dung:row[1],
+    goiY:'Look for the clue in this '+scope+' question.',giaiThich:row[3],example:row[3],_scope:scope,_gen:key};
+}
+function v5FromWord(w,bank,reverse,key,scope){
+  const ans=reverse?w.en:w.vi;
+  const others=shuffle(bank.filter(function(x){return x!==w && x.en!==w.en && (reverse?x.en:x.vi)!==ans;}));
+  const seen=new Set([String(ans).toLowerCase()]),distractors=[];
+  others.forEach(function(x){const value=String(reverse?x.en:x.vi);if(!seen.has(value.toLowerCase()) && distractors.length<3){seen.add(value.toLowerCase());distractors.push(value);}});
+  if(distractors.length<3)return null;
+  return {hoi:reverse?'“'+w.vi+'” trong tiếng Anh là gì?':'“'+w.en+'” có nghĩa là gì?',visual:'',
+    dapAn:shuffle([ans].concat(distractors)),dung:ans,goiY:'Hãy nhớ lại từ trong bài '+scope+'.',
+    giaiThich:'“'+w.en+'” có nghĩa là “'+w.vi+'”.',example:viDuTu(w)[0],_scope:scope,_gen:key};
+}
+function v5WordPool(bank,key,scope){
+  const qs=[];bank.forEach(function(w){[false,true].forEach(function(reverse){const q=v5FromWord(w,bank,reverse,key,scope);if(q)qs.push(q);});});return qs;
+}
+function v5ClozePool(bank,key,scope){
+  const out=[];
+  bank.forEach(function(w){
+    const sentence=viDuTu(w)[0];if(!sentence||sentence.split(/\s+/).length<7)return;
+    const pos=sentence.toLowerCase().indexOf(w.en.toLowerCase());if(pos<0)return;
+    const cloze=sentence.slice(0,pos)+'____'+sentence.slice(pos+w.en.length);
+    const others=shuffle(bank.filter(function(x){return x.en!==w.en;})).slice(0,3).map(function(x){return x.en;});
+    if(others.length<3)return;
+    out.push({hoi:'Điền từ phù hợp ('+scope+'): “'+cloze+'”',visual:'',dapAn:shuffle([w.en].concat(others)),dung:w.en,
+      goiY:'Nghĩ đến nghĩa: '+w.vi+'.',giaiThich:sentence,example:sentence,_scope:scope,_gen:key});
+  });return out;
+}
+function v5DialoguePool(dialogue,key,scope){
+  const out=[];
+  dialogue.forEach(function(d){
+    out.push({hoi:'Poly hỏi: “'+d.cau+'” Con chọn câu trả lời nào?',visual:'',dapAn:shuffle([d.dung].concat(d.sai)),dung:d.dung,
+      goiY:'Chọn câu đáp đúng với tình huống.',giaiThich:d.cau+' — '+d.dung,example:d.dung,_scope:scope,_gen:key});
+    const wrong=shuffle(dialogue.filter(function(x){return x!==d && x.cau!==d.cau;})).slice(0,3).map(function(x){return x.cau;});
+    if(wrong.length<3){
+      ['What colour is it?','How much is the ticket?','Where do you live?','What time is it?','What is your favourite food?','How are you?'].forEach(function(z){if(wrong.length<3 && z!==d.cau && !wrong.includes(z))wrong.push(z);});
+    }
+    out.push({hoi:'Câu hỏi nào phù hợp với câu trả lời: “'+d.dung+'”?',visual:'',dapAn:shuffle([d.cau].concat(wrong)),dung:d.cau,
+      goiY:'Đọc câu trả lời rồi nghĩ lại câu hỏi.',giaiThich:d.cau+' — '+d.dung,example:d.dung,_scope:scope,_gen:key});
+  });return out;
+}
+function v5BankForKey(key,mode){
+  const cd=CHU_DE.find(function(c){return c.baiHoc.some(function(b){return b.gen===key;});});
+  const lessons=cd?cd.baiHoc.filter(function(b){return b.gen===key;}):[];
+  const vocab=lessons.find(function(b){return b.vocab;});
+  const dialogue=lessons.find(function(b){return b.hoiThoaiMau;});
+  if(vocab){
+    const scope=cd.ten;
+    const words=v5WordPool(vocab.vocab,key,scope);
+    const index=/^v3Gen(\d+)$/.exec(key);
+    const contextual=index?V3_REASON[Number(index[1])].concat(V5_MATH_DYNAMIC[Number(index[1])]||[]).map(function(row){return v5FromReason(row,scope,key);}):[];
+    if(mode==='vocab')return words;
+    if(mode==='practice')return contextual.concat(index && Number(index[1])>=6 && Number(index[1])<=8 ? [] : v5ClozePool(vocab.vocab,key,scope));
+    return words.concat(contextual).concat(index && Number(index[1])>=6 && Number(index[1])<=8 ? [] : v5ClozePool(vocab.vocab,key,scope));
+  }
+  if(dialogue)return v5DialoguePool(dialogue.hoiThoaiMau,key,cd.ten);
+  if(GEN[key]){const fallback=[];for(let i=0;i<12;i++){const q=GEN[key]();q._gen=key;q._scope='Ôn tập';fallback.push(q);}return fallback;}
+  if(laKeyTuThem(key)){const item=timTuThemTheoKey(key);return item?[tuVungTuThemGen(item)]:[];}
+  return [];
+}
+function v5Distinct(pool){const seen=new Set();return pool.filter(function(q){
+  const id=String(q.hoi).trim().toLowerCase()+'|'+String(q.dung).trim().toLowerCase();
+  if(seen.has(id))return false;seen.add(id);return true;
+});}
+function v5Choose(pool,count,historyKey){
+  const history=state.recentQuestions[historyKey]||[];const old=new Set(history);
+  const shuffled=shuffle(v5Distinct(pool));
+  const fresh=shuffled.filter(function(q){return !old.has(q.hoi);});
+  const recycled=shuffled.filter(function(q){return old.has(q.hoi);}).sort(function(a,b){return history.indexOf(a.hoi)-history.indexOf(b.hoi);});
+  const result=fresh.concat(recycled).slice(0,count);
+  state.recentQuestions[historyKey]=history.concat(result.map(function(q){return q.hoi;})).slice(-Math.min(45,Math.max(12,shuffled.length-1)));
+  luu();return result;
+}
+function v5Balanced(keys,count,historyKey){
+  const unique=Array.from(new Set(keys));
+  const pools=unique.map(function(key){const history=state.recentQuestions[historyKey]||[];const recent=new Set(history);
+    const shuffled=shuffle(v5Distinct(v5BankForKey(key,'mixed')));
+    return {key:key,items:shuffled.filter(function(q){return !recent.has(q.hoi);}).concat(shuffled.filter(function(q){return recent.has(q.hoi);}).sort(function(a,b){return history.indexOf(a.hoi)-history.indexOf(b.hoi);} ))};
+  });
+  const output=[],seen=new Set();
+  while(output.length<count){
+    let added=0;
+    for(const pack of pools){
+      while(pack.items.length){const q=pack.items.shift(),id=q.hoi+'|'+q.dung;
+        if(seen.has(id))continue;seen.add(id);q._gen=pack.key;output.push(q);added++;break;}
+      if(output.length>=count)break;
+    }
+    if(!added)break;
+  }
+  state.recentQuestions[historyKey]=(state.recentQuestions[historyKey]||[]).concat(output.map(function(q){return q.hoi;})).slice(-45);
+  luu();return shuffle(output);
+}
+CHU_DE.filter(function(cd){return !cd.id.startsWith('test-')&&cd.id!=='cd9'&&cd.id!=='cd10';}).forEach(function(cd){
+  const keys=Array.from(new Set(cd.baiHoc.map(function(b){return b.gen;}).filter(Boolean)));
+  if(!keys.length)return;
+  cd.baiHoc.push({id:cd.id+'-checkpoint',ten:'🏅 Kiểm tra cuối đảo · chỉ chủ đề này',
+    loai:'topicTest',keys:keys,soCau:14,scope:cd.id});
+});
 
 /* ================== LƯU TRỮ AN TOÀN ================== */
 const KHO=(function(){
@@ -980,10 +2136,10 @@ const KHO=(function(){
     set(k,v){ try{ if(dungLS){localStorage.setItem(k,JSON.stringify(v)); return;} }catch(e){} mem[k]=v; }
   };
 })();
-const STATE_MAC_DINH={sao:0,streak:0,ngayCuoi:'',tienDo:{},saiBank:[],mastery:{},tuVungTuThem:[],soBuoi:0,lastReflection:''};
+const STATE_MAC_DINH={sao:0,streak:0,ngayCuoi:'',tienDo:{},saiBank:[],mastery:{},tuVungTuThem:[],soBuoi:0,lastReflection:'',recentQuestions:{}};
 let state=KHO.get('daoTiengAnh',STATE_MAC_DINH);
 state=Object.assign({},STATE_MAC_DINH,state);
-state.tienDo=state.tienDo||{}; state.saiBank=state.saiBank||[]; state.mastery=state.mastery||{}; state.tuVungTuThem=Array.isArray(state.tuVungTuThem)?state.tuVungTuThem:[];
+state.recentQuestions=state.recentQuestions||{}; state.tienDo=state.tienDo||{}; state.saiBank=state.saiBank||[]; state.mastery=state.mastery||{}; state.tuVungTuThem=Array.isArray(state.tuVungTuThem)?state.tuVungTuThem:[];
 function luu(){ KHO.set('daoTiengAnh', state); }
 const KHOANG_ON=[0,1,2,4,8,16,30];
 function ghiNhanHoanThanhNgay(){
@@ -1032,6 +2188,44 @@ const CHAO=['Hello! Mình là Vẹt Poly. Hôm nay mình cùng khám phá đảo
   'Con quay lại rồi! Vẹt Poly chờ con mãi. Học đều mỗi ngày một chút là giỏi nhất đó! 🦜',
   'Chỉ cần 12 phút mỗi ngày thôi — mình cùng bắt đầu nhé!',
   'Hôm nay con muốn thăm đảo nào? Nói sai cũng không sao hết nha, cứ mạnh dạn nói tiếng Anh!'];
+
+
+/* ===== V6: DICTIONARY + SPEAKING LAB ===== */
+function v6DictionaryWords(){
+  const out=[],seen=new Set();
+  CHU_DE.forEach(function(cd){cd.baiHoc.forEach(function(b){(b.vocab||[]).forEach(function(w){
+    const key=String(w.en).toLowerCase()+'|'+String(w.vi).toLowerCase(); if(seen.has(key))return;seen.add(key);
+    const ex=(typeof viDuTu==='function'?viDuTu(w):[w.example||'']).filter(Boolean)[0]||'';
+    out.push({en:w.en,vi:w.vi,example:ex,topic:cd.ten,level:cd.capDo||''});
+  });});});
+  state.tuVungTuThem.forEach(function(w){const key=String(w.en).toLowerCase()+'|'+String(w.vi).toLowerCase();if(!seen.has(key))out.push({en:w.en,vi:w.vi,example:w.example||'',topic:w.topic||'Sổ từ của bé',level:'custom'});});
+  return out;
+}
+function renderDictionary(){
+  const q=String($('#dictSearch')?.value||'').trim().toLowerCase(),host=$('#dictResults');if(!host)return;
+  let words=v6DictionaryWords();
+  if(q)words=words.filter(function(w){return [w.en,w.vi,w.example,w.topic].some(function(x){return String(x||'').toLowerCase().includes(q);});});
+  else words=words.slice(0,12);
+  words=words.slice(0,40);
+  host.innerHTML=words.length?words.map(function(w){return '<article class="dict-item"><div class="dict-title"><b>'+esc(w.en)+'</b><span class="dict-meaning">— '+esc(w.vi)+'</span><button class="speak-btn" data-say="'+encodeURIComponent(w.en)+'" aria-label="Nghe từ '+esc(w.en)+'">🔊</button></div>'+(w.example?'<p class="dict-example">💬 '+esc(w.example)+' <button class="speak-btn" data-say="'+encodeURIComponent(w.example)+'" aria-label="Nghe câu ví dụ">🔊</button></p>':'')+'<div class="dict-tags"><span>'+esc(w.topic)+'</span>'+(w.level&&w.level!=='custom'?'<span>'+esc(String(w.level).toUpperCase())+'</span>':'')+'</div></article>';}).join(''):'<div class="custom-empty">Chưa tìm thấy từ này trong chương trình. Con có thể thêm nó vào Sổ từ của bé.</div>';
+}
+function moDictionary(){renderDictionary();toi('dictionary');setTimeout(function(){$('#dictSearch').focus();},80);}
+const V6_SPEAK={
+ daily:[['Can I have some water, please?','Đổi water thành món hoặc đồ uống con muốn.'],['I like reading because stories are fun.','Đổi reading và lý do thành ý thật của con.'],['Could you help me with this, please?','Dùng khi con cần nhờ giúp đỡ.'],['I don’t understand. Could you say that again?','Một câu cứu nguy rất hữu ích khi giao tiếp.'],['After school, I usually do my homework.','Đổi hoạt động sau giờ học thành của con.']],
+ school:[['May I borrow your pencil, please?','Đổi pencil thành một đồ dùng học tập.'],['My favourite subject is English because I like speaking.','Đổi môn học và lý do.'],['I agree with you because that idea is fair.','Thử nói một ý con đồng ý.'],['I think the answer is twelve.','Đổi twelve thành đáp án con muốn.'],['Could you explain this question, please?','Dùng khi chưa hiểu đề.']],
+ math:[['Seven plus eight equals fifteen.','Đổi các số và tự tạo phép cộng mới.'],['A rectangle has four sides.','Đổi rectangle thành một hình khác.'],['Half of ten is five.','Tự tạo một câu half of ...'],['This ruler is thirty centimetres long.','Đổi đồ vật và số đo.'],['I know this because I counted the groups.','Tập giải thích cách con tìm đáp án.']],
+ science:[['Plants need light and water to grow.','Đổi plants thành một sinh vật và nói điều nó cần.'],['Ice melts when it gets warm.','Đổi hiện tượng khoa học con biết.'],['I predict the plant will grow taller.','Dùng I predict ... để đưa ra dự đoán.'],['I observed that the shadow moved.','Dùng I observed ... để kể điều con quan sát.'],['The Moon goes around the Earth.','Đổi thành một fact khoa học khác con nhớ.']],
+ story:[['One rainy morning, I found a tiny box.','Đổi thời gian, thời tiết hoặc đồ vật để mở truyện mới.'],['The girl felt nervous because she was lost.','Đổi nhân vật, cảm xúc và lý do.'],['First we made a plan, then we started our journey.','Tạo hai sự việc theo thứ tự.'],['Suddenly, we heard a strange noise behind us.','Đổi strange noise thành chi tiết của con.'],['In the end, everyone was safe and happy.','Tạo một kết thúc khác cho câu chuyện.']]
+};
+let v6SpeakSet='daily',v6SpeakIndex=0,v6SpeakRate=.8;
+function v6SpeakLine(){return V6_SPEAK[v6SpeakSet][v6SpeakIndex%V6_SPEAK[v6SpeakSet].length];}
+function v6SayAtRate(text,rate){if(!('speechSynthesis' in window)){toast('Thiết bị này chưa hỗ trợ đọc thành tiếng.');return;}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=rate;const vs=speechSynthesis.getVoices();u.voice=vs.find(v=>/^en-GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;speechSynthesis.speak(u);}
+function renderSpeakingLab(){const x=v6SpeakLine();$('#shadowHost').innerHTML='<article class="shadow-card"><small>LƯỢT '+(v6SpeakIndex+1)+' / '+V6_SPEAK[v6SpeakSet].length+'</small><div class="shadow-line">“'+esc(x[0])+'”</div><div class="speed-row"><button data-speed=".65">🐢 Chậm</button><button data-speed=".8">🎧 Vừa</button><button data-speed="1">▶️ Chuẩn</button></div><div class="mission-box"><b>⭐ Đổi thành câu của con</b><br>'+esc(x[1])+'</div><label class="listen-check"><input type="checkbox" id="shadowDone"> <span>Con đã nghe → nói đè theo mẫu → đổi ít nhất 1 chi tiết.</span></label><div class="lab-actions" style="margin-top:13px"><button class="primary" id="btnShadowNext">Câu tiếp theo →</button><button class="secondary" id="btnShadowRandom">🎲 Đổi câu</button></div></article>';
+  document.querySelectorAll('[data-speed]').forEach(function(b){b.onclick=function(){v6SpeakRate=Number(b.dataset.speed);v6SayAtRate(x[0],v6SpeakRate);};});
+  $('#btnShadowNext').onclick=function(){if(!$('#shadowDone').checked){toast('Con thử nói theo và đổi 1 chi tiết trước nhé.');return;}v6SpeakIndex=(v6SpeakIndex+1)%V6_SPEAK[v6SpeakSet].length;renderSpeakingLab();};
+  $('#btnShadowRandom').onclick=function(){v6SpeakIndex=Math.floor(Math.random()*V6_SPEAK[v6SpeakSet].length);renderSpeakingLab();};
+}
+function moSpeakingLab(){v6SpeakIndex=0;renderSpeakingLab();toi('speakinglab');setTimeout(khoiTaoGhiAm,60);}
 
 /* ================== ĐIỀU HƯỚNG ================== */
 const $=function(s){return document.querySelector(s);};
@@ -1111,7 +2305,7 @@ function handleCustomWordAction(event){
   const card=button.closest('.custom-word'),id=card&&card.dataset.id;
   const word=state.tuVungTuThem.find(function(w){return String(w.id)===String(id);}); if(!word)return;
   const action=button.dataset.action;
-  if(action==='hear'){noiTiengAnh(word.example?word.en+'. '+word.example:word.en);return;}
+  if(action==='hear'){noiTiengAnh(word.en);return;}
   if(action==='review'){moOnNhanh([keyTuThem(word.id),keyTuThem(word.id),keyTuThem(word.id),keyTuThem(word.id)]);return;}
   if(action==='edit'){
     customEditingId=word.id;$('#customEn').value=word.en;$('#customVi').value=word.vi;$('#customTopic').value=word.topic||'';$('#customExample').value=word.example||'';
@@ -1188,7 +2382,7 @@ function moChuDe(id){
   toi('topic');
 }
 function renderVocabTheory(b){
-  const words=b.vocab.map(function(w){const ex=viDuTu(w);return '<div class="w"><span class="word-main"><b>'+w.en+'</b> — '+w.vi+'<small style="display:block;color:var(--ink-soft);margin-top:5px;line-height:1.4">💬 '+ex.join(' · ')+'</small></span><button class="speak-btn" data-say="'+encodeURIComponent(w.en+'. '+ex[0])+'" aria-label="Nghe từ '+w.en+' trong câu">🔊</button></div>';}).join('');
+  const words=b.vocab.map(function(w){const ex=viDuTu(w);return '<div class="w"><span class="word-main"><b>'+w.en+'</b> — '+w.vi+'<small style="display:block;color:var(--ink-soft);margin-top:5px;line-height:1.4">💬 '+ex.join(' · ')+'</small></span><button class="speak-btn" data-say="'+encodeURIComponent(w.en)+'" aria-label="Nghe từ '+w.en+'">🔊</button></div>';}).join('');
   return '<div class="learning-path"><span>1 · Nhớ lại</span><span class="active">2 · Khám phá</span><span>3 · Tự làm</span></div>'+
     '<div class="theory"><h3>📖 Từ vựng: '+b.chuDe+'</h3>'+
     '<p><b>Nghe → nhìn → làm động tác → nhắc lại.</b> Chia thành cụm nhỏ; con không cần thuộc hết trước khi luyện.</p>'+
@@ -1304,16 +2498,17 @@ function renderNoiCard(b){
     '<button class="btn-start" id="btnNoiXong">✅ Con đã nói xong bài này!</button></div>';
 }
 function moBai(b){
+  const oldReview=$('#reviewQuizHost');if(oldReview)oldReview.style.display='none';
   baiHienTai=b;
   const tabbarEl=document.querySelector('.tabbar');
   if(b.loai==='giaoTiep'){
     tabbarEl.style.display='none'; $('#quizView').style.display='none'; $('#theoryView').style.display='block';
     $('#theoryView').innerHTML=renderGiaoTiepCard(b); khoiTaoGiaoTiep(b); toi('lesson'); return;
   }
-  if(b.loai==='levelTest'){
+  if(b.loai==='levelTest'||b.loai==='topicTest'){
     tabbarEl.style.display='none'; $('#theoryView').style.display='none'; $('#quizView').style.display='none'; toi('lesson');
     let host=$('#reviewQuizHost'); if(!host){host=document.createElement('div');host.id='reviewQuizHost';$('#screen-lesson').appendChild(host);} host.style.display='block';
-    batDauLevelTest(b); return;
+    if(b.loai==='topicTest')batDauTopicTest(b);else batDauLevelTest(b); return;
   }
   if(b.loai==='dienDat'){
     tabbarEl.style.display='none';
@@ -1387,43 +2582,38 @@ function chonTab(t){
 }
 
 /* ================== QUIZ ENGINE ================== */
-let quiz={cauHoi:[],viTri:0,dungDau:0,daSaiCauNay:false,laOnNhanh:false,keysChon:null};
-
-function batDauLevelTest(b){
-  batDemGio();
-  quiz.laOnNhanh=true;quiz.keysChon=b.keys.slice();quiz.viTri=0;quiz.dungDau=0;quiz.cauHoi=[];
-  for(let i=0;i<b.soCau;i++){const key=b.keys[i%b.keys.length];const q=taoCauHoiTheoKey(key)||GEN.tuVungBanThan();q._gen=key;quiz.cauHoi.push(q);} 
-  // trộn thứ tự để mỗi lần chơi khác nhau
-  for(let i=quiz.cauHoi.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[quiz.cauHoi[i],quiz.cauHoi[j]]=[quiz.cauHoi[j],quiz.cauHoi[i]];}
+let quiz={cauHoi:[],viTri:0,dungDau:0,daSaiCauNay:false,laOnNhanh:false,keysChon:null,mode:'lesson'};
+function v5StartAssessment(b,mode){
+  batDemGio();quiz.laOnNhanh=true;quiz.mode=mode;quiz.keysChon=b.keys.slice();
+  quiz.viTri=0;quiz.dungDau=0;quiz.cauHoi=v5Balanced(b.keys,b.soCau,mode+':'+b.id);
+  if(!quiz.cauHoi.length){toast('Bài kiểm tra chưa có câu hỏi.');return;}
   veCauHoi();
 }
-
+function batDauLevelTest(b){v5StartAssessment(b,'levelTest');}
+function batDauTopicTest(b){v5StartAssessment(b,'topicTest');}
 function batDauQuiz(laOn,forcedKeys){
-  batDemGio();
-  quiz.laOnNhanh=laOn;
+  batDemGio();quiz.laOnNhanh=laOn;quiz.mode=laOn?'review':'lesson';
   quiz.keysChon=Array.isArray(forcedKeys)?forcedKeys.slice():null;
-  quiz.viTri=0; quiz.dungDau=0;
-  quiz.cauHoi=[];
+  quiz.viTri=0;quiz.dungDau=0;quiz.cauHoi=[];
   if(laOn){
-    const genXong=[]; CHU_DE.forEach(function(cd){cd.baiHoc.forEach(function(b){if(b.gen&&GEN[b.gen])genXong.push(b.gen);});});
+    const genXong=[];CHU_DE.forEach(function(cd){cd.baiHoc.forEach(function(b){if(b.gen&&GEN[b.gen])genXong.push(b.gen);});});
     const customKeys=state.tuVungTuThem.map(function(w){return keyTuThem(w.id);});
     const denHan=cacKyNangDenHan().filter(keyCoBoSinh);
     const yeu=Object.keys(state.mastery).filter(keyCoBoSinh).sort(function(a,b){return (state.mastery[a].box||0)-(state.mastery[b].box||0);});
     const tuSai=state.saiBank.slice(-4).filter(keyCoBoSinh);
     const uuTien=[].concat(denHan,tuSai,yeu).filter(function(k,i,a){return a.indexOf(k)===i;});
-    const nguon=quiz.keysChon&&quiz.keysChon.length?quiz.keysChon:(uuTien.length?uuTien:(customKeys.length?customKeys:(genXong.length?genXong:['tuVungBanThan','tuVungMauSac','tuVungConVat'])));
-    const soCau=quiz.keysChon&&quiz.keysChon.length?Math.max(4,quiz.keysChon.length):8;
-    for(let i=0;i<soCau;i++){
-      const key=i<nguon.length?nguon[i]:pick(nguon);
-      const q=taoCauHoiTheoKey(key)||GEN.tuVungBanThan();
-      q._gen=keyCoBoSinh(key)?key:'tuVungBanThan';quiz.cauHoi.push(q);
-    }
-  } else {
-    for(let i=0;i<baiHienTai.soCau;i++){
-      let q,tries=0;const seen=new Set(quiz.cauHoi.map(function(x){return x.hoi;}));do{q=GEN[baiHienTai.gen]();tries++;}while(seen.has(q.hoi)&&tries<30);q._gen=baiHienTai.gen;quiz.cauHoi.push(q);
-    }
+    const source=quiz.keysChon&&quiz.keysChon.length?quiz.keysChon:(uuTien.length?uuTien:(customKeys.length?customKeys:genXong));
+    const keys=source.length?source:['tuVungBanThan'];
+    quiz.cauHoi=v5Balanced(keys,quiz.keysChon?Math.max(4,keys.length):8,'review:general');
+  }else{
+    const b=baiHienTai;
+    const mode=b.id.endsWith('-practice')?'practice':'vocab';
+    const pool=v5BankForKey(b.gen,mode);
+    quiz.cauHoi=v5Choose(pool,b.soCau,'lesson:'+b.id);
+    if(quiz.cauHoi.length<b.soCau){toast('Chủ đề này hiện có '+quiz.cauHoi.length+' câu không trùng; không lấy câu từ chủ đề khác.');}
     chonTab('luyenTap');
   }
+  if(!quiz.cauHoi.length){toast('Không tìm thấy câu hỏi phù hợp.');return;}
   veCauHoi();
 }
 function veCauHoi(){
@@ -1438,7 +2628,7 @@ function veCauHoi(){
   const lopChu=daiNhat>10?' text':'';
   let ansHtml='';
   q.dapAn.forEach(function(a,i){
-    ansHtml+='<button class="ans'+lopChu+'" data-i="'+i+'">'+a+'</button>';
+    ansHtml+='<button class="ans'+lopChu+'" data-i="'+i+'">'+esc(a)+'</button>';
   });
   view.innerHTML='<div class="learning-path"><span>1 · Nhớ lại</span><span>2 · Có gợi ý</span><span class="active">3 · Tự làm</span></div><div class="quiz-progress" aria-label="Tiến độ câu hỏi">'+bars+'</div>'+
     '<div class="qcard"><p class="qtext">'+q.hoi+'</p>'+
@@ -1480,7 +2670,7 @@ function chamDiem(btn,q){
       fb.innerHTML='Đúng rồi! Con đã tự sửa được — great learning! 🌟'+
         '<span class="giai">'+q.giaiThich+'</span>';
     }
-    const ex=q.example||q.giaiThich;if(ex){fb.innerHTML+='<span class="example-after">💬 <b>Ví dụ / cách dùng:</b> '+esc(ex)+' <button class="mini-btn speak-btn" data-say="'+encodeURIComponent(ex)+'">🔊 Nghe cách đọc</button></span>';} $('#btnNext').style.display='inline-block';
+    const ex=q.example||q.giaiThich;if(ex){fb.innerHTML+='<div class="example-after"><div>💬 <b>Ví dụ / cách dùng:</b> '+esc(ex)+'</div><button type="button" class="mini-btn speak-btn example-listen" data-say="'+encodeURIComponent(ex)+'" aria-label="Nghe câu ví dụ">🔊 Nghe câu ví dụ</button></div>';} $('#btnNext').style.display='inline-block';
   } else {
     btn.classList.add('sai'); btn.disabled=true;
     if(!quiz.daSaiCauNay){
@@ -1517,7 +2707,7 @@ function ketThucBai(){
   if(dung===tong) loi='Xuất sắc! Excellent! Con làm đúng tất cả ngay lần đầu!';
   else if(sao3===2) loi='Làm tốt lắm! Con đúng '+dung+'/'+tong+' câu ngay lần đầu. Càng luyện càng giỏi!';
   else loi='Con đã hoàn thành cả bài — riêng việc không bỏ cuộc đã rất đáng khen rồi! Mai mình luyện lại nhé.';
-  if(!quiz.laOnNhanh){
+  if(!quiz.laOnNhanh || quiz.mode==='topicTest'||quiz.mode==='levelTest'){
     const td=state.tienDo[baiHienTai.id]||{sao:0,xong:false};
     td.xong=true; td.sao=Math.max(td.sao||0,sao3);
     state.tienDo[baiHienTai.id]=td; ghiNhanHoanThanhNgay(); luu();
@@ -1526,14 +2716,14 @@ function ketThucBai(){
   }
   const view=quiz.laOnNhanh?$('#reviewQuizHost'):$('#quizView');
   view.innerHTML='<div class="finish"><div class="fox-big">🦜🎉</div>'+
-    '<h2>'+(quiz.laOnNhanh?'Ôn tập hoàn thành!':'Hoàn thành bài học!')+'</h2>'+
+    '<h2>'+(quiz.mode==='topicTest'?'Hoàn thành kiểm tra chủ đề!':quiz.mode==='levelTest'?'Hoàn thành kiểm tra cuối cấp!':quiz.laOnNhanh?'Ôn tập hoàn thành!':'Hoàn thành bài học!')+'</h2>'+
     '<div class="saoket">'+'⭐'.repeat(sao3)+'☆'.repeat(3-sao3)+'</div>'+
     '<p>'+loi+'</p>'+
     '<div class="reflection"><b>Bài này cảm thấy thế nào?</b><div class="reflection-row">'+
     '<button data-feel="easy">🙂 Dễ</button><button data-feel="right">🌱 Vừa sức</button><button data-feel="hard">🧩 Cần ôn</button></div></div>'+
     '<div class="row"><button class="again" id="btnLamLai">🔁 Làm lại</button>'+
     '<button class="home" id="btnVeNha">🗺️ Về bản đồ</button></div></div>';
-  $('#btnLamLai').addEventListener('click',function(){batDauQuiz(quiz.laOnNhanh,quiz.keysChon);});
+  $('#btnLamLai').addEventListener('click',function(){if(quiz.mode==='topicTest')batDauTopicTest(baiHienTai);else if(quiz.mode==='levelTest')batDauLevelTest(baiHienTai);else batDauQuiz(quiz.laOnNhanh,quiz.keysChon);});
   $('#btnVeNha').addEventListener('click',function(){veBanDo();toi('home');});
   view.querySelectorAll('[data-feel]').forEach(function(btn){btn.addEventListener('click',function(){
     view.querySelectorAll('[data-feel]').forEach(function(x){x.classList.remove('selected');});btn.classList.add('selected');
@@ -1611,6 +2801,10 @@ document.addEventListener('DOMContentLoaded',function(){
   });
   $('#btnOnNhanh').addEventListener('click',function(){moOnNhanh();});
   $('#btnSoTu').addEventListener('click',moSoTu);
+  $('#btnDictionary').addEventListener('click',moDictionary);
+  $('#btnSpeakingLab').addEventListener('click',moSpeakingLab);
+  $('#dictSearch').addEventListener('input',renderDictionary);
+  $('#speakTabs').addEventListener('click',function(e){const b=e.target.closest('[data-set]');if(!b)return;document.querySelectorAll('#speakTabs button').forEach(x=>x.classList.remove('active'));b.classList.add('active');v6SpeakSet=b.dataset.set;v6SpeakIndex=0;renderSpeakingLab();});
   $('#customWordForm').addEventListener('submit',luuCustomWord);
   $('#btnCancelEdit').addEventListener('click',resetCustomForm);
   $('#customSearch').addEventListener('input',renderCustomWords);
